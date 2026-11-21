@@ -61,7 +61,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
   Do: `/admin` lists my tournaments. The "New tournament" form takes the tournament name, the club A/B names, the number of courts, pairs per round, and each club's players (type a name, pick M/F, Add to a list with Remove; submitted as `Name, M|F` lines). A server action inserts everything. The detail page shows the captain links and the audience link with copy buttons.
   Done when: you create one with 16+16 players and 7 courts, and the links show.
 
-- [ ] **T11 Live refresh plumbing** (S). Depends: T02.
+- [x] **T11 Live refresh plumbing** (S). Depends: T02.
   Read: ARCH §Request model (live updates).
   Do: `broadcastChanged(tournamentId)` (server, Realtime broadcast on `t:{id}`) and a client `<LiveRefresh tournamentId>` that subscribes and calls `router.refresh()` (debounced ~300ms).
   Done when: two browser tabs, an action in one refreshes the other (browser).
@@ -164,3 +164,5 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 - T10: every session-reading page needs its own `export const instant = false`; the layout's doesn't cover the page. Create is plain inserts with a compensating `delete` of the tournament on failure (cascade), not an SQL function.
 - T10: `CopyLink` (`@/components/ui/CopyLink`) for the T12 header links; origin from `headers()` (host + x-forwarded-proto). `RosterInput` (`src/app/admin/RosterInput.tsx`) is name + gender + Add, posting a hidden `players{A|B}` that `parseRoster` validates; reuse it for T13 roster add.
 - T10: if `next dev` throws "Jest worker encountered 2 child process exceptions", restart it; it's a dev-server crash, not app code.
+- T11: call `broadcastChanged(tournamentId)` from `@/lib/realtime` after each successful write (REST `httpSend`, logs instead of throwing). Mount `<LiveRefresh tournamentId>` (`@/components/LiveRefresh`) on any page that shows tournament data; `/admin/t/[id]` already has it.
+- T11: if a stale `next dev` holds :3000 and is crashed, `npx next start -p 3001` after `npm run build` works for browser checks (localhost cookies are shared across ports).

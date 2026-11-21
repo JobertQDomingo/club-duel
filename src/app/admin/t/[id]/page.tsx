@@ -1,6 +1,7 @@
 import { headers } from 'next/headers'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { LiveRefresh } from '@/components/LiveRefresh'
 import { Card } from '@/components/ui/Card'
 import { CopyLink } from '@/components/ui/CopyLink'
 import { requireAdmin } from '@/lib/auth'
@@ -22,6 +23,7 @@ export default async function TournamentPage({ params }: PageProps<'/admin/t/[id
 
   return (
     <main className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 py-6">
+      <LiveRefresh tournamentId={id} />
       <Link href="/admin" className="underline">← My tournaments</Link>
       <h1 className="font-display text-4xl font-extrabold uppercase leading-tight">{data.tournament.name}</h1>
       <p>
