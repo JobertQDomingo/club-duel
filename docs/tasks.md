@@ -28,7 +28,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 
 ## M1 — Core logic (pure, tested)
 
-- [ ] **T05 Totals + ranking** (M). Depends: T04.
+- [x] **T05 Totals + ranking** (M). Depends: T04.
   Read: PRD §5, DM §Derived data.
   Do: in `src/lib/domain.ts`, `clubTotals(data)`, `playerStats(data)`, `ranking(data)` (wins → diff → PF → name). Use done matches only.
   Done when: Vitest covers a 2-round fixture including a ranking tie.
@@ -151,3 +151,4 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 - T02: keys are the new Supabase format: `NEXT_PUBLIC_SUPABASE_ANON_KEY` holds the publishable key (`sb_publishable_`), `SUPABASE_SERVICE_ROLE_KEY` the secret key (`sb_secret_`). Import clients from `@/lib/supabase/{admin,server,browser}`; `supabaseServer()` is async.
 - T03: migrations are applied by pasting into the Supabase SQL editor (no CLI link). Verify with service role `select count` + anon insert → 42501.
 - T04: `loadTournament(id)` (server-only) returns `TournamentData | null` (null for unknown or non-uuid id). Rows are unsorted except `rounds` (by number). Types in `@/lib/types`.
+- T05: `clubTotals` returns `{A, B}` keyed by club side. `playerStats`/`ranking` include only players with ≥1 done match (`PlayerStat` has `player`, played, wins, losses, pf, pa, diff). Fixture in `domain.test.ts` is reusable for T06/T07.
