@@ -4,11 +4,10 @@ import { useState } from 'react'
 import { RosterInput } from '@/app/admin/RosterInput'
 import { FormError, useResult } from '@/components/ActionResult'
 import { Button } from '@/components/ui/Button'
+import { field } from '@/components/ui/field'
 import { MAX_NAME } from '@/lib/domain'
 import { addPlayers, editPlayer, removePlayer, renameClub, type Caller } from '@/lib/roster-actions'
 import type { Club, Player } from '@/lib/types'
-
-export const field = 'min-h-11 border border-ink bg-sheet px-3 text-base'
 
 /** One club's name and roster, editable. Shared by the admin console and the captain page. */
 export function RosterEditor({ caller, club, players }: { caller: Caller; club: Pick<Club, 'id' | 'side' | 'name'>; players: Player[] }) {
@@ -20,7 +19,7 @@ export function RosterEditor({ caller, club, players }: { caller: Caller; club: 
   return (
     <div className="flex flex-col gap-4">
       <form action={wrapName((f) => renameClub(caller, club.id, f))} className="flex flex-col gap-2">
-        <label className="font-display text-sm font-bold uppercase tracking-wide" htmlFor={`club-${club.id}`}>
+        <label className="text-sm font-semibold" htmlFor={`club-${club.id}`}>
           Club {club.side} name
         </label>
         <div className="flex gap-2">
@@ -30,12 +29,12 @@ export function RosterEditor({ caller, club, players }: { caller: Caller; club: 
         <FormError error={nameError} />
       </form>
 
-      <ol className="divide-y divide-ink/20 border border-ink/20">
+      <ol className="-mx-4 divide-y divide-line border-y border-line sm:-mx-5">
         {sorted.map((p) => (
           // values in the key: remount after a save, since a select ignores a changed defaultValue on form reset
           <PlayerRow key={`${p.id}:${p.name}:${p.gender}`} caller={caller} player={p} />
         ))}
-        {sorted.length === 0 && <li className="px-3 py-2 text-ink-soft">No players yet.</li>}
+        {sorted.length === 0 && <li className="px-4 sm:px-5 py-3 text-ink-soft">No players yet.</li>}
       </ol>
 
       <form action={wrapAdd((f) => addPlayers(caller, club.id, f))} className="flex flex-col gap-2">
@@ -54,7 +53,7 @@ function PlayerRow({ caller, player }: { caller: Caller; player: Player }) {
     return removePlayer(caller, player.id)
   }
   return (
-    <li className="@container flex flex-col gap-1 px-3 py-2">
+    <li className="@container flex flex-col gap-1 px-4 sm:px-5 py-2">
       {/* under 384px the name gets its own line; gender, Save and Remove go below it */}
       <form action={wrap((f) => editPlayer(caller, player.id, f))} className="flex flex-wrap items-center gap-2">
         <input name="name" defaultValue={player.name} required maxLength={MAX_NAME} aria-label={`Rename ${player.name}`} className={`${field} min-w-0 flex-1 basis-full @sm:basis-0`} />

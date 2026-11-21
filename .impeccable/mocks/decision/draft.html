@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Captain's Draft</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--g:#0D1518;--p:#142126;--l:#24363D;--t:#E9F1F2;--s:#8FA6AB;--a:#38D99A;--b:#F0506E;--gold:#E9B949;--live:#F5E663;--warn:#FF9A3D}
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:1440px;height:900px;overflow:hidden;background:var(--g);color:var(--t);font:15px/1.4 Inter,sans-serif;font-variant-numeric:tabular-nums}
+.d{font-family:Rajdhani,sans-serif;text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+.top{display:flex;justify-content:space-between;padding:14px 40px;color:var(--s);font-size:14px}
+.bar{display:grid;grid-template-columns:1fr 280px 1fr;height:120px;margin:0 40px}
+.team{display:flex;align-items:center;justify-content:space-between;padding:0 28px}
+.team.a{background:linear-gradient(90deg,#0F3A2C,#14302A);border-top:3px solid var(--a)}
+.team.b{background:linear-gradient(270deg,#3E1622,#30161D);border-top:3px solid var(--b);flex-direction:row-reverse}
+.team h2{font-size:26px}
+.team small{display:block;color:var(--s);font-size:13px}
+.tot{font-family:Rajdhani;font-weight:700;font-size:88px;line-height:1}
+.mid{background:var(--p);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border-top:3px solid var(--gold)}
+.mid b{font-size:30px;color:var(--gold)}
+.mid span{font-size:13px;color:var(--s)}
+.race{display:flex;height:10px;margin:0 40px;position:relative}
+.race:after{content:"";position:absolute;left:50%;top:-4px;bottom:-4px;width:2px;background:var(--gold)}
+.lead{margin:10px 40px 0;color:var(--a);font-size:15px}
+.tabs{display:flex;margin:20px 40px 0;gap:28px;border-bottom:1px solid var(--l)}
+.tab{padding:12px 2px;font-size:18px;color:var(--s);border-bottom:3px solid transparent;margin-bottom:-1px}
+.tab.on{color:var(--t);border-color:var(--gold)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 40px 0}
+.court{background:var(--p);border:1px solid var(--l);padding:14px 16px;display:grid;grid-template-columns:1fr 92px 1fr;gap:10px;align-items:stretch}
+.court header{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center}
+.court header h3{font-size:24px}
+.chip{font:700 13px Rajdhani;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px}
+.live{background:var(--live);color:var(--g)}
+.free{border:1px solid var(--s);color:var(--s)}
+.slot{border:1px solid;padding:10px 12px;min-height:96px;display:flex;flex-direction:column;gap:2px}
+.slot.a{border-color:var(--a);background:#10261F}
+.slot.b{border-color:var(--b);background:#2A141A;text-align:right}
+.slot .d{font-size:13px}
+.slot.a .d{color:var(--a)} .slot.b .d{color:var(--b)}
+.spine{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border-left:1px solid var(--l);border-right:1px solid var(--l)}
+.spine b{font:700 30px Rajdhani}
+.spine span{font-size:12px;color:var(--s)}
+.seal{align-items:center;justify-content:center;background:repeating-linear-gradient(45deg,#1B2B30 0 6px,var(--p) 6px 12px);border-color:var(--gold)!important}
+.seal .d{color:var(--gold)!important;font-size:15px}
+.warn{align-self:flex-end;margin-top:4px;background:var(--warn);color:var(--g);font:700 12px Rajdhani;letter-spacing:.06em;padding:1px 6px;text-transform:uppercase}
+.act{grid-column:1/-1;display:flex;gap:10px;justify-content:flex-end}
+.btn{height:44px;padding:0 20px;display:flex;align-items:center;font:700 16px Rajdhani;letter-spacing:.1em;text-transform:uppercase}
+.go{background:var(--gold);color:var(--g)}
+.out{border:1px solid var(--t)}
+.sel{height:44px;border:1px solid var(--l);padding:0 14px;display:flex;align-items:center;gap:30px;color:var(--t)}
+</style></head><body>
+<div class="top"><span>← My tournaments</span><span><b style="color:var(--t)">Saturday Club Duel</b> · synthetic demo data</span></div>
+<div class="bar">
+  <div class="team a"><div><h2 class="d">Riverside PC</h2><small>Captain locked in</small></div><span class="tot" style="color:var(--a)">112</span></div>
+  <div class="mid d"><span>Round 2</span><b>Draft locked</b><span>2 live · 3 to play</span></div>
+  <div class="team b"><div style="text-align:right"><h2 class="d">Northgate PC</h2><small>Captain locked in</small></div><span class="tot" style="color:var(--b)">104</span></div>
+</div>
+<div class="race"><div style="width:53%;background:var(--a)"></div><div style="flex:1;background:var(--b)"></div></div>
+<p class="lead d">Riverside PC lead by 8</p>
+<nav class="tabs d"><span class="tab on">Courts</span><span class="tab">Lineups</span><span class="tab">Results</span><span class="tab">Ranking</span><span class="tab">Setup</span></nav>
+<div class="grid">
+  <section class="court">
+    <header><h3 class="d">Court 1</h3><span class="chip live">Live</span></header>
+    <div class="slot a"><span class="d">Pair 3</span>Ana Cruz<br>Ben Lim</div>
+    <div class="spine"><span class="d">Match</span><b>3</b></div>
+    <div class="slot b"><span class="d">Pair 3</span>Olga Pineda<br>Paul Chua</div>
+    <div class="act"><span class="btn out">End match 3</span></div>
+  </section>
+  <section class="court">
+    <header><h3 class="d">Court 2</h3><span class="chip live">Live</span></header>
+    <div class="slot a"><span class="d">Pair 4</span>Mara Villa<br>Noel Ramos</div>
+    <div class="spine"><span class="d">Match</span><b>4</b></div>
+    <div class="slot b"><span class="d">Pair 4</span>Jun Reyes<br>Kat Dizon<span class="warn">⚠ Already paired once</span></div>
+    <div class="act"><span class="btn out">End match 4</span></div>
+  </section>
+  <section class="court">
+    <header><h3 class="d">Court 3</h3><span class="chip free">Free</span></header>
+    <div class="slot a seal"><span class="d">Sealed</span></div>
+    <div class="spine"><span class="d">Next</span><b>5</b></div>
+    <div class="slot b seal"><span class="d">Sealed</span></div>
+    <div class="act"><span class="sel">Match 5 <span>▾</span></span><span class="btn go">Start on Court 3</span></div>
+  </section>
+  <section class="court">
+    <header><h3 class="d">Court 4</h3><span class="chip free">Free</span></header>
+    <div class="slot a seal"><span class="d">Sealed</span></div>
+    <div class="spine"><span class="d">Next</span><b>6</b></div>
+    <div class="slot b seal"><span class="d">Sealed</span></div>
+    <div class="act"><span class="sel">Match 6 <span>▾</span></span><span class="btn go">Start on Court 4</span></div>
+  </section>
+</div>
+</body></html>

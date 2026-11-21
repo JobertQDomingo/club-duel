@@ -10,9 +10,9 @@ import { ScoreRace } from "@/components/ui/ScoreRace";
 export function RaceDemo() {
   const [t, setT] = useState({ a: 112, b: 104 });
   return (
-    <Card title="Score race">
-      <ScoreRace a={{ name: "Riverside PC", total: t.a }} b={{ name: "Northgate PC", total: t.b }} />
-      <div className="mt-4 flex flex-wrap gap-2">
+    <div className="flex flex-col gap-3">
+      <ScoreRace a={{ name: "Riverside PC", total: t.a }} b={{ name: "Northgate PC", total: t.b }} status="Round 2 · 3 of 7 matches done" />
+      <div className="flex flex-wrap gap-2">
         <Button variant="secondary" onClick={() => setT({ a: t.a + 11, b: t.b + 7 })}>
           Riverside win 11–7
         </Button>
@@ -23,7 +23,7 @@ export function RaceDemo() {
           Reset to 0–0
         </Button>
       </div>
-    </Card>
+    </div>
   );
 }
 
@@ -43,9 +43,9 @@ export function FlipDemo() {
         )
       }
     >
-      <div key={run} className="grid grid-cols-[1fr_auto_1fr] border-y border-ink">
+      <div key={run} className="-mx-4 grid grid-cols-[1fr_auto_1fr] border-y border-line last:border-b-0 sm:-mx-5">
         <PairCard side="A" slot={4} names={started ? ["Mara Villa", "Noel Ramos"] : null} />
-        <span className="flex items-center border-x border-ink px-2 font-display text-xl font-extrabold">vs</span>
+        <span className="flex items-center px-2 text-xs font-semibold text-ink-soft">vs</span>
         <PairCard side="B" slot={4} names={started ? ["Olga Pineda", "Paul Chua"] : null} repeat />
       </div>
     </Card>

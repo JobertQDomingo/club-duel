@@ -17,11 +17,11 @@ export function EndTournament({ tournamentId, live, tied, pending }: Props) {
         End tournament
       </Button>
       {live && <p className="text-ink-soft">Ends once no match is live.</p>}
-      <dialog ref={dialog} aria-label="End tournament" className="m-auto w-[calc(100%-2rem)] max-w-md border border-ink bg-sheet p-4 text-ink backdrop:bg-ink/40">
+      <dialog ref={dialog} aria-label="End tournament" className="m-auto w-[calc(100%-2rem)] max-w-md rounded-2xl bg-card p-5 text-ink shadow-[0_12px_40px_rgb(17_24_39/0.22)] backdrop:bg-ink/40">
         <form action={wrap(() => endTournament(tournamentId))} className="flex flex-col gap-3">
-          <h3 className="border-b border-ink pb-2 font-display text-xl font-bold uppercase">End tournament?</h3>
+          <h3 className="text-xl font-bold tracking-tight">End tournament?</h3>
           <p>The audience sees the final result and awards. No more rounds can be opened.</p>
-          {tied && <p className="font-semibold">Currently tied: ending now makes it a Draw. Open another round for a tiebreaker instead.</p>}
+          {tied && <p className="rounded-xl bg-warn-bg px-3 py-2 font-semibold text-warn-ink">Currently tied: ending now makes it a Draw. Open another round for a tiebreaker instead.</p>}
           {pending > 0 && <p>{pending} pending {pending === 1 ? 'match' : 'matches'} won&apos;t count.</p>}
           <FormError error={error} />
           <div className="flex flex-wrap gap-2">

@@ -1,13 +1,13 @@
 'use client'
 
 import { FormError, useResult } from '@/components/ActionResult'
-import { field } from '@/components/RosterEditor'
 import { Button } from '@/components/ui/Button'
+import { field } from '@/components/ui/field'
 import { MAX_NAME } from '@/lib/domain'
 import type { Court } from '@/lib/types'
 import { addCourt, removeCourt, renameCourt, setPairsPerRound } from './actions'
 
-const label = 'font-display text-sm font-bold uppercase tracking-wide'
+const label = 'text-sm font-semibold'
 
 /** Admin-only: courts list (add, rename, remove) and pairs per round. */
 export function CourtsEditor({ tournamentId, courts, pairs }: { tournamentId: string; courts: Court[]; pairs: number }) {
@@ -28,7 +28,7 @@ export function CourtsEditor({ tournamentId, courts, pairs }: { tournamentId: st
 
       <div className="flex flex-col gap-2">
         <h3 className={label}>Courts ({courts.length})</h3>
-        <ol className="divide-y divide-ink/20 border border-ink/20">
+        <ol className="-mx-4 divide-y divide-line border-y border-line sm:-mx-5">
           {sorted.map((c) => (
             <CourtRow key={c.id} tournamentId={tournamentId} court={c} />
           ))}
@@ -53,7 +53,7 @@ function CourtRow({ tournamentId, court }: { tournamentId: string; court: Court 
     return removeCourt(tournamentId, court.id)
   }
   return (
-    <li className="flex flex-col gap-1 px-3 py-2">
+    <li className="flex flex-col gap-1 px-4 sm:px-5 py-2">
       <form action={wrap((f) => renameCourt(tournamentId, court.id, f))} className="flex flex-wrap items-center gap-2">
         <input name="name" defaultValue={court.name} required maxLength={MAX_NAME} aria-label={`Rename ${court.name}`} className={`${field} min-w-0 flex-1`} />
         <Button type="submit" variant="secondary">Save</Button>

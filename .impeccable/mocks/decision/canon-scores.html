@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Category standard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--g:#F4F6F8;--w:#FFFFFF;--t:#111827;--s:#6B7280;--l:#E5E7EB;--a:#1D4ED8;--b:#DC2626;--live:#16A34A;--warn:#F59E0B}
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:1440px;height:900px;overflow:hidden;background:var(--g);color:var(--t);font:15px/1.4 Inter,sans-serif;font-variant-numeric:tabular-nums}
+.wrap{max-width:1200px;margin:0 auto;padding:20px 0}
+.top{display:flex;justify-content:space-between;color:var(--s);margin-bottom:14px}
+.board{background:var(--w);border-radius:12px;border:1px solid var(--l);padding:22px 28px}
+.board h1{font-size:22px;font-weight:800;margin-bottom:16px}
+.score{display:grid;grid-template-columns:1fr auto 1fr;align-items:center}
+.club{display:flex;align-items:center;gap:14px}
+.club.r{justify-content:flex-end}
+.dot{width:14px;height:14px;border-radius:50%}
+.club b{font-size:18px}
+.n{font-size:56px;font-weight:800;line-height:1}
+.mid{padding:0 30px;text-align:center;color:var(--s);font-size:13px;font-weight:600}
+.meter{display:flex;height:8px;border-radius:4px;overflow:hidden;margin-top:16px}
+.lead{margin-top:8px;color:var(--s);font-weight:600}
+.tabs{display:inline-flex;background:#E9ECF1;border-radius:10px;padding:4px;margin:18px 0}
+.tab{padding:8px 20px;border-radius:8px;font-weight:600;color:var(--s)}
+.tab.on{background:var(--w);color:var(--t);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.court{background:var(--w);border:1px solid var(--l);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px;height:300px}
+.court header{display:flex;justify-content:space-between;align-items:center}
+.court h3{font-size:17px;font-weight:700}
+.chip{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px}
+.live{background:#DCFCE7;color:var(--live)}
+.free{background:#F3F4F6;color:var(--s)}
+.pair{font-size:14px}
+.pair small{display:block;font-size:12px;font-weight:700}
+.vs{color:var(--s);font-size:12px;font-weight:700}
+.warn{display:inline-block;margin-top:2px;background:#FEF3C7;color:#92400E;font-size:11px;font-weight:700;padding:1px 6px;border-radius:4px}
+.hid{height:44px;border-radius:8px;background:#F3F4F6;color:var(--s);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600}
+.btn{margin-top:auto;height:42px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700}
+.p{background:var(--t);color:#fff}
+.o{border:1px solid var(--l)}
+.sel{height:40px;border:1px solid var(--l);border-radius:8px;display:flex;align-items:center;justify-content:space-between;padding:0 12px}
+.list{background:var(--w);border:1px solid var(--l);border-radius:12px;margin-top:16px;display:grid;grid-template-columns:repeat(7,1fr)}
+.list div{padding:12px;text-align:center;border-right:1px solid var(--l);font-size:13px;color:var(--s)}
+.list b{display:block;color:var(--t);font-size:16px}
+</style></head><body><div class="wrap">
+<div class="top"><span>← My tournaments</span><span>synthetic demo data</span></div>
+<div class="board"><h1>Saturday Club Duel</h1>
+  <div class="score">
+    <div class="club"><span class="dot" style="background:var(--a)"></span><b>Riverside PC</b><span class="n">112</span></div>
+    <div class="mid">ROUND 2<br>2 live · 3 to play</div>
+    <div class="club r"><span class="n">104</span><b>Northgate PC</b><span class="dot" style="background:var(--b)"></span></div>
+  </div>
+  <div class="meter"><div style="width:53%;background:var(--a)"></div><div style="flex:1;background:var(--b)"></div></div>
+  <p class="lead">Riverside PC lead by 8</p>
+</div>
+<nav class="tabs"><span class="tab on">Courts</span><span class="tab">Lineups</span><span class="tab">Results</span><span class="tab">Ranking</span><span class="tab">Setup</span></nav>
+<div class="grid">
+  <section class="court"><header><h3>Court 1</h3><span class="chip live">● Live · Match 3</span></header>
+    <div class="pair"><small style="color:var(--a)">Pair 3</small>Ana Cruz, Ben Lim</div><span class="vs">vs</span>
+    <div class="pair"><small style="color:var(--b)">Pair 3</small>Olga Pineda, Paul Chua</div><div class="btn o">End match 3</div></section>
+  <section class="court"><header><h3>Court 2</h3><span class="chip live">● Live · Match 4</span></header>
+    <div class="pair"><small style="color:var(--a)">Pair 4</small>Mara Villa, Noel Ramos</div><span class="vs">vs</span>
+    <div class="pair"><small style="color:var(--b)">Pair 4</small>Jun Reyes, Kat Dizon<br><span class="warn">Already paired once</span></div><div class="btn o">End match 4</div></section>
+  <section class="court"><header><h3>Court 3</h3><span class="chip free">Free</span></header>
+    <div class="sel"><span>Match 5</span><span>▾</span></div><div class="hid">Hidden until start</div><div class="hid">Hidden until start</div><div class="btn p">Start on Court 3</div></section>
+  <section class="court"><header><h3>Court 4</h3><span class="chip free">Free</span></header>
+    <div class="sel"><span>Match 6</span><span>▾</span></div><div class="hid">Hidden until start</div><div class="hid">Hidden until start</div><div class="btn p">Start on Court 4</div></section>
+</div>
+<div class="list">
+  <div>Match 1<b style="color:var(--a)">11–7</b></div><div>Match 2<b style="color:var(--b)">9–11</b></div>
+  <div>Match 3<b style="color:var(--live)">Live</b></div><div>Match 4<b style="color:var(--live)">Live</b></div>
+  <div>Match 5<b>—</b></div><div>Match 6<b>—</b></div><div style="border:0">Match 7<b>—</b></div>
+</div>
+</div></body></html>

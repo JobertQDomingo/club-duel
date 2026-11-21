@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-/** A sheet panel on the wall. Never nest cards. */
+/** A white panel on the page ground. Never nest cards. */
 export function Card({
   title,
   action,
@@ -13,10 +13,10 @@ export function Card({
   className?: string;
 }) {
   return (
-    <section className={`bg-sheet p-4 ${className}`}>
+    <section className={`min-w-0 rounded-2xl border border-line bg-card p-4 sm:p-5 ${className}`}>
       {title && (
-        <header className="mb-3 flex items-baseline justify-between gap-3 border-b border-ink pb-2">
-          <h2 className="font-display text-2xl font-bold uppercase leading-none">{title}</h2>
+        <header className="mb-3 flex items-center justify-between gap-3">
+          <h2 className="text-lg font-bold leading-tight tracking-tight">{title}</h2>
           {action}
         </header>
       )}

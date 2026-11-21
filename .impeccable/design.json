@@ -1,202 +1,52 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-21T08:06:06.099Z",
+  "generatedAt": "2026-11-21T12:00:00.000Z",
   "title": "Design System: Club Duel",
   "extensions": {
     "colorMeta": {
-      "wall": {
-        "role": "neutral",
-        "displayName": "Painted Wall Sage",
-        "canonical": "#d6e4da",
-        "tonalRamp": [
-          "#363937",
-          "#606762",
-          "#8b948e",
-          "#b6c2b9",
-          "#dee9e1",
-          "#e8f0eb",
-          "#f3f7f4",
-          "#fafcfb"
-        ]
-      },
-      "sheet": {
-        "role": "neutral",
-        "displayName": "Sheet White",
-        "canonical": "#ffffff",
-        "tonalRamp": [
-          "#404040",
-          "#737373",
-          "#a6a6a6",
-          "#d9d9d9",
-          "#ffffff",
-          "#ffffff",
-          "#ffffff",
-          "#ffffff"
-        ]
-      },
-      "ink": {
-        "role": "primary",
-        "displayName": "Print Ink",
-        "canonical": "#16181d",
-        "tonalRamp": [
-          "#060607",
-          "#0a0b0d",
-          "#0e1013",
-          "#131419",
-          "#45464a",
-          "#7f8083",
-          "#b9babb",
-          "#e3e3e4"
-        ]
-      },
-      "ink-soft": {
-        "role": "neutral",
-        "displayName": "Soft Ink",
-        "canonical": "#4a5058",
-        "tonalRamp": [
-          "#131416",
-          "#212428",
-          "#303439",
-          "#3f444b",
-          "#6e7379",
-          "#9b9fa3",
-          "#c9cbcd",
-          "#e9eaeb"
-        ]
-      },
-      "club-a": {
-        "role": "secondary",
-        "displayName": "Club A Marker Blue",
-        "canonical": "#1f5bd8",
-        "tonalRamp": [
-          "#081736",
-          "#0e2961",
-          "#143b8c",
-          "#1a4db8",
-          "#4c7ce0",
-          "#84a5ea",
-          "#bccef3",
-          "#e4ebfa"
-        ]
-      },
-      "club-b": {
-        "role": "secondary",
-        "displayName": "Club B Marker Red",
-        "canonical": "#d7322b",
-        "tonalRamp": [
-          "#360d0b",
-          "#611613",
-          "#8c211c",
-          "#b72b25",
-          "#df5b55",
-          "#e98e8a",
-          "#f3c2bf",
-          "#fae6e6"
-        ]
-      },
-      "live": {
-        "role": "tertiary",
-        "displayName": "Highlighter Yellow",
-        "canonical": "#f2dc4a",
-        "tonalRamp": [
-          "#3d3713",
-          "#6d6321",
-          "#9d8f30",
-          "#cebb3f",
-          "#f5e36e",
-          "#f8ec9b",
-          "#fbf5c9",
-          "#fdfbe9"
-        ]
-      },
-      "tape": {
-        "role": "tertiary",
-        "displayName": "Masking Tape",
-        "canonical": "#e6d3a0",
-        "tonalRamp": [
-          "#3a3528",
-          "#675f48",
-          "#968968",
-          "#c4b388",
-          "#ebdcb3",
-          "#f1e7cb",
-          "#f8f2e3",
-          "#fcfaf4"
-        ]
-      },
-      "warn": {
-        "role": "tertiary",
-        "displayName": "Caution Orange",
-        "canonical": "#f08a24",
-        "tonalRamp": [
-          "#3c2309",
-          "#6c3e10",
-          "#9c5a17",
-          "#cc751f",
-          "#f3a150",
-          "#f7bf87",
-          "#fbdcbd",
-          "#fdf1e5"
-        ]
-      }
+      "page": { "role": "neutral", "displayName": "Venue Grey", "canonical": "#f3f5f8", "tonalRamp": ["#1c1f24", "#373c44", "#565e6c", "#8a929f", "#c3c8d0", "#e5e8ee", "#f3f5f8", "#fafbfc"] },
+      "card": { "role": "neutral", "displayName": "Card White", "canonical": "#ffffff", "tonalRamp": ["#262626", "#525252", "#737373", "#a3a3a3", "#d4d4d4", "#f5f5f5", "#fafafa", "#ffffff"] },
+      "line": { "role": "neutral", "displayName": "Hairline", "canonical": "#e5e7eb", "tonalRamp": ["#1f2937", "#374151", "#4b5563", "#6b7280", "#9ca3af", "#d1d5db", "#e5e7eb", "#f9fafb"] },
+      "ink": { "role": "primary", "displayName": "Scoreboard Ink", "canonical": "#111827", "tonalRamp": ["#111827", "#1f2937", "#374151", "#4b5563", "#6b7280", "#9ca3af", "#e5e7eb", "#f9fafb"] },
+      "ink-soft": { "role": "neutral", "displayName": "Soft Ink", "canonical": "#565e6c", "tonalRamp": ["#1c1f24", "#2e333b", "#424852", "#565e6c", "#7a818d", "#a2a8b2", "#cdd1d7", "#eceef1"] },
+      "club-a": { "role": "secondary", "displayName": "Club A Blue", "canonical": "#1d4ed8", "tonalRamp": ["#1e3a8a", "#1e40af", "#1d4ed8", "#2563eb", "#3b82f6", "#93c5fd", "#bfdbfe", "#eff6ff"] },
+      "club-b": { "role": "secondary", "displayName": "Club B Red", "canonical": "#dc2626", "tonalRamp": ["#7f1d1d", "#991b1b", "#b91c1c", "#dc2626", "#ef4444", "#fca5a5", "#fecaca", "#fef2f2"] },
+      "live": { "role": "tertiary", "displayName": "Live Green", "canonical": "#16a34a", "tonalRamp": ["#14532d", "#166534", "#15803d", "#16a34a", "#22c55e", "#86efac", "#dcfce7", "#f0fdf4"] },
+      "live-ink": { "role": "tertiary", "displayName": "Live Green Ink", "canonical": "#166534", "tonalRamp": ["#14532d", "#166534", "#15803d", "#16a34a", "#22c55e", "#86efac", "#dcfce7", "#f0fdf4"] },
+      "live-bg": { "role": "tertiary", "displayName": "Live Green Wash", "canonical": "#dcfce7", "tonalRamp": ["#14532d", "#166534", "#15803d", "#16a34a", "#22c55e", "#86efac", "#dcfce7", "#f0fdf4"] },
+      "warn": { "role": "tertiary", "displayName": "Caution Amber", "canonical": "#d97706", "tonalRamp": ["#78350f", "#92400e", "#b45309", "#d97706", "#f59e0b", "#fcd34d", "#fef3c7", "#fffbeb"] },
+      "warn-ink": { "role": "tertiary", "displayName": "Caution Amber Ink", "canonical": "#92400e", "tonalRamp": ["#78350f", "#92400e", "#b45309", "#d97706", "#f59e0b", "#fcd34d", "#fef3c7", "#fffbeb"] },
+      "warn-bg": { "role": "tertiary", "displayName": "Caution Amber Wash", "canonical": "#fef3c7", "tonalRamp": ["#78350f", "#92400e", "#b45309", "#d97706", "#f59e0b", "#fcd34d", "#fef3c7", "#fffbeb"] }
     },
     "typographyMeta": {
-      "display-total": {
-        "displayName": "Display Total",
-        "purpose": "Club totals in the score race only; clamp(3.5rem, 20vw, 4.5rem) below sm so a 3-digit total fits half of a 320px phone, 6rem from sm."
-      },
-      "headline": {
-        "displayName": "Headline",
-        "purpose": "Page title, uppercase."
-      },
-      "title": {
-        "displayName": "Title",
-        "purpose": "Card titles on an ink rule, uppercase."
-      },
-      "body": {
-        "displayName": "Body",
-        "purpose": "Player names and copy; tabular numerals."
-      },
-      "label": {
-        "displayName": "Label",
-        "purpose": "Badges, pair labels (\"Pair 4\" on phones), club names over totals; buttons at 1rem."
-      }
+      "display-total": { "displayName": "Display Total", "purpose": "The two club totals in the scoreboard only; 2.5rem, 3.5rem once the scoreboard card is 48rem wide (@3xl). Tabular, counts up over 700ms." },
+      "headline": { "displayName": "Headline", "purpose": "Page titles, login wordmark, winner banner; scoreboard tournament name at 1.25rem (1.5rem from 640px)." },
+      "title": { "displayName": "Title", "purpose": "Card titles, court names, section headings on the ground." },
+      "score": { "displayName": "Score", "purpose": "Finished scores in match rows; winner's club colour in neutral views." },
+      "body": { "displayName": "Body", "purpose": "Copy and names; pair-card and picker names at 0.9375rem leading-snug." },
+      "button": { "displayName": "Button", "purpose": "Buttons; tabs at 0.8125rem on phones, 0.875rem from 640px." },
+      "label": { "displayName": "Label", "purpose": "Pair labels, badges, metadata labels, table headers. Sentence case, never a kicker above a heading." }
     },
     "shadows": [
-      {
-        "name": "tape-lift",
-        "value": "0 2px 4px rgb(22 24 29 / 0.18)",
-        "purpose": "Masking tape over a face-down pair. The only shadow in the system."
-      }
+      { "name": "segment-lift", "value": "0 1px 3px rgb(17 24 39 / 0.12)", "purpose": "The active tab in the segmented control." },
+      { "name": "overlay", "value": "0 12px 40px rgb(17 24 39 / 0.22)", "purpose": "Dialogs and the ranking stat-sheet popover, over a 40% ink backdrop." }
     ],
     "motion": [
-      {
-        "name": "ease-out-expo",
-        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
-        "purpose": "Race bar width (700ms) and tape peel (600ms, 150ms delay)."
-      },
-      {
-        "name": "peel",
-        "value": "to { transform: translate(110%, -40%) rotate(14deg); opacity: 0; }",
-        "purpose": "Tape peels off when a face-down pair is revealed."
-      }
+      { "name": "ease-out-expo", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Race-bar width (700ms), card flip-in (320ms, 240ms delay), tab panel-in (240ms)." },
+      { "name": "count-up", "value": "700ms, 1 - 2^(-10p)", "purpose": "Scoreboard totals tween from the previous value; instant under reduced motion." },
+      { "name": "flip-out", "value": "@keyframes flip-out { to { transform: rotateY(90deg); visibility: hidden; } } 240ms ease-in", "purpose": "A face-down card back turns away when names arrive." },
+      { "name": "flip-in", "value": "@keyframes flip-in { from { transform: rotateY(-90deg); } } 320ms expo-out, 240ms delay", "purpose": "The revealed names turn in." },
+      { "name": "panel-in", "value": "@keyframes panel-in { from { opacity: 0.4; transform: translateY(6px); } } 240ms expo-out", "purpose": "A tab panel settles in when selected." },
+      { "name": "live-ping", "value": "Tailwind animate-ping on a 60% live dot", "purpose": "The live dot pulses in the Live badge and on a tab." },
+      { "name": "reduced-motion", "value": "animation/transition durations 1ms, delays 0", "purpose": "Global override under prefers-reduced-motion." }
     ],
     "breakpoints": [
-      {
-        "name": "container-sm",
-        "value": "384px",
-        "purpose": "Container query on roster rows: below it the name field takes its own line."
-      },
-      {
-        "name": "sm",
-        "value": "640px",
-        "purpose": "Display-total to 6rem, full pair labels, court board two columns."
-      },
-      {
-        "name": "lg",
-        "value": "1024px",
-        "purpose": "Admin console goes to two/three columns."
-      }
+      { "name": "@3xs", "value": "16rem (container)", "purpose": "Award winner fields with 5+ names go two columns." },
+      { "name": "@sm", "value": "24rem (container)", "purpose": "Roster rows: below it the name field takes its own line." },
+      { "name": "sm", "value": "640px", "purpose": "Card padding 20px, full pair labels, tabs shrink to fit, court tiles 4 columns." },
+      { "name": "@3xl", "value": "48rem (container)", "purpose": "Scoreboard switches from stacked rows to the face-off." },
+      { "name": "lg", "value": "1024px", "purpose": "Admin two-column splits; match strip 7 columns." },
+      { "name": "xl", "value": "1280px", "purpose": "Admin court cards 4 columns." }
     ]
   },
   "components": [
@@ -204,116 +54,109 @@
       "name": "Primary Button",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "Solid ink action; one per view.",
-      "html": "<button class=\"ds-btn ds-btn-primary\">Submit lineup</button>",
-      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;border:0;border-radius:0;font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:0.025em;font-size:1rem;cursor:pointer;transition:background-color .15s,color .15s;}.ds-btn:focus-visible{outline:2px solid var(--color-ink);outline-offset:2px;}.ds-btn-primary{padding:0 16px;background:var(--color-ink);color:var(--color-sheet);}.ds-btn-primary:hover{background:rgb(22 24 29 / 0.85);}"
+      "description": "Ink fill, one per view (Start match, Submit lineup).",
+      "html": "<button class=\"ds-btn ds-btn-primary\">Start match</button>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;border:0;border-radius:12px;font-family:var(--font-sans);font-size:.9375rem;font-weight:600;cursor:pointer;transition:background-color .15s,color .15s,border-color .15s;}.ds-btn:focus-visible{outline:2px solid var(--color-ink);outline-offset:2px;}.ds-btn:disabled{opacity:.4;cursor:not-allowed;}.ds-btn-primary{padding:0 16px;background:var(--color-ink);color:#fff;}.ds-btn-primary:hover{background:rgb(17 24 39 / .85);}"
     },
     {
       "name": "Secondary Button",
       "kind": "button",
       "refersTo": "button-secondary",
-      "description": "White with ink border.",
-      "html": "<button class=\"ds-btn ds-btn-secondary\">Unsubmit</button>",
-      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;border:0;border-radius:0;font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:0.025em;font-size:1rem;cursor:pointer;transition:background-color .15s,color .15s;}.ds-btn:focus-visible{outline:2px solid var(--color-ink);outline-offset:2px;}.ds-btn-secondary{padding:0 16px;background:var(--color-sheet);color:var(--color-ink);border:1px solid var(--color-ink);}.ds-btn-secondary:hover{background:var(--color-wall);}"
+      "description": "White with a hairline border (Copy, Save, End match).",
+      "html": "<button class=\"ds-btn ds-btn-secondary\">End match 1</button>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;border:0;border-radius:12px;font-family:var(--font-sans);font-size:.9375rem;font-weight:600;cursor:pointer;transition:background-color .15s,color .15s,border-color .15s;}.ds-btn:focus-visible{outline:2px solid var(--color-ink);outline-offset:2px;}.ds-btn-secondary{padding:0 16px;background:var(--color-card);color:var(--color-ink);border:1px solid var(--color-line);}.ds-btn-secondary:hover{background:var(--color-page);border-color:rgb(17 24 39 / .25);}"
     },
     {
       "name": "Ghost Button",
       "kind": "button",
       "refersTo": "button-ghost",
-      "description": "Underlined text action for low-stakes actions.",
-      "html": "<button class=\"ds-btn ds-btn-ghost\">Copy link</button>",
-      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;border:0;border-radius:0;font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:0.025em;font-size:1rem;cursor:pointer;transition:background-color .15s,color .15s;}.ds-btn:focus-visible{outline:2px solid var(--color-ink);outline-offset:2px;}.ds-btn-ghost{background:none;color:var(--color-ink);text-decoration:underline;text-underline-offset:.2em;}.ds-btn-ghost:hover{color:var(--color-ink-soft);}"
+      "description": "Soft-ink text action (Sign out, Remove, Close).",
+      "html": "<button class=\"ds-btn ds-btn-ghost\">Sign out</button>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;border:0;border-radius:12px;font-family:var(--font-sans);font-size:.9375rem;font-weight:600;cursor:pointer;transition:background-color .15s,color .15s;}.ds-btn:focus-visible{outline:2px solid var(--color-ink);outline-offset:2px;}.ds-btn-ghost{padding:0 12px;background:transparent;color:var(--color-ink-soft);}.ds-btn-ghost:hover{background:rgb(17 24 39 / .05);color:var(--color-ink);}"
+    },
+    {
+      "name": "Field",
+      "kind": "input",
+      "refersTo": "field",
+      "description": "One look for inputs and selects; neutral error note below.",
+      "html": "<div class=\"ds-form\"><label class=\"ds-label\">Club A name<input class=\"ds-field\" value=\"Riverside PC\" maxlength=\"60\"></label><p class=\"ds-error\" role=\"alert\"><svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\"><circle cx=\"8\" cy=\"8\" r=\"6.25\"/><path d=\"M8 4.75v3.75M8 11v.25\"/></svg>Enter a club name (up to 60 characters).</p></div>",
+      "css": ".ds-form{display:flex;flex-direction:column;gap:8px;max-width:360px;}.ds-label{display:flex;flex-direction:column;gap:4px;font-family:var(--font-sans);font-size:.875rem;font-weight:600;color:var(--color-ink);}.ds-field{min-height:44px;border:1px solid var(--color-line);border-radius:12px;background:var(--color-card);padding:0 12px;font-family:var(--font-sans);font-size:1rem;font-weight:400;color:var(--color-ink);transition:border-color .15s;}.ds-field:hover{border-color:rgb(17 24 39 / .25);}.ds-field:focus-visible{outline:2px solid var(--color-ink);outline-offset:2px;}.ds-error{display:flex;align-items:flex-start;gap:8px;margin:0;border-radius:12px;background:rgb(17 24 39 / .06);padding:8px 12px;font-family:var(--font-sans);font-weight:600;color:var(--color-ink);}.ds-error svg{flex:none;margin-top:4px;}"
+    },
+    {
+      "name": "Segmented Tabs",
+      "kind": "nav",
+      "refersTo": "tab-active",
+      "description": "Sticky segmented control under the scoreboard; a tab can carry the live dot.",
+      "html": "<div class=\"ds-tabs\" role=\"tablist\"><button class=\"ds-tab\" role=\"tab\" aria-selected=\"true\">Courts<span class=\"ds-dot\"></span></button><button class=\"ds-tab\" role=\"tab\" aria-selected=\"false\">Lineups</button><button class=\"ds-tab\" role=\"tab\" aria-selected=\"false\">Results</button><button class=\"ds-tab\" role=\"tab\" aria-selected=\"false\">Ranking</button></div>",
+      "css": ".ds-tabs{display:inline-flex;gap:4px;padding:4px;border-radius:16px;background:rgb(17 24 39 / .06);}.ds-tab{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 20px;border:0;border-radius:12px;background:transparent;font-family:var(--font-sans);font-size:.875rem;font-weight:600;color:var(--color-ink-soft);cursor:pointer;transition:background-color .2s,color .2s,box-shadow .2s;}.ds-tab:hover{color:var(--color-ink);}.ds-tab:focus-visible{outline:2px solid var(--color-ink);outline-offset:2px;}.ds-tab[aria-selected=true]{background:var(--color-card);color:var(--color-ink);box-shadow:0 1px 3px rgb(17 24 39 / .12);}.ds-dot{width:8px;height:8px;border-radius:9999px;background:var(--color-live);}"
     },
     {
       "name": "Badges",
       "kind": "chip",
-      "refersTo": "badge-warn",
-      "description": "Warn, live, and plain badges with filled/hollow state marks.",
-      "html": "<span class=\"ds-badge ds-badge-warn\"><svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linejoin=\"round\"><path d=\"M8 1.75 15 14.25H1L8 1.75Z\"/><path d=\"M8 6.25v3.5M8 11.75v.25\" stroke-linecap=\"round\"/></svg>Already paired once</span> <span class=\"ds-badge ds-badge-live\">Live · Court 2</span> <span class=\"ds-badge ds-badge-plain\"><i class=\"ds-mark ds-mark-filled\"></i>Submitted</span> <span class=\"ds-badge ds-badge-plain\"><i class=\"ds-mark\"></i>Not yet</span>",
-      "css": ".ds-badge{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:0.025em;font-size:.875rem;line-height:1.25rem;color:var(--color-ink);}.ds-badge-warn{background:var(--color-warn);}.ds-badge-live{background:var(--color-live);}.ds-badge-plain{background:var(--color-sheet);border:1px solid var(--color-ink);}.ds-mark{width:10px;height:10px;border-radius:50%;border:2px solid var(--color-ink);box-sizing:border-box;}.ds-mark-filled{background:var(--color-ink);}"
+      "refersTo": "badge-live",
+      "description": "Live (pulsing dot), warn (repeat pair), plain with a state mark.",
+      "html": "<span class=\"ds-badge ds-live\"><span class=\"ds-dot\"></span>Live · Match 1</span> <span class=\"ds-badge ds-warn\"><svg viewBox=\"0 0 16 16\" width=\"14\" height=\"14\" fill=\"none\" stroke=\"#d97706\" stroke-width=\"1.75\" stroke-linejoin=\"round\"><path d=\"M8 1.75 15 14.25H1L8 1.75Z\"/><path d=\"M8 6.25v3.5M8 11.75v.25\" stroke-linecap=\"round\"/></svg>Already paired once</span> <span class=\"ds-badge ds-plain\"><span class=\"ds-mark\"></span>Free</span> <span class=\"ds-badge ds-plain\"><span class=\"ds-mark ds-filled\"></span>Submitted</span>",
+      "css": ".ds-badge{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;border-radius:9999px;padding:2px 10px;font-family:var(--font-sans);font-size:.75rem;font-weight:600;line-height:1.25rem;}.ds-live{background:var(--color-live-bg);color:var(--color-live-ink);}.ds-warn{background:var(--color-warn-bg);color:var(--color-warn-ink);}.ds-plain{background:rgb(17 24 39 / .06);color:var(--color-ink-soft);}.ds-dot{width:8px;height:8px;border-radius:9999px;background:var(--color-live);animation:ds-ping 1s cubic-bezier(0,0,.2,1) infinite;}@keyframes ds-ping{50%{opacity:.5;}}.ds-mark{width:8px;height:8px;border-radius:9999px;border:1.5px solid currentColor;box-sizing:border-box;}.ds-filled{background:currentColor;}"
     },
     {
-      "name": "Card",
+      "name": "Card with flush list",
       "kind": "card",
       "refersTo": "card",
-      "description": "Square white sheet on the wall; title on an ink rule. Never nested.",
-      "html": "<section class=\"ds-card\"><header class=\"ds-card-head\"><h2>Match 4</h2></header><p>Sheet content.</p></section>",
-      "css": ".ds-card{background:var(--color-sheet);padding:16px;}.ds-card-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--color-ink);}.ds-card-head h2{margin:0;font-family:var(--font-display);font-weight:700;font-size:1.5rem;line-height:1;text-transform:uppercase;}"
-    },
-    {
-      "name": "Form Field",
-      "kind": "input",
-      "description": "Square 44px ink-bordered fields with an uppercase label above; roster rows give the name its own line under 384px; errors are an ink-ruled alert.",
-      "html": "<div class=\"ds-form\"><label class=\"ds-label\">Club A name<input class=\"ds-input\" value=\"Riverside PC\" maxlength=\"60\"></label><fieldset class=\"ds-roster\"><legend class=\"ds-label\">New players (0)</legend><div class=\"ds-row\"><input class=\"ds-input ds-grow\" placeholder=\"Player name\" aria-label=\"Club A player name\" maxlength=\"60\"><select class=\"ds-input\" aria-label=\"Club A player gender\"><option value=\"\" disabled selected>Gender</option><option value=\"M\">M</option><option value=\"F\">F</option></select><button class=\"ds-btn-secondary\" type=\"button\">Add</button></div></fieldset><p class=\"ds-error\" role=\"alert\">Enter a club name (up to 60 characters).</p></div>",
-      "css": ".ds-form{display:flex;flex-direction:column;gap:16px;background:var(--color-sheet);padding:16px;}.ds-label{display:flex;flex-direction:column;gap:4px;padding:0;font-family:var(--font-display);font-weight:700;font-size:.875rem;text-transform:uppercase;letter-spacing:0.025em;color:var(--color-ink);}.ds-input{min-height:44px;border:1px solid var(--color-ink);border-radius:0;background:var(--color-sheet);padding:0 12px;font-family:var(--font-sans);font-size:1rem;font-weight:400;text-transform:none;letter-spacing:0;color:var(--color-ink);}.ds-input:focus-visible,.ds-btn-secondary:focus-visible{outline:2px solid var(--color-ink);outline-offset:2px;}.ds-roster{container-type:inline-size;min-width:0;margin:0;padding:0;border:0;display:flex;flex-direction:column;gap:8px;}.ds-row{display:flex;flex-wrap:wrap;gap:8px;}.ds-grow{flex:1 1 100%;min-width:0;}@container (min-width:24rem){.ds-grow{flex-basis:0;}}.ds-btn-secondary{min-height:44px;padding:0 16px;border:1px solid var(--color-ink);border-radius:0;background:var(--color-sheet);color:var(--color-ink);font-family:var(--font-display);font-weight:700;font-size:1rem;text-transform:uppercase;letter-spacing:0.025em;cursor:pointer;transition:background-color .15s;}.ds-btn-secondary:hover{background:var(--color-wall);}.ds-error{margin:0;border-left:4px solid var(--color-ink);padding-left:12px;font-family:var(--font-sans);font-weight:600;color:var(--color-ink);}"
-    },
-    {
-      "name": "PairCard",
-      "kind": "custom",
-      "description": "One club's pair; face-down renders masking tape and no names. On phones the label reads \"Pair 4\" (club prefix screen-reader only) and long names wrap.",
-      "html": "<div class=\"ds-match\"><div class=\"ds-pair\"><p class=\"ds-pair-label ds-a\"><span class=\"ds-club-prefix\">Club A · </span>Pair 4</p><p class=\"ds-names\">Maximiliano Dela Cruz-Santos<br>Noel Ramos</p></div><span class=\"ds-vs\">vs</span><div class=\"ds-pair ds-right\"><p class=\"ds-pair-label ds-b\"><span class=\"ds-club-prefix\">Club B · </span>Pair 4</p><div class=\"ds-tape\"></div></div></div>",
-      "css": ".ds-match{display:grid;grid-template-columns:1fr auto 1fr;border-top:1px solid var(--color-ink);border-bottom:1px solid var(--color-ink);background:var(--color-sheet);}.ds-pair{position:relative;min-width:0;min-height:72px;overflow:hidden;padding:8px 12px;}.ds-right{text-align:right;}.ds-pair-label{margin:0;font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:0.025em;font-size:.875rem;}.ds-a{color:var(--color-club-a);}.ds-b{color:var(--color-club-b);}.ds-names{margin:0;font-family:var(--font-sans);line-height:1.375;overflow-wrap:break-word;hyphens:auto;}.ds-vs{display:flex;align-items:center;padding:0 8px;border-left:1px solid var(--color-ink);border-right:1px solid var(--color-ink);font-family:var(--font-display);font-weight:800;font-size:1.25rem;}.ds-tape{position:absolute;left:8px;right:8px;top:28px;height:48px;transform:rotate(-1deg);background:var(--color-tape);box-shadow:0 2px 4px rgb(22 24 29 / 0.18);}@media (max-width:639px){.ds-pair{padding:8px;}.ds-club-prefix{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;}}"
+      "description": "White 16px card on a hairline; row lists run edge to edge and drop the bottom rule when they end the card.",
+      "html": "<section class=\"ds-card\"><header><h2>Round 2</h2></header><ol class=\"ds-flush\"><li><span class=\"ds-lbl ds-a\">Pair 1</span>Ana Cruz &amp; Noel Ramos</li><li class=\"ds-livewash\"><span class=\"ds-lbl ds-a\">Pair 2</span>Mia Santos &amp; Leo Tan</li><li><span class=\"ds-lbl ds-a\">Pair 3</span><span class=\"ds-soft\">Tap to pick 2 players</span></li></ol></section>",
+      "css": ".ds-card{max-width:420px;border:1px solid var(--color-line);border-radius:16px;background:var(--color-card);padding:16px;font-family:var(--font-sans);color:var(--color-ink);}.ds-card header{margin-bottom:12px;}.ds-card h2{margin:0;font-size:1.125rem;font-weight:700;line-height:1.25;letter-spacing:-.025em;}.ds-flush{list-style:none;margin:0 -16px;padding:0;border-top:1px solid var(--color-line);}.ds-flush li{display:flex;flex-direction:column;gap:2px;min-height:56px;padding:10px 16px;border-bottom:1px solid var(--color-line);}.ds-flush li:last-child{border-bottom:0;}.ds-flush li:hover{background:var(--color-page);}.ds-livewash{background:rgb(220 252 231 / .6);}.ds-lbl{font-size:.75rem;font-weight:600;}.ds-a{color:var(--color-club-a);}.ds-soft{color:var(--color-ink-soft);}"
     },
     {
       "name": "ScoreRace",
       "kind": "custom",
-      "description": "Club totals as whole colour fields over a race strip meeting at an ink midline. Club names take up to two lines; totals sit on the bottom edge and shrink fluidly below sm.",
-      "html": "<div><div class=\"ds-band\"><div class=\"ds-field ds-fa\"><p class=\"ds-club\">Riverside PC</p><p class=\"ds-total\">112</p></div><div class=\"ds-field ds-fb\"><p class=\"ds-club\">Northgate PC</p><p class=\"ds-total\">104</p></div></div><div class=\"ds-strip\"><div class=\"ds-bar ds-fa\" style=\"left:0;width:62%\"></div><div class=\"ds-bar ds-fb\" style=\"right:0;width:38%\"></div><div class=\"ds-mid\"></div></div><p class=\"ds-lead\">Riverside PC lead by 8</p></div>",
-      "css": ".ds-band{display:grid;grid-template-columns:1fr 1fr;color:var(--color-sheet);}.ds-field{display:flex;flex-direction:column;justify-content:space-between;min-width:0;padding:10px 16px 12px;}.ds-fb{text-align:right;}.ds-fa{background:var(--color-club-a);}.ds-fb{background:var(--color-club-b);}.ds-club{margin:0;font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:0.025em;font-size:.875rem;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;overflow-wrap:break-word;}.ds-total{margin:0;font-family:var(--font-display);font-weight:800;font-size:clamp(3.5rem,20vw,4.5rem);line-height:.9;font-variant-numeric:tabular-nums;}.ds-strip{position:relative;margin-top:8px;height:14px;background:var(--color-sheet);}.ds-bar{position:absolute;top:0;bottom:0;transition:width .7s cubic-bezier(0.16,1,0.3,1);}.ds-mid{position:absolute;top:-3px;bottom:-3px;left:50%;width:2px;transform:translateX(-50%);background:var(--color-ink);}.ds-lead{margin:6px 0 0;font-family:var(--font-display);font-weight:700;text-transform:uppercase;}@media (min-width:640px){.ds-total{font-size:6rem;}}"
+      "description": "Scoreboard card: crests, clubs, tabular totals (trailing dimmed), race bar split at 50% + 1.5%/point capped 10/90 with a centre tick. Stacked below a 48rem card, face-off above.",
+      "html": "<section class=\"ds-sb\"><h1>Demo tournament</h1><div class=\"ds-row\"><span class=\"ds-crest ds-ca\">RP</span><p class=\"ds-club\">Riverside PC</p><p class=\"ds-total ds-trail\">56</p><span class=\"ds-dash\">–</span><p class=\"ds-total\">58</p><p class=\"ds-club ds-r\">Northgate PC</p><span class=\"ds-crest ds-cb\">NP</span></div><div class=\"ds-race\"><div class=\"ds-track\"><div class=\"ds-fa\" style=\"width:47%\"></div><div class=\"ds-fb\"></div></div><div class=\"ds-tick\"></div></div><div class=\"ds-foot\"><p class=\"ds-lead\">Northgate PC lead by 2</p><p class=\"ds-status\">Round 2 · 0 of 7 matches done</p></div></section>",
+      "css": ".ds-sb{container-type:inline-size;border:1px solid var(--color-line);border-radius:16px;background:var(--color-card);padding:24px;font-family:var(--font-sans);color:var(--color-ink);}.ds-sb h1{margin:0 0 20px;font-size:1.5rem;font-weight:700;letter-spacing:-.025em;}.ds-row{display:grid;grid-template-columns:auto 1fr auto auto auto 1fr auto;align-items:center;gap:16px;}.ds-crest{display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:9999px;color:#fff;font-size:.875rem;font-weight:700;}.ds-ca{background:var(--color-club-a);}.ds-cb{background:var(--color-club-b);}.ds-club{margin:0;font-size:1.125rem;font-weight:700;line-height:1.25;min-width:0;}.ds-r{text-align:right;}.ds-total{margin:0;font-size:3.5rem;font-weight:800;line-height:1;letter-spacing:-.025em;font-variant-numeric:tabular-nums;}.ds-trail{color:var(--color-ink-soft);}.ds-dash{font-size:1.875rem;font-weight:300;color:rgb(17 24 39 / .25);}.ds-race{position:relative;margin-top:16px;}.ds-track{display:flex;height:10px;overflow:hidden;border-radius:9999px;background:var(--color-line);}.ds-fa{background:var(--color-club-a);transition:width .7s cubic-bezier(0.16,1,0.3,1);}.ds-fb{flex:1;background:var(--color-club-b);}.ds-tick{position:absolute;top:-4px;bottom:-4px;left:50%;width:2px;transform:translateX(-50%);border-radius:9999px;background:var(--color-ink);}.ds-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 16px;margin-top:10px;font-size:.875rem;}.ds-foot p{margin:0;}.ds-lead{font-weight:600;}.ds-status{color:var(--color-ink-soft);}@container (max-width:41.99rem){.ds-row{grid-template-columns:auto 1fr auto;gap:12px;}.ds-dash{display:none;}.ds-crest{width:36px;height:36px;font-size:.75rem;}.ds-total{font-size:2.5rem;}.ds-club{font-size:1rem;font-weight:600;}}"
+    },
+    {
+      "name": "PairCard",
+      "kind": "custom",
+      "description": "Match row: pair A | Match N + score/Live/Pending | pair B. Face-down pairs are club-striped card backs with a lock; no names in the DOM.",
+      "html": "<div class=\"ds-match\"><div class=\"ds-pair\"><p class=\"ds-pl ds-a\">Club A · Pair 1</p><p class=\"ds-names\">Ana Cruz<br>Noel Ramos</p></div><div class=\"ds-mid\"><span class=\"ds-ml\">Match 1</span><span class=\"ds-score ds-a\">11–6</span></div><div class=\"ds-pair ds-right\"><p class=\"ds-pl ds-b\">Club B · Pair 1</p><div class=\"ds-back ds-b\"><svg viewBox=\"0 0 16 16\" width=\"14\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\"><rect x=\"3\" y=\"7\" width=\"10\" height=\"7\" rx=\"1.5\"/><path d=\"M5.5 7V5a2.5 2.5 0 0 1 5 0v2\"/></svg>Hidden</div></div></div>",
+      "css": ".ds-match{display:grid;grid-template-columns:1fr auto 1fr;max-width:420px;border-top:1px solid var(--color-line);border-bottom:1px solid var(--color-line);background:var(--color-card);font-family:var(--font-sans);color:var(--color-ink);}.ds-pair{min-width:0;min-height:72px;padding:10px 16px;}.ds-right{text-align:right;}.ds-pl{margin:0;font-size:.75rem;font-weight:600;}.ds-a{color:var(--color-club-a);}.ds-b{color:var(--color-club-b);}.ds-names{margin:2px 0 0;font-size:.9375rem;line-height:1.375;overflow-wrap:break-word;hyphens:auto;}.ds-mid{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:80px;padding:8px;}.ds-ml{font-size:.75rem;font-weight:600;color:var(--color-ink-soft);}.ds-score{white-space:nowrap;font-size:1.5rem;font-weight:800;letter-spacing:-.025em;font-variant-numeric:tabular-nums;}.ds-back{display:flex;align-items:center;justify-content:center;gap:6px;height:44px;margin-top:4px;border-radius:8px;font-size:.75rem;font-weight:600;background:repeating-linear-gradient(135deg,color-mix(in srgb,currentColor 6%,transparent) 0 6px,color-mix(in srgb,currentColor 12%,transparent) 6px 12px);}"
     }
   ],
   "narrative": {
-    "northStar": "The Venue Draw Sheet",
-    "overview": "The duel looks like the printed draw sheet a director tapes to the venue wall and marks up live in two club markers. Sage-painted wall, white sheet panels with square corners, print-black hairlines, and two marker colours that fill whole regions. State is a mark in a fixed cell (filled or hollow, highlighter for live), and pending pairs sit under masking tape. Figures carry the page: club totals are the largest thing on any screen.\n\nLight only: indoor venue, and the user ruled out a dark theme. Not cute, not corporate: no grey SaaS score card with one blue accent, no mascots or rounded friendliness.",
+    "northStar": "The Match Centre",
+    "overview": "Club Duel reads like the match page of a mainstream sports-scores app (the Apple Sports, FotMob and Sofascore family, and the EA FC / 2K companion apps): a white scoreboard card at the top with crests, club names and the two totals, a race bar that shows the lead, and a sticky segmented control under it. Each role (admin, captain, audience) gets one page, and its sections are tabs rather than a stack of panels. Nothing is dressed up as a theme. The polish comes from canon details done well: tabular totals that count up, a dimmed trailing score, green only for live, card backs for hidden pairs.\n\nThe ground is a cool light grey with white cards on 1px hairlines and 16px corners. It is light because the app is used inside a bright indoor venue. Density is medium. Rows are at least 44px tall, and lists run edge to edge inside their card, so a phone shows a lot without feeling cramped. Colour is rationed so each colour has one meaning. The two club colours label that club's things, green means a match is on, and amber means you should look twice.",
     "keyCharacteristics": [
-      "Club colour owns regions, never a thin accent.",
-      "Scale contrast ranks information: monumental totals, uppercase condensed heads, plain body.",
-      "Square sheets, ink hairlines, no radius.",
-      "Tape is the only thing with a shadow.",
-      "Motion only in two signature moves: race bars growing and tape peeling."
+      "Scoreboard card first, sticky segmented tabs second, one page per role.",
+      "Cool grey ground, white 16px-radius cards on 1px hairlines; flat at rest.",
+      "One meaning per colour: club blue/red, live green, caution amber. Errors stay neutral.",
+      "Inter throughout. The totals are the heaviest and largest type, and the only figures that animate.",
+      "Hidden pairs are striped card backs with a lock. Their names never reach the DOM."
     ],
     "rules": [
-      {
-        "name": "The Whole Field Rule",
-        "body": "A club colour fills a region (totals band, race bar) or labels that club's own content. It is never a generic accent, link colour, or decoration.",
-        "section": "colors"
-      },
-      {
-        "name": "The One Meaning Rule",
-        "body": "Yellow means live, orange means repeat-pair warning, tape means hidden. Do not reuse them for anything else.",
-        "section": "colors"
-      },
-      {
-        "name": "The Figures Carry the Page Rule",
-        "body": "The club totals are always the largest type on screen. Nothing else uses display-total.",
-        "section": "typography"
-      },
-      {
-        "name": "The Uppercase Is for Heads Rule",
-        "body": "Condensed uppercase is for titles, labels, buttons, and badges. Names and sentences stay in Barlow sentence case.",
-        "section": "typography"
-      },
-      {
-        "name": "The Only Tape Lifts Rule",
-        "body": "No shadows on cards, buttons, badges, or dialogs. If something needs to stand out, use scale, a club field, or ink weight.",
-        "section": "elevation"
-      }
+      { "name": "The One Meaning Rule", "body": "Green means live. Amber means caution, which is mainly the repeat pair. Blue and red mean \"this club's\". Do not reuse any of them as decoration, a link colour, or a generic accent.", "section": "colors" },
+      { "name": "The Neutral Error Rule", "body": "There is no error colour. A form error is a 6% ink note with a circled \"!\" icon and semibold text, announced as an alert. Red belongs to Club B, so red text would read as \"Club B\".", "section": "colors" },
+      { "name": "The Winner Takes Its Colour Rule", "body": "In neutral views (audience, admin, tabulation), a finished match score is set in the winning club's colour. In a captain's own view the result is a W/L chip instead: ink fill for W, 6% ink for L.", "section": "colors" },
+      { "name": "The Figures Lead Rule", "body": "The scoreboard totals are always the heaviest, largest type on the page. Other scores step down (1.5rem and below).", "section": "typography" },
+      { "name": "The Tabular Where It Counts Rule", "body": "`tabular-nums` applies only to scores, totals, stats, the ranking table, stat sheets, the score inputs and audit timestamps, never to the whole body. Negative numbers use the true minus sign (U+2212), never a hyphen.", "section": "typography" },
+      { "name": "The No Kicker Rule", "body": "No eyebrow or kicker line above a heading. Context goes in the heading itself or in a pill beside it. For example, the captain header is the club name with a \"Captain\" pill, not \"CAPTAIN\" over the name. Small metadata labels belong above a row or value, never above a page or card title.", "section": "typography" },
+      { "name": "The Hairline Not Shadow Rule", "body": "Cards, tiles, buttons, badges and fields never cast a shadow. To make something stand out, use a status fill (live-bg), a club colour, or weight and size.", "section": "elevation" }
     ],
     "dos": [
-      "**Do** let club colours fill whole regions (totals fields, race bars) and label only that club's content.",
-      "**Do** separate content with 1px print-ink hairlines inside white sheets.",
-      "**Do** keep numerals tabular and make the club totals the largest type on screen.",
-      "**Do** pass `names={null}` for any pair the viewer may not see; face-down renders tape only.",
-      "**Do** keep motion to the race bars and the tape peel, with the global reduced-motion override intact.",
-      "**Do** keep tap targets at least 44px."
+      "**Do** open every role page with the scoreboard card, then the sticky tabs; add a new section as a tab, not a stacked panel.",
+      "**Do** keep cards white with 16px corners on a 1px hairline over the grey ground, and run row lists flush to the card edge (-mx-4 sm:-mx-5, rows px-4 sm:px-5).",
+      "**Do** put tile grids (courts, match strips) on the page ground under a Title heading.",
+      "**Do** set a finished score in the winning club's colour in neutral views, and dim the trailing total in the scoreboard.",
+      "**Do** use `tabular-nums` on scores, totals, stats and tables only, and U+2212 for negatives.",
+      "**Do** pass `names={null}` for any pair the viewer may not see; the card back renders and no names reach the DOM.",
+      "**Do** keep motion to the total count-up, race-bar growth, card flip, live-dot pulse and tab fade, all on `--ease-out-expo`, with the global reduced-motion override intact.",
+      "**Do** keep tap targets at least 44px and give every grid a `grid-cols-1` base template."
     ],
     "donts": [
-      "**Don't** add a dark theme; the product is light only.",
-      "**Don't** put a shadow on anything but tape.",
-      "**Don't** round corners on sheets, buttons, or badges.",
-      "**Don't** use yellow, orange, or tape colour for anything except live, repeat warning, and hidden.",
-      "**Don't** fall back to a grey SaaS score card with one blue accent, or to cute mascot-style friendliness.",
-      "**Don't** nest cards."
+      "**Don't** nest cards, or put a tile grid inside a card.",
+      "**Don't** use green for anything but live, amber for anything but caution, or club blue/red for anything but that club's content.",
+      "**Don't** add an error colour; errors are the neutral ink note with an icon.",
+      "**Don't** put a shadow on cards, tiles, buttons, badges or fields; only the active tab and overlays lift.",
+      "**Don't** put a kicker or eyebrow above a heading; put context in the heading or a pill beside it.",
+      "**Don't** apply `tabular-nums` to the whole body."
     ]
   }
 }

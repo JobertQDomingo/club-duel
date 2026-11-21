@@ -20,6 +20,78 @@
         ],
         "createdAt": "2026-11-21T04:49:41.630Z",
         "reason": "agent: unchosen decision-round sketch, intentionally in its own rejected direction's fonts; not shipped UI"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/cabinet.html"
+        ],
+        "createdAt": "2026-11-21T09:11:58.540Z",
+        "reason": "agent: decision-round sketch in its own direction's fonts; not shipped UI"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/draft.html"
+        ],
+        "createdAt": "2026-11-21T09:11:58.791Z",
+        "reason": "agent: decision-round sketch in its own direction's fonts; not shipped UI"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-tiles.html"
+        ],
+        "createdAt": "2026-11-21T09:11:59.053Z",
+        "reason": "agent: decision-round sketch in its own direction's fonts; not shipped UI"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon-scores.html"
+        ],
+        "createdAt": "2026-11-21T09:11:59.305Z",
+        "reason": "agent: decision-round sketch in its own direction's fonts; not shipped UI"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/cabinet.html"
+        ],
+        "createdAt": "2026-11-21T09:12:44.984Z",
+        "reason": "agent: throwaway decision-round sketch (compact chips drawn as skeletons); not shipped UI"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/draft.html"
+        ],
+        "createdAt": "2026-11-21T09:12:45.264Z",
+        "reason": "agent: throwaway decision-round sketch (compact chips drawn as skeletons); not shipped UI"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-tiles.html"
+        ],
+        "createdAt": "2026-11-21T09:12:45.547Z",
+        "reason": "agent: throwaway decision-round sketch (compact chips drawn as skeletons); not shipped UI"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon-scores.html"
+        ],
+        "createdAt": "2026-11-21T09:12:45.829Z",
+        "reason": "agent: throwaway decision-round sketch (compact chips drawn as skeletons); not shipped UI"
       }
     ]
   }

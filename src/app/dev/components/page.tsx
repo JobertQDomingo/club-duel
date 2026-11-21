@@ -9,12 +9,12 @@ export const metadata = { title: "Components · Club Duel" };
 export default function ComponentsPage() {
   return (
     <main className="mx-auto w-full max-w-5xl px-4 py-6">
-      <h1 className="font-display text-4xl font-extrabold uppercase">Club Duel components</h1>
+      <h1 className="text-3xl font-bold tracking-tight">Club Duel components</h1>
       <p className="mt-1 max-w-prose text-ink-soft">
-        Venue Draw Sheet system. All names on this page are synthetic demo data.
+        Base components. All names on this page are synthetic demo data.
       </p>
 
-      <div className="mt-6 grid items-start gap-4 md:grid-cols-2">
+      <div className="mt-6 grid grid-cols-1 items-start gap-4 md:grid-cols-2">
         <RaceDemo />
         <FlipDemo />
 
@@ -38,7 +38,7 @@ export default function ComponentsPage() {
         </Card>
 
         <Card title="Pair cards" className="md:col-span-2">
-          <div className="grid divide-y divide-ink border-y border-ink sm:grid-cols-4 sm:divide-x sm:divide-y-0">
+          <div className="-mx-4 grid grid-cols-1 divide-y divide-line border-y border-line last:border-b-0 sm:-mx-5 sm:grid-cols-4 sm:divide-x sm:divide-y-0">
             <PairCard side="A" slot={1} names={["Ana Cruz", "Ben Lim"]} />
             <PairCard side="A" slot={2} names={["Eli Go", "Fay Ong"]} repeat />
             <PairCard side="B" slot={3} names={null} />

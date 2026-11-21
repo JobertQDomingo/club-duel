@@ -11,7 +11,7 @@ export default async function LoginPage() {
   if (data?.claims) redirect('/admin')
   return (
     <main className="mx-auto w-full max-w-md px-4 py-6">
-      <h1 className="mb-6 font-display text-4xl font-extrabold uppercase leading-tight">Club Duel</h1>
+      <h1 className="mb-6 text-3xl font-extrabold tracking-tight">Club Duel</h1>
       <Card title="Admin sign in">
         <LoginForm />
       </Card>

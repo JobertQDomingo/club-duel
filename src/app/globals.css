@@ -1,34 +1,36 @@
 @import "tailwindcss";
 
-/* Venue Draw Sheet: see DESIGN.md. Light only (indoor venue, user ruled out dark). */
+/* Sports-scores app system: see DESIGN.md. Light (indoor venue). */
 @theme {
-  --color-wall: #d6e4da;
-  --color-sheet: #ffffff;
-  --color-ink: #16181d;
-  --color-ink-soft: #4a5058;
-  --color-club-a: #1f5bd8;
-  --color-club-b: #d7322b;
-  --color-live: #f2dc4a;
-  --color-tape: #e6d3a0;
-  --color-warn: #f08a24;
+  --color-page: #f3f5f8;
+  --color-card: #ffffff;
+  --color-line: #e5e7eb;
+  --color-ink: #111827;
+  --color-ink-soft: #565e6c;
+  --color-club-a: #1d4ed8;
+  --color-club-b: #dc2626;
+  --color-live: #16a34a;
+  --color-live-ink: #166534;
+  --color-live-bg: #dcfce7;
+  --color-warn: #d97706;
+  --color-warn-ink: #92400e;
+  --color-warn-bg: #fef3c7;
 
-  --font-sans: var(--font-barlow), system-ui, sans-serif;
-  --font-display: var(--font-barlow-sc), var(--font-barlow), sans-serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 body {
-  background: var(--color-wall);
+  background: var(--color-page);
   color: var(--color-ink);
   font-family: var(--font-sans);
-  font-variant-numeric: tabular-nums;
-  caret-color: var(--color-club-a);
-  scrollbar-color: var(--color-ink-soft) var(--color-wall);
+  caret-color: var(--color-ink);
+  scrollbar-color: #c3c8d0 var(--color-page);
 }
 
 ::selection {
-  background: var(--color-live);
+  background: #dbe4ff;
   color: var(--color-ink);
 }
 
@@ -41,11 +43,33 @@ a {
   text-underline-offset: 0.2em;
 }
 
-/* Signature move 2: masking tape peels off when a pair is revealed. */
-@keyframes peel {
+/* Face-down pair: a card back striped in its club's colour (set via text colour). */
+.card-back {
+  background: repeating-linear-gradient(
+    135deg,
+    color-mix(in srgb, currentColor 6%, transparent) 0 6px,
+    color-mix(in srgb, currentColor 12%, transparent) 6px 12px
+  );
+}
+
+/* Signature move: a face-down card turns away, then the names turn in. */
+@keyframes flip-out {
   to {
-    transform: translate(110%, -40%) rotate(14deg);
-    opacity: 0;
+    transform: rotateY(90deg);
+    visibility: hidden;
+  }
+}
+
+@keyframes flip-in {
+  from {
+    transform: rotateY(-90deg);
+  }
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0.4;
+    transform: translateY(6px);
   }
 }
 
@@ -54,6 +78,7 @@ a {
   *::before,
   *::after {
     animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
     transition-duration: 1ms !important;
   }
 }

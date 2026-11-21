@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { Badge } from '@/components/ui/Badge'
 import { Card } from '@/components/ui/Card'
 import { requireUser } from '@/lib/auth'
 import { supabaseAdmin } from '@/lib/supabase/admin'
@@ -17,16 +18,16 @@ export default async function AdminHome() {
   if (error) throw new Error(error.message)
 
   return (
-    <main className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 py-6">
-      <h1 className="font-display text-4xl font-extrabold uppercase leading-tight">My tournaments</h1>
+    <main className="mx-auto flex w-full max-w-4xl flex-col gap-4 px-4 py-6">
+      <h1 className="text-3xl font-bold tracking-tight">My tournaments</h1>
       <Card>
         {tournaments.length ? (
-          <ul className="divide-y divide-ink/20">
+          <ul className="-my-2 divide-y divide-line">
             {tournaments.map((t) => (
               <li key={t.id}>
-                <Link href={`/admin/t/${t.id}`} className="flex min-h-11 items-center justify-between gap-4 py-2 font-semibold hover:underline">
-                  {t.name}
-                  <span className="font-display text-sm uppercase tracking-wide text-ink-soft">{t.status}</span>
+                <Link href={`/admin/t/${t.id}`} className="flex min-h-14 items-center justify-between gap-4 py-2 font-semibold hover:underline">
+                  <span className="min-w-0 wrap-anywhere">{t.name}</span>
+                  <Badge mark={t.status === 'ended' ? 'filled' : 'hollow'}>{t.status}</Badge>
                 </Link>
               </li>
             ))}

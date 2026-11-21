@@ -9,8 +9,10 @@ export default async function AdminLayout({ children }: LayoutProps<'/admin'>) {
   await requireUser()
   return (
     <div className="flex flex-1 flex-col">
-      <header className="flex items-center justify-between gap-4 bg-sheet px-4">
-        <span className="font-display text-xl font-extrabold uppercase">Club Duel · Admin</span>
+      <header className="flex items-center justify-between gap-4 border-b border-line bg-card px-4">
+        <span className="text-lg font-extrabold tracking-tight">
+          Club Duel <span className="font-medium text-ink-soft">Admin</span>
+        </span>
         <form action={signOut}>
           <Button type="submit" variant="ghost">Sign out</Button>
         </form>

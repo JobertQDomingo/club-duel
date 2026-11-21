@@ -2,12 +2,11 @@
 
 import { useRef, useState, type KeyboardEvent } from 'react'
 import { Button } from '@/components/ui/Button'
+import { field } from '@/components/ui/field'
 import { MAX_NAME } from '@/lib/domain'
 import type { Player } from '@/lib/types'
 
 type Entry = Pick<Player, 'name' | 'gender'>
-
-const field = 'min-h-11 border border-ink bg-sheet px-3 font-sans text-base font-normal normal-case tracking-normal'
 
 /** Name + gender + Add, building a list. Submits as `field` (default `players{side}`) in the "Name, M" line format parseRoster reads. */
 export function RosterInput({ side, field: fieldName = `players${side}`, legend = `Club ${side} players` }: { side: 'A' | 'B'; field?: string; legend?: string }) {
@@ -34,7 +33,7 @@ export function RosterInput({ side, field: fieldName = `players${side}`, legend 
 
   return (
     <fieldset className="@container flex min-w-0 flex-col gap-2">
-      <legend className="font-display text-sm font-bold uppercase tracking-wide">
+      <legend className="mb-2 text-sm font-semibold">
         {legend} ({players.length})
       </legend>
       <input type="hidden" name={fieldName} value={players.map((p) => `${p.name}, ${p.gender}`).join('\n')} />
@@ -66,10 +65,10 @@ export function RosterInput({ side, field: fieldName = `players${side}`, legend 
         </Button>
       </div>
       {players.length > 0 && (
-        <ol className="divide-y divide-ink/20 border border-ink/20">
+        <ol className="divide-y divide-line border-y border-line">
           {players.map((p, i) => (
-            <li key={i} className="flex min-h-11 items-center justify-between gap-2 px-3">
-              <span>
+            <li key={i} className="flex min-h-11 items-center justify-between gap-2">
+              <span className="min-w-0 wrap-anywhere">
                 {i + 1}. {p.name} <span className="text-ink-soft">· {p.gender}</span>
               </span>
               <Button

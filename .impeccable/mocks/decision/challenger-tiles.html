@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Console Home Rows</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--g:#0F1013;--p:#1B1D23;--l:#2C2F38;--t:#FFFFFF;--s:#9AA0AE;--a:#4C7DFF;--b:#FF5A47;--live:#F6D34A;--warn:#FF9A3D}
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:1440px;height:900px;overflow:hidden;background:var(--g);color:var(--t);font:15px/1.4 Manrope,sans-serif;font-variant-numeric:tabular-nums}
+.top{display:flex;justify-content:space-between;align-items:center;padding:16px 48px;color:var(--s)}
+.top b{color:var(--t);font-size:18px}
+.hero{display:grid;grid-template-columns:1fr 1fr;margin:0 48px;height:150px;border-radius:14px;overflow:hidden;position:relative}
+.hero div{padding:20px 28px;display:flex;flex-direction:column;justify-content:space-between}
+.hero .a{background:var(--a)} .hero .b{background:var(--b);text-align:right}
+.hero h2{font-size:18px;font-weight:800;letter-spacing:.02em}
+.hero span{font-size:84px;font-weight:800;line-height:.85;letter-spacing:-.03em}
+.meter{position:absolute;left:28px;right:28px;bottom:12px;height:6px;background:rgba(0,0,0,.35);border-radius:3px;display:flex;overflow:hidden}
+.lead{margin:12px 48px 0;color:var(--s);font-weight:700}
+.tabs{display:flex;gap:8px;margin:18px 48px 0}
+.tab{padding:9px 20px;border-radius:999px;font-weight:700;color:var(--s);background:var(--p)}
+.tab.on{background:var(--t);color:var(--g)}
+.row{margin:22px 0 0 48px}
+.row h3{font-size:17px;font-weight:800;margin-bottom:10px}
+.row h3 small{color:var(--s);font-weight:600;margin-left:8px}
+.rail{display:flex;gap:14px;align-items:center}
+.tile{flex:none;width:250px;height:150px;border-radius:12px;background:var(--p);padding:14px;display:flex;flex-direction:column;gap:6px;opacity:.55}
+.tile.f{width:330px;height:196px;opacity:1;outline:3px solid var(--t);outline-offset:3px;background:linear-gradient(90deg,#22356E 0 50%,#5A2620 50%)}
+.tile header{display:flex;justify-content:space-between;align-items:center;font-weight:800}
+.tile header b{font-size:22px}
+.chip{font-size:12px;font-weight:800;padding:3px 9px;border-radius:999px;text-transform:uppercase;letter-spacing:.05em}
+.live{background:var(--live);color:var(--g)}
+.free{background:var(--l);color:var(--s)}
+.vs{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;margin-top:auto}
+.vs .r{text-align:right}
+.vs i{font-style:normal;color:var(--s);font-weight:800;font-size:12px}
+.lbl{font-size:12px;font-weight:800;opacity:.8}
+.warn{display:inline-block;background:var(--warn);color:var(--g);font-size:11px;font-weight:800;padding:1px 6px;border-radius:4px}
+.btn{margin-top:8px;height:40px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-weight:800;background:var(--t);color:var(--g)}
+.btn.o{background:transparent;border:2px solid var(--t);color:var(--t)}
+.m{width:176px;height:112px;opacity:1}
+.m b{font-size:13px;color:var(--s);font-weight:800}
+.m .sc{font-size:30px;font-weight:800;margin-top:auto}
+.m.lv{outline:2px solid var(--live)}
+.back{background:repeating-linear-gradient(135deg,#23262E 0 10px,var(--p) 10px 20px)}
+.back .sc{color:var(--s);font-size:15px}
+</style></head><body>
+<div class="top"><span>← My tournaments</span><span><b>Saturday Club Duel</b> · synthetic demo data</span></div>
+<div class="hero">
+  <div class="a"><h2>Riverside PC</h2><span>112</span></div>
+  <div class="b"><h2>Northgate PC</h2><span>104</span></div>
+  <div class="meter"><div style="width:53%;background:#fff"></div></div>
+</div>
+<p class="lead">Riverside PC lead by 8 · Round 2 · 2 live · 3 to play</p>
+<nav class="tabs"><span class="tab on">Courts</span><span class="tab">Lineups</span><span class="tab">Results</span><span class="tab">Ranking</span><span class="tab">Setup</span></nav>
+<section class="row"><h3>Courts<small>4 courts · 2 live</small></h3>
+  <div class="rail">
+    <div class="tile f"><header><b>Court 1</b><span class="chip live">Live · Match 3</span></header>
+      <div class="vs"><div><div class="lbl">Pair 3</div>Ana Cruz<br>Ben Lim</div><i>VS</i><div class="r"><div class="lbl">Pair 3</div>Olga Pineda<br>Paul Chua</div></div>
+      <div class="btn o">End match 3</div></div>
+    <div class="tile"><header><b>Court 2</b><span class="chip live">Live · Match 4</span></header>
+      <div class="vs"><div>Mara Villa<br>Noel Ramos</div><i>VS</i><div class="r">Jun Reyes<br>Kat Dizon<br><span class="warn">⚠ Paired once</span></div></div></div>
+    <div class="tile"><header><b>Court 3</b><span class="chip free">Free</span></header><div style="margin-top:auto;color:var(--s)">Next: Match 5</div><div class="btn">Start on Court 3</div></div>
+    <div class="tile"><header><b>Court 4</b><span class="chip free">Free</span></header><div style="margin-top:auto;color:var(--s)">Next: Match 6</div><div class="btn">Start on Court 4</div></div>
+  </div>
+</section>
+<section class="row"><h3>Round 2<small>7 matches</small></h3>
+  <div class="rail">
+    <div class="tile m"><b>Match 1</b><span class="sc" style="color:var(--a)">11–7</span></div>
+    <div class="tile m"><b>Match 2</b><span class="sc" style="color:var(--b)">9–11</span></div>
+    <div class="tile m lv"><b>Match 3</b><span class="chip live" style="align-self:flex-start">Live · Court 1</span></div>
+    <div class="tile m lv"><b>Match 4</b><span class="chip live" style="align-self:flex-start">Live · Court 2</span></div>
+    <div class="tile m back"><b>Match 5</b><span class="sc">Face down</span></div>
+    <div class="tile m back"><b>Match 6</b><span class="sc">Face down</span></div>
+    <div class="tile m back"><b>Match 7</b><span class="sc">Face down</span></div>
+  </div>
+</section>
+</body></html>

@@ -3,12 +3,13 @@
 import { useActionState } from 'react'
 import { FormError } from '@/components/ActionResult'
 import { Button } from '@/components/ui/Button'
+import { field as base } from '@/components/ui/field'
 import { MAX_NAME } from '@/lib/domain'
 import { createTournament } from './actions'
 import { RosterInput } from './RosterInput'
 
-const label = 'font-display text-sm font-bold uppercase tracking-wide'
-const field = 'mt-1 block min-h-11 w-full border border-ink bg-sheet px-3 font-sans text-base font-normal normal-case tracking-normal'
+const label = 'text-sm font-semibold'
+const field = `${base} mt-1.5 block w-full font-normal`
 
 export function NewTournamentForm() {
   const [state, action, pending] = useActionState(createTournament, undefined)

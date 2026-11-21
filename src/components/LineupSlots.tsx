@@ -66,13 +66,13 @@ export function LineupSlots({ side, slots, players, pairs, repeats, editable, cl
 
   return (
     <div className="flex flex-col gap-3">
-      <ol className="divide-y divide-ink/20 border-y border-ink">
+      <ol className="-mx-4 divide-y divide-line border-y border-line sm:-mx-5 last:border-b-0">
         {Array.from({ length: slots }, (_, i) => i + 1).map((slot) => {
           const p = bySlot.get(slot)
           const label = (
             <>
-              <span className={`font-display text-sm font-bold uppercase tracking-wide ${club}`}>Pair {slot}</span>
-              <span className={p ? '' : 'text-ink-soft'}>
+              <span className={`text-xs font-semibold ${club}`}>Pair {slot}</span>
+              <span className={`max-w-full wrap-anywhere ${p ? '' : 'text-ink-soft'}`}>
                 {p ? `${name.get(p.player1_id)} & ${name.get(p.player2_id)}` : editable ? 'Tap to pick 2 players' : 'Empty'}
               </span>
               {repeats.includes(slot) && <Badge tone="warn" />}
@@ -85,17 +85,17 @@ export function LineupSlots({ side, slots, players, pairs, repeats, editable, cl
                   type="button"
                   aria-expanded={open === slot}
                   onClick={() => toggleSlot(slot)}
-                  className="flex min-h-14 w-full flex-col items-start gap-0.5 px-1 py-2 text-left hover:bg-wall aria-expanded:bg-wall"
+                  className="flex min-h-14 w-full flex-col items-start gap-0.5 px-4 sm:px-5 py-2.5 text-left transition-colors hover:bg-page aria-expanded:bg-page"
                 >
                   {label}
                 </button>
               ) : (
-                <div className="flex min-h-14 flex-col items-start gap-0.5 px-1 py-2">{label}</div>
+                <div className="flex min-h-14 flex-col items-start gap-0.5 px-4 sm:px-5 py-2.5">{label}</div>
               )}
 
               {editable && open === slot && (
-                <div className="flex flex-col gap-2 px-1 pb-3">
-                  <p className="font-display text-sm font-bold uppercase tracking-wide">
+                <div className="flex flex-col gap-3 bg-page px-4 pb-4 sm:px-5">
+                  <p className="text-sm font-semibold">
                     Pick 2 players · {picked.length} of 2
                   </p>
                   {first && warned && (
@@ -116,10 +116,10 @@ export function LineupSlots({ side, slots, players, pairs, repeats, editable, cl
                           aria-pressed={picked.includes(pl.id)}
                           disabled={taken || pending}
                           onClick={() => pick(pl.id)}
-                          className={`flex min-h-11 flex-col items-start justify-center gap-1 border border-ink px-2 py-1 text-left hover:bg-wall aria-pressed:bg-ink aria-pressed:text-sheet disabled:cursor-not-allowed disabled:border-ink/30 disabled:text-ink/40 ${rounds ? 'bg-warn/25' : ''}`}
+                          className={`flex min-h-11 min-w-0 flex-col items-start justify-center gap-1 rounded-xl border px-3 py-1.5 text-left wrap-anywhere transition-colors hover:border-ink/30 aria-pressed:border-ink aria-pressed:bg-ink aria-pressed:text-white disabled:cursor-not-allowed disabled:opacity-40 ${rounds ? 'border-warn/40 bg-warn-bg' : 'border-line bg-card'}`}
                         >
                           <span>
-                            {pl.name} <span className="text-sm">· {pl.gender}</span>
+                            {pl.name} <span className="text-sm opacity-70">· {pl.gender}</span>
                           </span>
                           {taken && <span className="text-sm">In pair {other}</span>}
                           {rounds && <Badge tone="warn">{rounds.length > 1 ? 'Rounds' : 'Round'} {rounds.join(', ')}</Badge>}
@@ -127,7 +127,7 @@ export function LineupSlots({ side, slots, players, pairs, repeats, editable, cl
                       )
                     })}
                   </div>
-                  <div className="flex gap-4">
+                  <div className="flex gap-2">
                     {p && clearable && (
                       <Button variant="ghost" disabled={pending} onClick={() => run(slot, null)}>
                         Clear pair

@@ -1,55 +1,88 @@
+"use client";
+
+import { useEffect, useRef, useState, type ReactNode } from "react";
+
+type Club = { name: string; total: number };
+
 /**
- * Signature move 1: the totals band. Each club owns a colour field; the race
- * strip's two marker bars split at the points share and grow when totals change.
+ * The scoreboard: crest, club and total per side (stacked rows in a narrow card,
+ * a face-off once the card is 48rem wide, so long club names keep room), then the race bar whose split shows the lead. Totals
+ * count up and the bars grow when a score lands.
  */
-export function ScoreRace({
-  a,
-  b,
-}: {
-  a: { name: string; total: number };
-  b: { name: string; total: number };
-}) {
+export function ScoreRace({ a, b, heading, status }: { a: Club; b: Club; heading?: ReactNode; status?: string }) {
   // The split shows the lead, not the points share: 1.5% per point, capped, so a few points read.
   const shareA = 50 + Math.max(-40, Math.min(40, (a.total - b.total) * 1.5));
   const gap = Math.abs(a.total - b.total);
-  const lead =
-    gap === 0 ? "Tied" : `${a.total > b.total ? a.name : b.name} lead by ${gap}`;
+  const lead = gap === 0 ? "Tied" : `${a.total > b.total ? a.name : b.name} lead by ${gap}`;
+  const tone = (mine: number, theirs: number) => (mine < theirs ? "text-ink-soft" : "text-ink");
+  const total = "text-[2.5rem] font-extrabold tabular-nums leading-none tracking-tight @3xl:text-[3.5rem]";
+  const name = "min-w-0 font-semibold leading-tight wrap-anywhere hyphens-auto @3xl:text-lg @3xl:font-bold";
 
   return (
-    <div>
-      <div className="grid grid-cols-2 text-sheet">
-        <Field club={a.name} total={a.total} className="bg-club-a" />
-        <Field club={b.name} total={b.total} className="bg-club-b text-right" />
+    <section className="@container rounded-2xl border border-line bg-card p-4 sm:p-6">
+      {heading}
+      <div className="grid grid-cols-[auto_1fr_auto] items-center gap-x-3 gap-y-3 [grid-template-areas:'ca_na_ta'_'cb_nb_tb'] @3xl:grid-cols-[auto_1fr_auto_auto_auto_1fr_auto] @3xl:gap-x-4 @3xl:[grid-template-areas:'ca_na_ta_d_tb_nb_cb']">
+        <Crest name={a.name} className="bg-club-a [grid-area:ca]" />
+        <p className={`${name} [grid-area:na]`}>{a.name}</p>
+        <p className={`${total} ${tone(a.total, b.total)} text-right [grid-area:ta]`}>
+          <Count value={a.total} />
+        </p>
+        <span aria-hidden className="hidden text-3xl font-light text-ink/25 [grid-area:d] @3xl:block">
+          –
+        </span>
+        <p className={`${total} ${tone(b.total, a.total)} text-right [grid-area:tb] @3xl:text-left`}>
+          <Count value={b.total} />
+        </p>
+        <p className={`${name} [grid-area:nb] @3xl:text-right`}>{b.name}</p>
+        <Crest name={b.name} className="bg-club-b [grid-area:cb]" />
       </div>
-      <div
-        className="relative mt-2 h-3.5 bg-sheet"
-        role="img"
-        aria-label={`${lead}: ${a.name} ${a.total}, ${b.name} ${b.total}`}
-      >
-        <div
-          className="absolute inset-y-0 left-0 bg-club-a transition-[width] duration-700 ease-out-expo"
-          style={{ width: `${shareA}%` }}
-        />
-        <div
-          className="absolute inset-y-0 right-0 bg-club-b transition-[width] duration-700 ease-out-expo"
-          style={{ width: `${100 - shareA}%` }}
-        />
-        <div className="absolute inset-y-[-3px] left-1/2 w-0.5 -translate-x-1/2 bg-ink" />
+
+      <div className="relative mt-4" role="img" aria-label={`${lead}: ${a.name} ${a.total}, ${b.name} ${b.total}`}>
+        <div className="flex h-2.5 overflow-hidden rounded-full bg-line">
+          <div className="bg-club-a transition-[width] duration-700 ease-out-expo" style={{ width: `${shareA}%` }} />
+          <div className="flex-1 bg-club-b" />
+        </div>
+        <div className="absolute -inset-y-1 left-1/2 w-0.5 -translate-x-1/2 rounded-full bg-ink" />
       </div>
-      <p className="mt-1.5 font-display text-base font-bold uppercase" aria-live="polite">
-        {lead}
-      </p>
-    </div>
+      <div className="mt-2.5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 text-sm">
+        <p className="font-semibold" aria-live="polite">
+          {lead}
+        </p>
+        {status && <p className="text-ink-soft">{status}</p>}
+      </div>
+    </section>
   );
 }
 
-function Field({ club, total, className }: { club: string; total: number; className: string }) {
+/** Club monogram: first letters of the first two words ("Riverside PC" → RP). */
+function Crest({ name, className }: { name: string; className: string }) {
+  const words = name.trim().split(/\s+/);
+  const initials = (words.length > 1 ? words[0][0] + words[1][0] : name.slice(0, 2)).toUpperCase();
   return (
-    // Totals sit on the bottom edge so they line up when one club name takes two lines.
-    <div className={`flex min-w-0 flex-col justify-between px-4 pt-2.5 pb-3 ${className}`}>
-      <p className="line-clamp-2 font-display text-sm font-bold uppercase tracking-wide wrap-break-word">{club}</p>
-      {/* fluid below 360px so a 3-digit total fits half of a 320px phone */}
-      <p className="font-display text-[length:clamp(3.5rem,20vw,4.5rem)] font-extrabold leading-[0.9] sm:text-8xl">{total}</p>
-    </div>
+    <span
+      aria-hidden
+      className={`flex size-9 items-center justify-center rounded-full text-xs font-bold text-white @3xl:size-12 @3xl:text-sm ${className}`}
+    >
+      {initials}
+    </span>
   );
+}
+
+/** Counts from the previous total to the new one (instantly under reduced motion). */
+function Count({ value }: { value: number }) {
+  const [shown, setShown] = useState(value);
+  const prev = useRef(value);
+  useEffect(() => {
+    const start = prev.current;
+    prev.current = value;
+    const ms = matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 700;
+    const t0 = performance.now();
+    let raf = requestAnimationFrame(function tick(t) {
+      const p = ms ? Math.min(1, (t - t0) / ms) : 1;
+      setShown(p < 1 ? Math.round(start + (value - start) * (1 - 2 ** (-10 * p))) : value);
+      if (p < 1) raf = requestAnimationFrame(tick);
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [value]);
+  return <>{shown}</>;
 }

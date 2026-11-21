@@ -35,7 +35,7 @@ export function Draft({ token, side, slots, players, pairs, repeats, partners, s
           {opponent.name}: {opponent.submitted ? 'submitted' : 'not yet'}
         </Badge>
       </div>
-      {locked && <p className="font-semibold">Locked. Both lineups are in; pairs are revealed as matches start.</p>}
+      {locked && <p className="rounded-xl bg-page px-3 py-2 font-semibold">Locked. Both lineups are in; pairs are revealed as matches start.</p>}
 
       <LineupSlots
         side={side}
