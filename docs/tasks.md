@@ -21,7 +21,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
   Do: `supabase/migrations/0001_init.sql` from DM. User runs it in the Supabase SQL editor (or `npx supabase db push` if they prefer the CLI).
   Done when: all 9 tables exist with RLS enabled (user confirms, or check via a service-role query).
 
-- [ ] **T04 Domain types + loadTournament** (S). Depends: T03.
+- [x] **T04 Domain types + loadTournament** (S). Depends: T03.
   Read: DM, the table list.
   Do: `src/lib/types.ts` (row types matching the SQL). `src/lib/db.ts` → `loadTournament(id)` returns `{tournament, clubs, players, courts, rounds, lineups, pairs, matches}` using parallel queries.
   Done when: build passes; a seed-free smoke call returns `null` for an unknown id.
@@ -150,3 +150,4 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 - T01: in Git Bash, run `npm test` from `cd "C:/Projects/..."` (capital C:). From `/c/...` Vitest loads twice and fails with "failed to find the current suite". PowerShell is fine.
 - T02: keys are the new Supabase format: `NEXT_PUBLIC_SUPABASE_ANON_KEY` holds the publishable key (`sb_publishable_`), `SUPABASE_SERVICE_ROLE_KEY` the secret key (`sb_secret_`). Import clients from `@/lib/supabase/{admin,server,browser}`; `supabaseServer()` is async.
 - T03: migrations are applied by pasting into the Supabase SQL editor (no CLI link). Verify with service role `select count` + anon insert → 42501.
+- T04: `loadTournament(id)` (server-only) returns `TournamentData | null` (null for unknown or non-uuid id). Rows are unsorted except `rounds` (by number). Types in `@/lib/types`.
