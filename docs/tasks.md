@@ -124,7 +124,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
   Done when: a full seeded run ends and shows the winner, tabulation and awards.
 
 - [ ] **T22 Seed + demo script** (S). Depends: T14.
-  Do: `npm run seed` creates a demo tournament (Club A 16 + Club B 17 players, 7 courts — the real event's rosters; counts stay args, not constants) for a given admin email, optionally with 2 played rounds. Used for dry runs.
+  Do: `npm run seed` creates a demo tournament (Club A 16 + Club B 17 players, 4 courts — the real event's setup; counts stay args, not constants) for a given admin email, optionally with 2 played rounds. Used for dry runs.
   Done when: running it twice gives two independent demo tournaments.
 
 ## M7 — Ship
@@ -141,7 +141,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
   Do: Impeccable critique/polish on the captain draft and the audience page at phone width; fix the top issues.
 
 - [ ] **T26 Full dry run** (M) (browser). Depends: T22, T23.
-  Do: with Playwright MCP on production, play 2 rounds end-to-end as admin + 2 captains + audience, using a 16 + 17 roster (uneven sizes, so one club benches more players per round); log and fix bugs (split big fixes into new tasks at the bottom).
+  Do: with Playwright MCP on production, play 2 rounds end-to-end as admin + 2 captains + audience, using a 16 + 17 roster (uneven sizes, so one club benches more players per round) and 4 courts (fewer courts than pairs per round, so matches queue for a free court); log and fix bugs (split big fixes into new tasks at the bottom).
   Done when: no blocker bugs; the event checklist from ARCH §Free-tier caveats is noted in the README.
 
 ## Notes
