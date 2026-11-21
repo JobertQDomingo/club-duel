@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { awards, canOpenRound, clubTotals, pairKey, pairNames, parseRoster, parseScores, playerStats, ranking, repeatPairs, roundStatus, validateLineup, viewFor } from "./domain";
+import { awards, canOpenRound, clubTotals, pairKey, pairNames, parseRoster, parseScores, playerStats, ranking, repeatPairs, roundStatus, tabulation, validateLineup, viewFor } from "./domain";
 import type { LineupPair, Match, TournamentData } from "./types";
 
 // 2 clubs × 4 players, 2 rounds × 2 slots. Round 2 slot 2 is live (must be ignored).
@@ -310,5 +310,20 @@ describe("pairNames", () => {
     const view = viewFor(pending, { role: "audience" });
     expect(pairNames(view, "cb", "r2", 2)).toBeNull();
     expect(pairNames(view, "cb", "r2", 1)).toEqual(["Gus", "Hal"]);
+  });
+});
+
+describe("tabulation", () => {
+  test("per round: done matches by slot, round score, running totals; live/pending ignored", () => {
+    const t = tabulation(data);
+    expect(t.map((r) => [r.round.number, r.matches.map((m) => m.slot), r.A, r.B, r.totalA, r.totalB])).toEqual([
+      [1, [1, 2], 16, 16, 16, 16],
+      [2, [1], 11, 9, 27, 25],
+    ]);
+  });
+
+  test("skips rounds with no done match", () => {
+    const r1Only = { ...data, matches: data.matches.filter((m) => m.round_id === "r1") };
+    expect(tabulation(r1Only).map((r) => r.round.number)).toEqual([1]);
   });
 });

@@ -16,6 +16,7 @@ import { PairCard } from '@/components/ui/PairCard'
 import { RosterEditor } from '@/components/RosterEditor'
 import { editScore, endMatch } from './actions'
 import { CourtsEditor } from './CourtsEditor'
+import { EndTournament } from './EndTournament'
 import { OpenRound } from './OpenRound'
 import { RegenerateLink } from './RegenerateLink'
 import { EndMatch, ScoreForm } from './ScoreForm'
@@ -154,7 +155,17 @@ export default async function TournamentPage({ params }: PageProps<'/admin/t/[id
                 <p className={empty}>Your lineup edits are recorded in the audit log.</p>
               </>
             )}
-            <OpenRound tournamentId={id} number={(round?.number ?? 0) + 1} allowed={canOpenRound(view)} />
+            {view.tournament.status !== 'ended' && (
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <OpenRound tournamentId={id} number={(round?.number ?? 0) + 1} allowed={canOpenRound(view)} />
+                <EndTournament
+                  tournamentId={id}
+                  live={liveOn.size > 0}
+                  tied={totals.A === totals.B}
+                  pending={view.matches.filter((m) => m.status === 'pending').length}
+                />
+              </div>
+            )}
           </div>
         </Card>
 

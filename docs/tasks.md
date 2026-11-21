@@ -118,7 +118,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 
 ## M6 — Finish
 
-- [ ] **T21 End tournament + results** (M) (browser). Depends: T18, T19.
+- [x] **T21 End tournament + results** (M) (browser). Depends: T18, T19.
   Read: PRD §1 (tie), §3 step 8, §5.
   Do: an End Tournament button (disabled while a match is live, with a confirm dialog and a "currently tied" note). Results view on `/t/[id]` when ended: winner banner or Draw, a per-round tabulation with running totals, and awards from `awards()`.
   Done when: a full seeded run ends and shows the winner, tabulation and awards.
@@ -188,3 +188,6 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 - T19: `/t/[id]` (`src/app/t/[id]/page.tsx`) is public (proxy doesn't match it). Reuse `<Ranking view>` (`@/components/Ranking`) and `pairNames(view, clubId, roundId, slot)` (domain; null = face-down) for T20/T21.
 - T19: leak check = fetch `/t/[id]` plain + with `RSC: 1` header and search for hidden players' names/ids (none found on "T16 check 16v17").
 - T20: `/c/[token]` shows ScoreRace, a Results card (locked rounds, newest first, W/L from the captain's side, opponent pair "Hidden" until started) and `<Ranking>`. A `curl -H 'RSC: 1'` alone returns empty here; the leak check uses the HTML (it carries the inline flight payload).
+- T21: `endTournament` (admin actions) checks for live matches then sets `ended` (two calls, shortcut comment; no migration). `EndTournament.tsx` sits beside OpenRound; both hide once ended. Score edits still work after the end.
+- T21: `tabulation(view)` (domain) = rounds with done matches + round score + running totals. `/t/[id]` swaps the round/courts cards for `Results.tsx` (banner, tabulation, awards) when ended.
+- T21: "T16 check 16v17" is now ended (Alpha 26–20). Use T22's seed for fresh runs.

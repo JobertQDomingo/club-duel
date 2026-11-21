@@ -170,6 +170,22 @@ export function awards(data: TournamentView) {
   };
 }
 
+/** Results tabulation: each round with a done match, its done matches by slot, the round score and running club totals. */
+export function tabulation(data: TournamentView) {
+  const done = doneMatches(data);
+  let totalA = 0;
+  let totalB = 0;
+  return data.rounds.flatMap((round) => {
+    const matches = done.filter((m) => m.round_id === round.id).sort((x, y) => x.slot - y.slot);
+    if (!matches.length) return [];
+    const A = matches.reduce((s, m) => s + m.score_a, 0);
+    const B = matches.reduce((s, m) => s + m.score_b, 0);
+    totalA += A;
+    totalB += B;
+    return [{ round, matches, A, B, totalA, totalB }];
+  });
+}
+
 /** One player per line, "Name, M|F". Returns the players, or an error message naming the line. */
 export function parseRoster(text: string): Pick<Player, "name" | "gender">[] | string {
   const players: Pick<Player, "name" | "gender">[] = [];

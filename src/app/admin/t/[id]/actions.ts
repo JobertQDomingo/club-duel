@@ -127,3 +127,22 @@ export async function editScore(tournamentId: string, matchId: string, form: For
   })
   return e ? `Saved, but the audit log failed: ${e.message}` : done(tournamentId)
 }
+
+/** Ends the tournament; refused while a match is live. Pending matches of an unfinished round stay out of the totals. */
+export async function endTournament(tournamentId: string) {
+  await requireAdmin(tournamentId)
+  const { count, error: e } = await db
+    .from('matches')
+    .select('id, rounds!inner(tournament_id)', { count: 'exact', head: true })
+    .eq('rounds.tournament_id', tournamentId)
+    .eq('status', 'live')
+  if (e) return e.message
+  if (count) return 'A match is still live. End it first.'
+  // shortcut: live check + update are two calls, so a match started in between stays live after the end; move into an SQL fn if two admins ever share a tournament
+  const { error } = await db
+    .from('tournaments')
+    .update({ status: 'ended', ended_at: new Date().toISOString() })
+    .eq('id', tournamentId)
+    .neq('status', 'ended')
+  return error ? error.message : done(tournamentId)
+}
