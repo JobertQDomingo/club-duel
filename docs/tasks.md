@@ -142,7 +142,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
   Done when: the production URL works for login, captain and audience.
   Check: audit-log times render in the server timezone (UTC on Vercel; `shortcut:` in the admin page). If the venue needs local time, format them on the client.
 
-- [ ] **T24 Google login** (S) [USER]. Depends: T23. Optional.
+- [-] **T24 Google login** (S) [USER]. Depends: T23. Optional. **Deferred** 2026-11-21: email/password login is enough for now; reopen as `[ ]` to do it.
   User: create a Google OAuth client and enable the Google provider in Supabase.
   Do: a "Continue with Google" button on `/login`.
 
