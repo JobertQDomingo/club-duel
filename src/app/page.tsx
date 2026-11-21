@@ -1,3 +1,6 @@
+import { redirect } from 'next/navigation'
+
+// Captains and audience arrive by their own links; `/` is the admin's entry (proxy bounces signed-out → /login).
 export default function Home() {
-  return <main className="p-8 text-2xl font-semibold">Club Duel</main>;
+  redirect('/admin')
 }
