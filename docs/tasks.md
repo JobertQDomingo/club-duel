@@ -125,7 +125,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 
 - [x] **A1 Code audit + review fixes** (M). Ponytail audit of the repo and review of T19–T21 (2026-11-21, before T22).
   Fixed: (1) a round with more pairs than a club can fill could never be submitted, leaving the admin stuck → Open Round is refused with the reason (`rosterShortfall`); (2) after End tournament the court board still offered Start and an open round could still be drafted/submitted → both refused; (3) names had no length limit (spec said they did) → 60 chars, `parseName`; (4) captain roster scoping had no test → `roster-actions.test.ts`; (5) three copies of the post-write helper → `changed()` in `@/lib/realtime`; (6) placeholder smoke test deleted.
-  Left as-is (decisions with `shortcut:` comments): `endTournament` live-check race, two-call audit writes, audit-log times in server timezone (see T23).
+  Left as-is (decisions with `shortcut:` comments): `endTournament` live-check race, two-call audit writes (audit-log times: fixed in T23).
 
 - [x] **A2 Impeccable UI audit + mobile fixes** (M) (browser). Same day. Score 14/20 → 19/20 (responsive 1 → 4).
   Fixed: admin console and New-tournament form scrolled sideways on phones (grids without a base column template); 3-digit totals overflowed the score race at 320px; long names were clipped in pair cards (tape `overflow-hidden`) and overflowed results cells; ranking numbers split across lines; roster name inputs were 50–75px wide; Barlow 600 was used but not loaded; back link under 44px; dialogs touched the screen edges; repeated generic row labels; duplicate error paragraphs → `FormError`. Rules recorded in `DESIGN.md` §Layout › Responsive.
@@ -137,7 +137,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 
 ## M7 — Ship
 
-- [ ] **T23 Deploy to Vercel** (S) [USER]. Depends: T21.
+- [x] **T23 Deploy to Vercel** (S) [USER]. Depends: T21.
   User: import the GitHub repo in Vercel, add the 3 env vars, and add the Vercel URL to the Supabase Auth redirect URLs.
   Done when: the production URL works for login, captain and audience.
   Check: audit-log times render in the server timezone (UTC on Vercel; `shortcut:` in the admin page). If the venue needs local time, format them on the client.
@@ -208,3 +208,6 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 - T22: `npm run seed -- <admin email> [--a 16] [--b 17] [--courts 4] [--pairs 7] [--rounds N]` (`scripts/seed.mjs`). Prints admin/captain/audience paths. `--rounds` plays full rounds via the real RPCs (rotating pairs, no repeats, random 11–x scores); a round is left unopened.
 - T22: the email must belong to an existing auth user (`t16-check@example.com` is the test admin). The live DB now has two "Demo 2026-11-21 08:10" tournaments (one blank, one with 2 rounds played).
 - Post-A2: `pastPartners(view, roundId, clubId)` (player → partner → rounds) drives the picker's orange past-partner mark (`LineupSlots` `partners` prop, captain + admin); `repeatPairs` is built on it (`pairKey` removed). `PlayerStat.games` holds each done game (round, slot, partner, opponents, pf, pa) behind the stats; `<Ranking>` names open a native-popover stat sheet from it.
+- T23: production is https://club-duel.vercel.app. `vercel.json` pins functions to `hnd1` (Tokyo) next to Supabase `ap-northeast-1`; the dashboard default `iad1` made every query cross the Pacific. Check with a server action's `x-vercel-id` (PPR page GETs only show the edge).
+- T23: `npm run perf -- <baseUrl> <tournamentId> [--viewers 100]` load-tests pages, a refresh burst and realtime fan-out (read-only). Audit times use `<LocalTime iso>` (`@/components/LocalTime`, viewer's timezone).
+- T23: the admin account jobertdomingodev@gmail.com owns "Demo 2026-11-21 14:01:34" (2 rounds played, round 3 open, Club A Pair 1 = A15 & A16 drafted); use it or a fresh seed for T26.

@@ -2,6 +2,7 @@ import { headers } from 'next/headers'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { LiveRefresh } from '@/components/LiveRefresh'
+import { LocalTime } from '@/components/LocalTime'
 import { Card } from '@/components/ui/Card'
 import { CopyLink } from '@/components/ui/CopyLink'
 import { ScoreRace } from '@/components/ui/ScoreRace'
@@ -246,8 +247,7 @@ export default async function TournamentPage({ params }: PageProps<'/admin/t/[id
           <ol className="divide-y divide-line text-sm">
             {audit.map((e) => (
               <li key={e.id} className="py-2 first:pt-0 last:pb-0">
-                {/* shortcut: time is formatted in the server's timezone (UTC on Vercel); format on the client if the venue needs local time */}
-                <span className={`${empty} tabular-nums`}>{new Date(e.created_at).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })} · {e.actor} · </span>
+                <span className={`${empty} tabular-nums`}><LocalTime iso={e.created_at} /> · {e.actor} · </span>
                 {auditLine(e)}
               </li>
             ))}

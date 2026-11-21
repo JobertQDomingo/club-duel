@@ -45,7 +45,8 @@ Browser ──(server actions / route handlers)──▶ Next.js server ──(s
 ## Free-tier caveats
 - **Supabase pauses a free project after ~7 days of no activity.** Open the app (or resume it in the dashboard) the day before an event.
 - Vercel Hobby is for non-commercial use, which fits a friendly club event.
-- Load is tiny (a few dozen viewers), well within both free tiers.
+- Load is tiny (a few dozen viewers), well within both free tiers. Measured with `npm run perf`: 100 viewers refreshing at once, 0 failures; one event uses at most ~20% of any Hobby allowance.
+- Functions must run in the Supabase region (`vercel.json` `regions: ["hnd1"]` for `ap-northeast-1`). Each action makes several sequential queries, so a far region adds ~150 ms per query.
 
 ## Environment variables
 ```
