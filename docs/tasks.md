@@ -131,7 +131,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
   Fixed: admin console and New-tournament form scrolled sideways on phones (grids without a base column template); 3-digit totals overflowed the score race at 320px; long names were clipped in pair cards (tape `overflow-hidden`) and overflowed results cells; ranking numbers split across lines; roster name inputs were 50–75px wide; Barlow 600 was used but not loaded; back link under 44px; dialogs touched the screen edges; repeated generic row labels; duplicate error paragraphs → `FormError`. Rules recorded in `DESIGN.md` §Layout › Responsive.
   Not fixed (P3): captain results grid is dense at 320px; "· M" in the lineup picker can wrap; no real-device/iOS Safari or screen-reader pass (Chromium emulation only).
 
-- [ ] **T22 Seed + demo script** (S). Depends: T14.
+- [x] **T22 Seed + demo script** (S). Depends: T14.
   Do: `npm run seed` creates a demo tournament (Club A 16 + Club B 17 players, 4 courts — the real event's setup; counts stay args, not constants) for a given admin email, optionally with 2 played rounds. Used for dry runs.
   Done when: running it twice gives two independent demo tournaments.
 
@@ -205,3 +205,5 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 - A1: `roster-actions.test.ts` shows how to mock the Supabase query chain (a recorded thenable); reuse it for other action tests.
 - A2: every grid needs a base `grid-cols-1` (an implicit `auto` track scrolls phones sideways); a fieldset in a grid/flex row needs `min-w-0`. Input + buttons rows: `@container` on the row, `min-w-0 flex-1 basis-full @sm:basis-0` on the input. Name inputs get `maxLength={MAX_NAME}`; form errors only via `<FormError>`.
 - A2: a crashed `next dev` on :3000 blocks a second dev server in this folder (Next 16 lock); use `next build && next start -p 30xx`. If the Playwright MCP profile is locked, drive Playwright from a script with `channel: 'chrome'`.
+- T22: `npm run seed -- <admin email> [--a 16] [--b 17] [--courts 4] [--pairs 7] [--rounds N]` (`scripts/seed.mjs`). Prints admin/captain/audience paths. `--rounds` plays full rounds via the real RPCs (rotating pairs, no repeats, random 11–x scores); a round is left unopened.
+- T22: the email must belong to an existing auth user (`t16-check@example.com` is the test admin). The live DB now has two "Demo 2026-11-21 08:10" tournaments (one blank, one with 2 rounds played).
