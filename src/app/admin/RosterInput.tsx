@@ -8,8 +8,8 @@ type Entry = Pick<Player, 'name' | 'gender'>
 
 const field = 'min-h-11 border border-ink bg-sheet px-3 font-sans text-base font-normal normal-case tracking-normal'
 
-/** Name + gender + Add, building a list. Submits as `players{side}` in the "Name, M" line format parseRoster reads. */
-export function RosterInput({ side }: { side: 'A' | 'B' }) {
+/** Name + gender + Add, building a list. Submits as `field` (default `players{side}`) in the "Name, M" line format parseRoster reads. */
+export function RosterInput({ side, field: fieldName = `players${side}`, legend = `Club ${side} players` }: { side: 'A' | 'B'; field?: string; legend?: string }) {
   const [players, setPlayers] = useState<Entry[]>([])
   const [name, setName] = useState('')
   const [gender, setGender] = useState<Entry['gender'] | ''>('')
@@ -34,9 +34,9 @@ export function RosterInput({ side }: { side: 'A' | 'B' }) {
   return (
     <fieldset className="flex flex-col gap-2">
       <legend className="font-display text-sm font-bold uppercase tracking-wide">
-        Club {side} players ({players.length})
+        {legend} ({players.length})
       </legend>
-      <input type="hidden" name={`players${side}`} value={players.map((p) => `${p.name}, ${p.gender}`).join('\n')} />
+      <input type="hidden" name={fieldName} value={players.map((p) => `${p.name}, ${p.gender}`).join('\n')} />
       <div className="flex gap-2">
         <input
           ref={nameRef}

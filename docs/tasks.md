@@ -71,7 +71,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
   Do: `/admin/t/[id]` layout with a header (club totals, round status, links, regenerate captain link) and empty sections: Court board, Round panel, Rosters & courts, Results, Ranking. Renders from `viewFor(admin)`.
   Done when: the page renders the tournament created in T10 and totals show 0–0.
 
-- [ ] **T13 Roster + court CRUD** (M) (browser). Depends: T12.
+- [x] **T13 Roster + court CRUD** (M) (browser). Depends: T12.
   Read: PRD §3 step 2, DM §Rules (removal guards).
   Do: server actions shared by admin and captain. Rename club; add/edit/remove a player; add/rename/remove a court; edit pairs per round (admin). Map FK restrict errors to "Already played — can't remove, rename instead". Guards: `requireAdmin` / `requireCaptain(token)` (captain = own club only).
   Done when: CRUD works; the removal guard message shows (test it after T17 for a played player).
@@ -168,3 +168,6 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 - T11: if a stale `next dev` holds :3000 and is crashed, `npx next start -p 3001` after `npm run build` works for browser checks (localhost cookies are shared across ports).
 - T12: `/admin/t/[id]` sections are `Card`s with placeholder lines (Court board, Round panel, Results, Ranking, Rosters & courts); replace the placeholder in place. Ranking is already a real table from `ranking(view)` (inline in the page; extract it for T19/T20).
 - T12: `roundStatus(view)` in `domain.ts` gives the header line (latest round = `rounds.at(-1)`). Admin page actions live in `src/app/admin/t/[id]/actions.ts`; they end with `broadcastChanged` + `refresh()` from `next/cache`.
+- T13: `<RosterEditor caller club players>` (`@/components/RosterEditor`) is the shared club-name + roster editor; the captain page passes `caller={{ token }}`. Actions in `@/lib/roster-actions` scope by caller (`requireCaptain(token)` in `@/lib/auth` → own club only). Courts + pairs are admin-only in `admin/t/[id]/actions.ts`.
+- T13: forms use `useResult()` / `<FormError>` (`@/components/ActionResult`): actions return an error string or undefined. A `<select defaultValue>` doesn't update on form reset, so key rows on their values to remount after save.
+- T13: removal guard verified with a temporary lineup pair (FK 23503 → "Already played — can't remove, rename instead."). Stale `next start` servers may hold :3000/:3001; TaskStop leaves the node child alive, so kill it by port.

@@ -23,3 +23,15 @@ export async function requireAdmin(tournamentId: string): Promise<string> {
   if (data?.admin_id !== userId) notFound()
   return userId
 }
+
+/** The club this captain link belongs to; 404 for an unknown or regenerated token. */
+export async function requireCaptain(token: string): Promise<{ id: string; tournament_id: string }> {
+  const { data, error } = await supabaseAdmin
+    .from('clubs')
+    .select('id, tournament_id')
+    .eq('captain_token', token)
+    .maybeSingle()
+  if (error) throw new Error(error.message)
+  if (!data) notFound()
+  return data
+}

@@ -8,6 +8,8 @@ import { ScoreRace } from '@/components/ui/ScoreRace'
 import { requireAdmin } from '@/lib/auth'
 import { loadTournament } from '@/lib/db'
 import { clubTotals, ranking, roundStatus, viewFor } from '@/lib/domain'
+import { RosterEditor } from '@/components/RosterEditor'
+import { CourtsEditor } from './CourtsEditor'
 import { RegenerateLink } from './RegenerateLink'
 
 export const metadata = { title: 'Tournament · Club Duel' }
@@ -98,10 +100,12 @@ export default async function TournamentPage({ params }: PageProps<'/admin/t/[id
         </Card>
 
         <Card title="Rosters & courts" className="lg:col-span-2">
-          <p>
-            {clubs.map((c) => `${c.name}: ${view.players.filter((p) => p.club_id === c.id).length} players`).join(' · ')} ·{' '}
-            {view.courts.length} courts · {view.tournament.pairs_per_round} pairs per round
-          </p>
+          <div className="grid gap-8 lg:grid-cols-3">
+            {clubs.map((c) => (
+              <RosterEditor key={c.id} caller={{ tournamentId: id }} club={c} players={view.players.filter((p) => p.club_id === c.id)} />
+            ))}
+            <CourtsEditor tournamentId={id} courts={view.courts} pairs={view.tournament.pairs_per_round} />
+          </div>
         </Card>
       </div>
     </main>
