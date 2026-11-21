@@ -38,7 +38,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
   Do: `pairKey(a,b)`, `repeatPairs(data, roundId, clubId, pairs)` → a set of slots that repeat an earlier round, and `validateLineup(pairs, P)` → error on a duplicate player, a missing slot, or a player from the wrong club.
   Done when: tests cover duplicate (blocked), repeat (flagged), and the normalized order of `a,b`.
 
-- [ ] **T07 Visibility filter + awards** (M). Depends: T05.
+- [x] **T07 Visibility filter + awards** (M). Depends: T05.
   Read: DM §Visibility filter, PRD §5 Awards.
   Do: `viewFor(data, {role:'admin'|'captain'|'audience', clubId?})` returns a JSON-safe view with hidden pairs removed (no ids or names of hidden players) and tokens stripped for non-admins. `awards(data)` returns lists, so ties keep everyone.
   Done when: a test asserts the audience/opponent JSON contains no hidden player name; award ties are tested.
@@ -154,3 +154,5 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 - T05: `clubTotals` returns `{A, B}` keyed by club side. `playerStats`/`ranking` include only players with ≥1 done match (`PlayerStat` has `player`, played, wins, losses, pf, pa, diff). Fixture in `domain.test.ts` is reusable for T06/T07.
 - T06: `validateLineup(pairs, P, clubPlayerIds)` takes a 3rd arg (the club roster ids) for the wrong-club check, and requires all P slots, so it's the submit/full-save check. Returns an error string or null. `DraftPair` = `{slot, player1_id, player2_id}` in any order.
 - T06: before inserting into `lineup_pairs`, sort each pair so player1_id < player2_id (DB check). `pairKey` uses the same JS string order.
+- T07: `viewFor(data, viewer)` returns `TournamentView` (clubs without `captain_token` for non-admins). Domain fns accept `TournamentView`, so pages compute ranking/totals/awards from the view. Non-admin `players` = own club + players in visible pairs only (no full opponent roster).
+- T07: lineup rows (incl. `submitted_at`) stay visible to everyone for the "submitted?" status; only `pairs` are filtered. `awards()` returns `{mvp, topScorer:{A,B}, iron, biggestWin, closest}` as lists.

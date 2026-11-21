@@ -1,5 +1,5 @@
 // Pure derived numbers. No IO here, so the server and tests can share it.
-import type { LineupPair, Match, Player, TournamentData } from "./types";
+import type { LineupPair, Match, Player, TournamentData, TournamentView, Viewer } from "./types";
 
 export type PlayerStat = {
   player: Player;
@@ -12,10 +12,10 @@ export type PlayerStat = {
 };
 
 // The DB check guarantees a done match has two non-null, unequal scores.
-const doneMatches = (data: TournamentData) =>
+const doneMatches = (data: TournamentView) =>
   data.matches.filter((m): m is Match & { score_a: number; score_b: number } => m.status === "done");
 
-export function clubTotals(data: TournamentData): { A: number; B: number } {
+export function clubTotals(data: TournamentView): { A: number; B: number } {
   const totals = { A: 0, B: 0 };
   for (const m of doneMatches(data)) {
     totals.A += m.score_a;
@@ -25,7 +25,7 @@ export function clubTotals(data: TournamentData): { A: number; B: number } {
 }
 
 /** Stats for every player with at least one done match. */
-export function playerStats(data: TournamentData): PlayerStat[] {
+export function playerStats(data: TournamentView): PlayerStat[] {
   const side = new Map(data.clubs.map((c) => [c.id, c.side]));
   const lineups = new Map(data.lineups.map((l) => [l.id, l]));
   const players = new Map(data.players.map((p) => [p.id, p]));
@@ -66,7 +66,7 @@ export function pairKey(a: string, b: string): string {
 }
 
 /** Slots in `pairs` whose two players already paired for this club in an earlier round. */
-export function repeatPairs(data: TournamentData, roundId: string, clubId: string, pairs: DraftPair[]): Set<number> {
+export function repeatPairs(data: TournamentView, roundId: string, clubId: string, pairs: DraftPair[]): Set<number> {
   const num = new Map(data.rounds.map((r) => [r.id, r.number]));
   const current = num.get(roundId) ?? 0;
   const earlier = new Set(
@@ -88,8 +88,55 @@ export function validateLineup(pairs: DraftPair[], P: number, clubPlayerIds: str
 }
 
 /** Wins desc, then diff desc, then PF desc, then name. */
-export function ranking(data: TournamentData): PlayerStat[] {
+export function ranking(data: TournamentView): PlayerStat[] {
   return playerStats(data).sort(
     (x, y) => y.wins - x.wins || y.diff - x.diff || y.pf - x.pf || x.player.name.localeCompare(y.player.name),
   );
+}
+
+/**
+ * The data one viewer may see. Non-admins lose captain tokens, other clubs' pairs
+ * whose match isn't live/done yet (drafts included), and players they'd only learn of from those pairs.
+ */
+export function viewFor(data: TournamentData, viewer: Viewer): TournamentView {
+  if (viewer.role === "admin") return data;
+  const own = viewer.role === "captain" ? viewer.clubId : null;
+  const lineups = new Map(data.lineups.map((l) => [l.id, l]));
+  const revealed = new Set(data.matches.filter((m) => m.status !== "pending").map((m) => `${m.round_id}:${m.slot}`));
+  const pairs = data.pairs.filter((p) => {
+    const l = lineups.get(p.lineup_id);
+    return l && (l.club_id === own || revealed.has(`${l.round_id}:${p.slot}`));
+  });
+  const known = new Set(pairs.flatMap((p) => [p.player1_id, p.player2_id]));
+  return {
+    ...data,
+    clubs: data.clubs.map(({ id, tournament_id, side, name }) => ({ id, tournament_id, side, name })),
+    players: data.players.filter((p) => p.club_id === own || known.has(p.id)),
+    pairs,
+  };
+}
+
+/** Every item sharing the highest score (empty in, empty out). */
+const best = <T>(xs: T[], score: (x: T) => number) => {
+  const max = Math.max(...xs.map(score));
+  return xs.filter((x) => score(x) === max);
+};
+
+/** Results-page awards. Each is a list so ties keep everyone; player lists follow ranking order. */
+export function awards(data: TournamentView) {
+  const ranked = ranking(data);
+  const side = new Map(data.clubs.map((c) => [c.id, c.side]));
+  const top = ranked[0];
+  const done = doneMatches(data);
+  const margin = (m: (typeof done)[number]) => Math.abs(m.score_a - m.score_b);
+  return {
+    mvp: top ? ranked.filter((s) => s.wins === top.wins && s.diff === top.diff && s.pf === top.pf) : [],
+    topScorer: {
+      A: best(ranked.filter((s) => side.get(s.player.club_id) === "A"), (s) => s.pf),
+      B: best(ranked.filter((s) => side.get(s.player.club_id) === "B"), (s) => s.pf),
+    },
+    iron: best(ranked, (s) => s.played),
+    biggestWin: best(done, margin),
+    closest: best(done, (m) => -margin(m)),
+  };
 }

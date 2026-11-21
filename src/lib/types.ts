@@ -85,3 +85,10 @@ export type TournamentData = {
   pairs: LineupPair[]
   matches: Match[]
 }
+
+/** TournamentData as a viewer may see it: tokens are only present for the admin. */
+export type TournamentView = Omit<TournamentData, 'clubs'> & {
+  clubs: (Omit<Club, 'captain_token'> & { captain_token?: string })[]
+}
+
+export type Viewer = { role: 'admin' } | { role: 'audience' } | { role: 'captain'; clubId: string }
