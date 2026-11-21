@@ -20,7 +20,7 @@ export function NewTournamentForm() {
       <div className="grid gap-4 sm:grid-cols-2">
         <label className={label}>
           Courts
-          <input name="courts" type="number" min={1} max={50} required defaultValue={v.courts ?? 7} className={field} />
+          <input name="courts" type="number" min={1} max={50} required defaultValue={v.courts ?? 4} className={field} />
         </label>
         <label className={label}>
           Pairs per round
