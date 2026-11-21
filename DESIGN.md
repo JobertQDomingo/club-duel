@@ -189,6 +189,16 @@ Solid, square, uppercase. One primary per view.
 - **Border:** none on the panel; an optional title sits on a 1px ink bottom rule with an action right-aligned.
 - **Internal Padding:** 16px. Never nest.
 
+### Form fields
+- **Inputs, selects:** square, min height 44px, 1px ink border, sheet white, body type. Label above in Label type (uppercase, bold). Readonly link fields use mono type.
+- **Errors:** `role="alert"` paragraph with a 4px ink left rule, semibold. No error colour token yet.
+
+### CopyLink
+Label, then a readonly URL field (selects all on focus) beside a Secondary "Copy" button that reads "Copied" for 2s. Captain links are labelled "(keep private)".
+
+### RosterInput
+Per club: name field + gender select (blank "Gender" placeholder, so it's chosen each time) + Secondary "Add", disabled until both are set. Enter adds instead of submitting the form; focus returns to the name. Added players list below as a numbered, hairline-divided list with a Ghost "Remove" per row; the legend shows the count.
+
 ### PairCard (signature)
 One club's pair in a match. Label line in the club's marker colour, then two names in body type; repeat pairs add the warn badge. B side is right-aligned. `names: null` is face-down: it renders the tape strip and a screen-reader "Hidden until the match starts", and **no names reach the DOM**. When names arrive on a card that mounted face-down, the tape peels (600ms, expo-out, 150ms delay: slide and rotate off).
 

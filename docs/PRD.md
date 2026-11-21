@@ -23,7 +23,7 @@ Web app for a two-club pickleball "Club Duel" run in Captain's Mode. It replaces
 
 ## 3. Flow
 
-1. **Create.** Admin enters Club A name, Club B name, number of courts, pairs per round (default 7), and each club's players (name + gender). The app creates both captain links and the audience link.
+1. **Create.** Admin enters Club A name, Club B name, number of courts, pairs per round (default 7), and each club's players (name + gender), added one at a time: type the name, pick M or F, click Add (or press Enter); each listed player can be removed before creating. The app creates both captain links and the audience link.
 2. **Roster edits.** Captains can rename their club and add, edit or remove their own players at any time. The admin can edit everything. **A player who has played a match cannot be removed**, only renamed. The same rule applies to courts.
 3. **Open round.** Admin clicks "Open Round N". This is only possible when the previous round has no pending or live matches.
 4. **Blind lineup.** Each captain fills Pair 1…P by picking 2 players per slot. They see repeat-pair warnings inline, and same-round duplicates are prevented. All slots must be filled to submit. A captain can **unsubmit** until the opponent submits. When both have submitted, the round is **locked** and only the admin can edit lineups after that.

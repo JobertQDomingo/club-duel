@@ -58,7 +58,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 
 - [x] **T10 Create tournament + list** (M) (browser). Depends: T04, T09.
   Read: PRD §3 step 1, §4 Admin `/admin`.
-  Do: `/admin` lists my tournaments. The "New tournament" form takes the tournament name, the club A/B names, the number of courts, pairs per round, and each club's players (one per line, `Name, M|F`). A server action inserts everything. The detail page shows the captain links and the audience link with copy buttons.
+  Do: `/admin` lists my tournaments. The "New tournament" form takes the tournament name, the club A/B names, the number of courts, pairs per round, and each club's players (type a name, pick M/F, Add to a list with Remove; submitted as `Name, M|F` lines). A server action inserts everything. The detail page shows the captain links and the audience link with copy buttons.
   Done when: you create one with 16+16 players and 7 courts, and the links show.
 
 - [ ] **T11 Live refresh plumbing** (S). Depends: T02.
@@ -162,5 +162,5 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 - T09: guard with `requireUser()` / `requireAdmin(tournamentId)` from `@/lib/auth` (404 for a tournament you don't own). `src/proxy.ts` (Next 16's middleware) refreshes the session and redirects `/admin/**` → `/login`. Session-reading pages need `export const instant = false` (cacheComponents is on); `/admin/layout.tsx` already sets it.
 - T09: Supabase still has "Confirm email" ON and rejects unknown email domains, so mark test users confirmed with `auth.admin.updateUserById(id, {email_confirm:true})`. `vitest.config.mts` has the `@/*` alias; `auth.test.ts` shows how to mock `server-only`, `next/navigation` and the Supabase clients.
 - T10: every session-reading page needs its own `export const instant = false`; the layout's doesn't cover the page. Create is plain inserts with a compensating `delete` of the tournament on failure (cascade), not an SQL function.
-- T10: `CopyLink` (`@/components/ui/CopyLink`) for the T12 header links. Link origin comes from `headers()` (host + x-forwarded-proto).
+- T10: `CopyLink` (`@/components/ui/CopyLink`) for the T12 header links; origin from `headers()` (host + x-forwarded-proto). `RosterInput` (`src/app/admin/RosterInput.tsx`) is name + gender + Add, posting a hidden `players{A|B}` that `parseRoster` validates; reuse it for T13 roster add.
 - T10: if `next dev` throws "Jest worker encountered 2 child process exceptions", restart it; it's a dev-server crash, not app code.
