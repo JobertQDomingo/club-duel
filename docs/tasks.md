@@ -45,7 +45,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 
 ## M2 — Design + admin
 
-- [ ] **T08 Design direction** (M). Depends: T01.
+- [x] **T08 Design direction** (M). Depends: T01.
   Read: PRD §2, §4.
   Do: run Impeccable to set the visual direction for 3 surfaces (admin laptop console, captain phone draft, audience phone). Output `DESIGN.md` + Tailwind theme tokens + base components (Button, Card, face-down PairCard, Badge for the ⚠ repeat warning).
   Done when: a `/dev/components` page shows the components (browser); `DESIGN.md` is committed.
@@ -156,3 +156,6 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 - T06: before inserting into `lineup_pairs`, sort each pair so player1_id < player2_id (DB check). `pairKey` uses the same JS string order.
 - T07: `viewFor(data, viewer)` returns `TournamentView` (clubs without `captain_token` for non-admins). Domain fns accept `TournamentView`, so pages compute ranking/totals/awards from the view. Non-admin `players` = own club + players in visible pairs only (no full opponent roster).
 - T07: lineup rows (incl. `submitted_at`) stay visible to everyone for the "submitted?" status; only `pairs` are filtered. `awards()` returns `{mvp, topScorer:{A,B}, iron, biggestWin, closest}` as lists.
+- T08: read `DESIGN.md` before UI work. Tokens are Tailwind v4 `@theme` in `globals.css` (`bg-wall`, `bg-sheet`, `text-ink`, `bg-club-a/b`, `bg-live`, `bg-tape`, `bg-warn`, `font-display`). Components in `@/components/ui/{Button,Card,Badge,PairCard,ScoreRace}`.
+- T08: `PairCard names={null}` = face-down (no names in DOM); it peels its tape when names arrive on a mounted card, so keep stable React keys across `router.refresh()`. `ScoreRace` takes `{a:{name,total}, b:{name,total}}` (feed it `clubTotals`).
+- T08: for T12/T19, the review suggested a ruled match row (# | pair A | score/LIVE/Pending | pair B) and an "N of M matches done" line beside the lead. No error colour token yet: add one when the first form error ships.

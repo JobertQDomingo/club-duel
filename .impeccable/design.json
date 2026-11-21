@@ -1,0 +1,305 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-21T04:48:18.547Z",
+  "title": "Design System: Club Duel",
+  "extensions": {
+    "colorMeta": {
+      "wall": {
+        "role": "neutral",
+        "displayName": "Painted Wall Sage",
+        "canonical": "#d6e4da",
+        "tonalRamp": [
+          "#363937",
+          "#606762",
+          "#8b948e",
+          "#b6c2b9",
+          "#dee9e1",
+          "#e8f0eb",
+          "#f3f7f4",
+          "#fafcfb"
+        ]
+      },
+      "sheet": {
+        "role": "neutral",
+        "displayName": "Sheet White",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#404040",
+          "#737373",
+          "#a6a6a6",
+          "#d9d9d9",
+          "#ffffff",
+          "#ffffff",
+          "#ffffff",
+          "#ffffff"
+        ]
+      },
+      "ink": {
+        "role": "primary",
+        "displayName": "Print Ink",
+        "canonical": "#16181d",
+        "tonalRamp": [
+          "#060607",
+          "#0a0b0d",
+          "#0e1013",
+          "#131419",
+          "#45464a",
+          "#7f8083",
+          "#b9babb",
+          "#e3e3e4"
+        ]
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Soft Ink",
+        "canonical": "#4a5058",
+        "tonalRamp": [
+          "#131416",
+          "#212428",
+          "#303439",
+          "#3f444b",
+          "#6e7379",
+          "#9b9fa3",
+          "#c9cbcd",
+          "#e9eaeb"
+        ]
+      },
+      "club-a": {
+        "role": "secondary",
+        "displayName": "Club A Marker Blue",
+        "canonical": "#1f5bd8",
+        "tonalRamp": [
+          "#081736",
+          "#0e2961",
+          "#143b8c",
+          "#1a4db8",
+          "#4c7ce0",
+          "#84a5ea",
+          "#bccef3",
+          "#e4ebfa"
+        ]
+      },
+      "club-b": {
+        "role": "secondary",
+        "displayName": "Club B Marker Red",
+        "canonical": "#d7322b",
+        "tonalRamp": [
+          "#360d0b",
+          "#611613",
+          "#8c211c",
+          "#b72b25",
+          "#df5b55",
+          "#e98e8a",
+          "#f3c2bf",
+          "#fae6e6"
+        ]
+      },
+      "live": {
+        "role": "tertiary",
+        "displayName": "Highlighter Yellow",
+        "canonical": "#f2dc4a",
+        "tonalRamp": [
+          "#3d3713",
+          "#6d6321",
+          "#9d8f30",
+          "#cebb3f",
+          "#f5e36e",
+          "#f8ec9b",
+          "#fbf5c9",
+          "#fdfbe9"
+        ]
+      },
+      "tape": {
+        "role": "tertiary",
+        "displayName": "Masking Tape",
+        "canonical": "#e6d3a0",
+        "tonalRamp": [
+          "#3a3528",
+          "#675f48",
+          "#968968",
+          "#c4b388",
+          "#ebdcb3",
+          "#f1e7cb",
+          "#f8f2e3",
+          "#fcfaf4"
+        ]
+      },
+      "warn": {
+        "role": "tertiary",
+        "displayName": "Caution Orange",
+        "canonical": "#f08a24",
+        "tonalRamp": [
+          "#3c2309",
+          "#6c3e10",
+          "#9c5a17",
+          "#cc751f",
+          "#f3a150",
+          "#f7bf87",
+          "#fbdcbd",
+          "#fdf1e5"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display-total": {
+        "displayName": "Display Total",
+        "purpose": "Club totals in the score race only; 6rem from sm."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Page title, uppercase."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Card titles on an ink rule, uppercase."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Player names and copy; tabular numerals."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Badges, pair labels, club names; buttons at 1rem."
+      }
+    },
+    "shadows": [
+      {
+        "name": "tape-lift",
+        "value": "0 2px 4px rgb(22 24 29 / 0.18)",
+        "purpose": "Masking tape over a face-down pair. The only shadow in the system."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Race bar width (700ms) and tape peel (600ms, 150ms delay)."
+      },
+      {
+        "name": "peel",
+        "value": "to { transform: translate(110%, -40%) rotate(14deg); opacity: 0; }",
+        "purpose": "Tape peels off when a face-down pair is revealed."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Solid ink action; one per view.",
+      "html": "<button class=\"ds-btn ds-btn-primary\">Submit lineup</button>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;border:0;border-radius:0;font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:0.025em;font-size:1rem;cursor:pointer;transition:background-color .15s,color .15s;}.ds-btn:focus-visible{outline:2px solid var(--color-ink);outline-offset:2px;}.ds-btn-primary{padding:0 16px;background:var(--color-ink);color:var(--color-sheet);}.ds-btn-primary:hover{background:rgb(22 24 29 / 0.85);}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "White with ink border.",
+      "html": "<button class=\"ds-btn ds-btn-secondary\">Unsubmit</button>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;border:0;border-radius:0;font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:0.025em;font-size:1rem;cursor:pointer;transition:background-color .15s,color .15s;}.ds-btn:focus-visible{outline:2px solid var(--color-ink);outline-offset:2px;}.ds-btn-secondary{padding:0 16px;background:var(--color-sheet);color:var(--color-ink);border:1px solid var(--color-ink);}.ds-btn-secondary:hover{background:var(--color-wall);}"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Underlined text action for low-stakes actions.",
+      "html": "<button class=\"ds-btn ds-btn-ghost\">Copy link</button>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;border:0;border-radius:0;font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:0.025em;font-size:1rem;cursor:pointer;transition:background-color .15s,color .15s;}.ds-btn:focus-visible{outline:2px solid var(--color-ink);outline-offset:2px;}.ds-btn-ghost{background:none;color:var(--color-ink);text-decoration:underline;text-underline-offset:.2em;}.ds-btn-ghost:hover{color:var(--color-ink-soft);}"
+    },
+    {
+      "name": "Badges",
+      "kind": "chip",
+      "refersTo": "badge-warn",
+      "description": "Warn, live, and plain badges with filled/hollow state marks.",
+      "html": "<span class=\"ds-badge ds-badge-warn\"><svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linejoin=\"round\"><path d=\"M8 1.75 15 14.25H1L8 1.75Z\"/><path d=\"M8 6.25v3.5M8 11.75v.25\" stroke-linecap=\"round\"/></svg>Already paired once</span> <span class=\"ds-badge ds-badge-live\">Live · Court 2</span> <span class=\"ds-badge ds-badge-plain\"><i class=\"ds-mark ds-mark-filled\"></i>Submitted</span> <span class=\"ds-badge ds-badge-plain\"><i class=\"ds-mark\"></i>Not yet</span>",
+      "css": ".ds-badge{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:0.025em;font-size:.875rem;line-height:1.25rem;color:var(--color-ink);}.ds-badge-warn{background:var(--color-warn);}.ds-badge-live{background:var(--color-live);}.ds-badge-plain{background:var(--color-sheet);border:1px solid var(--color-ink);}.ds-mark{width:10px;height:10px;border-radius:50%;border:2px solid var(--color-ink);box-sizing:border-box;}.ds-mark-filled{background:var(--color-ink);}"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Square white sheet on the wall; title on an ink rule. Never nested.",
+      "html": "<section class=\"ds-card\"><header class=\"ds-card-head\"><h2>Match 4</h2></header><p>Sheet content.</p></section>",
+      "css": ".ds-card{background:var(--color-sheet);padding:16px;}.ds-card-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--color-ink);}.ds-card-head h2{margin:0;font-family:var(--font-display);font-weight:700;font-size:1.5rem;line-height:1;text-transform:uppercase;}"
+    },
+    {
+      "name": "PairCard",
+      "kind": "custom",
+      "description": "One club's pair; face-down renders masking tape and no names.",
+      "html": "<div class=\"ds-match\"><div class=\"ds-pair\"><p class=\"ds-pair-label ds-a\">Club A · Pair 4</p><p class=\"ds-names\">Mara Villa<br>Noel Ramos</p></div><span class=\"ds-vs\">vs</span><div class=\"ds-pair ds-right\"><p class=\"ds-pair-label ds-b\">Club B · Pair 4</p><div class=\"ds-tape\"></div></div></div>",
+      "css": ".ds-match{display:grid;grid-template-columns:1fr auto 1fr;border-top:1px solid var(--color-ink);border-bottom:1px solid var(--color-ink);background:var(--color-sheet);}.ds-pair{position:relative;min-height:72px;overflow:hidden;padding:8px 12px;}.ds-right{text-align:right;}.ds-pair-label{margin:0;font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:0.025em;font-size:.875rem;}.ds-a{color:var(--color-club-a);}.ds-b{color:var(--color-club-b);}.ds-names{margin:0;font-family:var(--font-sans);line-height:1.375;}.ds-vs{display:flex;align-items:center;padding:0 8px;border-left:1px solid var(--color-ink);border-right:1px solid var(--color-ink);font-family:var(--font-display);font-weight:800;font-size:1.25rem;}.ds-tape{position:absolute;left:8px;right:8px;top:28px;height:48px;transform:rotate(-1deg);background:var(--color-tape);box-shadow:0 2px 4px rgb(22 24 29 / 0.18);}"
+    },
+    {
+      "name": "ScoreRace",
+      "kind": "custom",
+      "description": "Club totals as whole colour fields over a race strip meeting at an ink midline.",
+      "html": "<div><div class=\"ds-band\"><div class=\"ds-field ds-fa\"><p class=\"ds-club\">Riverside PC</p><p class=\"ds-total\">112</p></div><div class=\"ds-field ds-fb\"><p class=\"ds-club\">Northgate PC</p><p class=\"ds-total\">104</p></div></div><div class=\"ds-strip\"><div class=\"ds-bar ds-fa\" style=\"left:0;width:62%\"></div><div class=\"ds-bar ds-fb\" style=\"right:0;width:38%\"></div><div class=\"ds-mid\"></div></div><p class=\"ds-lead\">Riverside PC lead by 8</p></div>",
+      "css": ".ds-band{display:grid;grid-template-columns:1fr 1fr;color:var(--color-sheet);}.ds-field{padding:10px 16px 12px;}.ds-fb{text-align:right;}.ds-fa{background:var(--color-club-a);}.ds-fb{background:var(--color-club-b);}.ds-club{margin:0;font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:0.025em;font-size:.875rem;}.ds-total{margin:0;font-family:var(--font-display);font-weight:800;font-size:4.5rem;line-height:.9;font-variant-numeric:tabular-nums;}.ds-strip{position:relative;margin-top:8px;height:14px;background:var(--color-sheet);}.ds-bar{position:absolute;top:0;bottom:0;transition:width .7s cubic-bezier(0.16,1,0.3,1);}.ds-mid{position:absolute;top:-3px;bottom:-3px;left:50%;width:2px;transform:translateX(-50%);background:var(--color-ink);}.ds-lead{margin:6px 0 0;font-family:var(--font-display);font-weight:700;text-transform:uppercase;}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Venue Draw Sheet",
+    "overview": "The duel looks like the printed draw sheet a director tapes to the venue wall and marks up live in two club markers. Sage-painted wall, white sheet panels with square corners, print-black hairlines, and two marker colours that fill whole regions. State is a mark in a fixed cell (filled or hollow, highlighter for live), and pending pairs sit under masking tape. Figures carry the page: club totals are the largest thing on any screen.\n\nLight only: indoor venue, and the user ruled out a dark theme. Not cute, not corporate: no grey SaaS score card with one blue accent, no mascots or rounded friendliness.",
+    "keyCharacteristics": [
+      "Club colour owns regions, never a thin accent.",
+      "Scale contrast ranks information: monumental totals, uppercase condensed heads, plain body.",
+      "Square sheets, ink hairlines, no radius.",
+      "Tape is the only thing with a shadow.",
+      "Motion only in two signature moves: race bars growing and tape peeling."
+    ],
+    "rules": [
+      {
+        "name": "The Whole Field Rule",
+        "body": "A club colour fills a region (totals band, race bar) or labels that club's own content. It is never a generic accent, link colour, or decoration.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Meaning Rule",
+        "body": "Yellow means live, orange means repeat-pair warning, tape means hidden. Do not reuse them for anything else.",
+        "section": "colors"
+      },
+      {
+        "name": "The Figures Carry the Page Rule",
+        "body": "The club totals are always the largest type on screen. Nothing else uses display-total.",
+        "section": "typography"
+      },
+      {
+        "name": "The Uppercase Is for Heads Rule",
+        "body": "Condensed uppercase is for titles, labels, buttons, and badges. Names and sentences stay in Barlow sentence case.",
+        "section": "typography"
+      },
+      {
+        "name": "The Only Tape Lifts Rule",
+        "body": "No shadows on cards, buttons, badges, or dialogs. If something needs to stand out, use scale, a club field, or ink weight.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** let club colours fill whole regions (totals fields, race bars) and label only that club's content.",
+      "**Do** separate content with 1px print-ink hairlines inside white sheets.",
+      "**Do** keep numerals tabular and make the club totals the largest type on screen.",
+      "**Do** pass `names={null}` for any pair the viewer may not see; face-down renders tape only.",
+      "**Do** keep motion to the race bars and the tape peel, with the global reduced-motion override intact.",
+      "**Do** keep tap targets at least 44px."
+    ],
+    "donts": [
+      "**Don't** add a dark theme; the product is light only.",
+      "**Don't** put a shadow on anything but tape.",
+      "**Don't** round corners on sheets, buttons, or badges.",
+      "**Don't** use yellow, orange, or tape colour for anything except live, repeat warning, and hidden.",
+      "**Don't** fall back to a grey SaaS score card with one blue accent, or to cute mascot-style friendliness.",
+      "**Don't** nest cards."
+    ]
+  }
+}
