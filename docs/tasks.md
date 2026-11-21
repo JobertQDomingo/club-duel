@@ -10,7 +10,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
   Do: `create-next-app` in the repo root (TS, Tailwind, ESLint, App Router, `src/`, alias `@/*`). Add `@supabase/supabase-js`, `@supabase/ssr`, and `vitest` with an `npm test` script. Replace the starter page with a one-line "Club Duel" placeholder.
   Done when: lint, test (one trivial test) and build pass.
 
-- [ ] **T02 Supabase project + clients** (S) [USER]. Depends: T01.
+- [x] **T02 Supabase project + clients** (S) [USER]. Depends: T01.
   Read: ARCH §Environment variables, §Request model.
   User: create a free Supabase project and paste the URL, anon key and service-role key into `.env.local`.
   Do: `.env.example` (names only). `src/lib/supabase/admin.ts` (service-role client, `import 'server-only'`), `server.ts` (SSR auth client from cookies), `browser.ts` (anon client for auth + realtime).
@@ -148,3 +148,4 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 <!-- Max 3 lines per task. Only what later tasks need. -->
 - T01: Next 16.4 / React 19.3 / Tailwind 4 / Vitest 5 (no vitest config yet; add one with the `@/*` alias when a test first needs it). AGENTS.md is managed by `next dev`, keep it committed.
 - T01: in Git Bash, run `npm test` from `cd "C:/Projects/..."` (capital C:). From `/c/...` Vitest loads twice and fails with "failed to find the current suite". PowerShell is fine.
+- T02: keys are the new Supabase format: `NEXT_PUBLIC_SUPABASE_ANON_KEY` holds the publishable key (`sb_publishable_`), `SUPABASE_SERVICE_ROLE_KEY` the secret key (`sb_secret_`). Import clients from `@/lib/supabase/{admin,server,browser}`; `supabaseServer()` is async.
