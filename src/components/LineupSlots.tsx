@@ -15,11 +15,13 @@ type Props = {
   editable: boolean
   /** False once the round is locked: a started match can't lose its pair. */
   clearable?: boolean
+  /** From `pastPartners`: after the 1st pick, that player's earlier partners are marked (still pickable). */
+  partners?: Record<string, Record<string, number[]>>
   save: (slot: number, ids: [string, string] | null) => Promise<string | undefined>
 }
 
 /** Pair 1…P of one lineup: tap a slot, pick 2 players (the 2nd pick saves). Shared by the captain draft and the admin round panel. */
-export function LineupSlots({ side, slots, players, pairs, repeats, editable, clearable = true, save }: Props) {
+export function LineupSlots({ side, slots, players, pairs, repeats, editable, clearable = true, partners = {}, save }: Props) {
   const [open, setOpen] = useState<number | null>(null)
   const [picked, setPicked] = useState<string[]>([])
   const [error, setError] = useState<string>()
@@ -30,6 +32,13 @@ export function LineupSlots({ side, slots, players, pairs, repeats, editable, cl
   const usedIn = new Map(pairs.flatMap((p) => [[p.player1_id, p.slot], [p.player2_id, p.slot]] as const))
   const sorted = [...players].sort((a, b) => a.name.localeCompare(b.name))
   const club = side === 'A' ? 'text-club-a' : 'text-club-b'
+  const first = picked.length === 1 ? picked[0] : null
+  const pastWith = (first && partners[first]) || {}
+  const takenBy = (id: string) => {
+    const other = usedIn.get(id)
+    return other !== undefined && other !== open ? other : undefined
+  }
+  const warned = sorted.some((pl) => pastWith[pl.id] && takenBy(pl.id) === undefined)
 
   const close = () => {
     setOpen(null)
@@ -89,10 +98,17 @@ export function LineupSlots({ side, slots, players, pairs, repeats, editable, cl
                   <p className="font-display text-sm font-bold uppercase tracking-wide">
                     Pick 2 players · {picked.length} of 2
                   </p>
+                  {first && warned && (
+                    <p className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                      <Badge tone="warn">Already paired</Badge>
+                      <span>{name.get(first)} already played with the players marked orange. You can still pick them.</span>
+                    </p>
+                  )}
                   <div className="grid grid-cols-2 gap-2">
                     {sorted.map((pl) => {
-                      const other = usedIn.get(pl.id)
-                      const taken = other !== undefined && other !== slot
+                      const other = takenBy(pl.id)
+                      const taken = other !== undefined
+                      const rounds = !taken && pastWith[pl.id]
                       return (
                         <button
                           key={pl.id}
@@ -100,12 +116,13 @@ export function LineupSlots({ side, slots, players, pairs, repeats, editable, cl
                           aria-pressed={picked.includes(pl.id)}
                           disabled={taken || pending}
                           onClick={() => pick(pl.id)}
-                          className="flex min-h-11 flex-col items-start justify-center border border-ink px-2 py-1 text-left hover:bg-wall aria-pressed:bg-ink aria-pressed:text-sheet disabled:cursor-not-allowed disabled:border-ink/30 disabled:text-ink/40"
+                          className={`flex min-h-11 flex-col items-start justify-center gap-1 border border-ink px-2 py-1 text-left hover:bg-wall aria-pressed:bg-ink aria-pressed:text-sheet disabled:cursor-not-allowed disabled:border-ink/30 disabled:text-ink/40 ${rounds ? 'bg-warn/25' : ''}`}
                         >
                           <span>
                             {pl.name} <span className="text-sm">· {pl.gender}</span>
                           </span>
                           {taken && <span className="text-sm">In pair {other}</span>}
+                          {rounds && <Badge tone="warn">{rounds.length > 1 ? 'Rounds' : 'Round'} {rounds.join(', ')}</Badge>}
                         </button>
                       )
                     })}

@@ -115,7 +115,7 @@ Painted wall, white paper, print ink, two markers, a highlighter, and tape.
 
 ### Tertiary
 - **Highlighter Yellow**: live state only (live badge, text selection). Ink text on it.
-- **Caution Orange**: the repeat-pair warning badge only. Ink text on it.
+- **Caution Orange**: repeat-pair warnings only: the ⚠ badge, and the past-partner mark in the player picker (`bg-warn/25` fill). Ink text on it.
 - **Masking Tape**: covers face-down pairs. Nothing else.
 
 ### Neutral
@@ -212,6 +212,15 @@ One club's pair in a match. Label line in the club's marker colour, then two nam
 
 ### ScoreRace (signature)
 Full-bleed totals band split into a Club A blue field and a Club B red field, each with club name (Label, up to two lines) and total (Display-total, bottom-aligned so both totals line up) in white. Below, a 14px white track holds two marker bars meeting at an ink midline that overhangs by 3px; the split shows the lead (1.5% per point, capped at 10/90), and bars animate width over 700ms expo-out. Lead line underneath ("Riverside PC lead by 8" or "Tied"), announced politely to screen readers.
+
+### Player picker (LineupSlots)
+Tap a slot, then pick 2 players from a two-column grid of square ink-bordered buttons (picked = ink fill; taken in another slot = disabled, "In pair N"). After the first pick, that player's partners from earlier rounds get the orange fill and a warn badge with the round ("Round 1"), and a line above the grid reads "<Badge>Already paired</Badge> Ana already played with the players marked orange. You can still pick them." They stay clickable; picking one saves and the slot shows the "Already paired once" badge.
+
+### Ranking stat sheet
+Each player name in the ranking is a button (dotted underline, full-cell 44px target) that opens a native `popover` sheet, sized and styled like the dialogs: the name and club on an ink rule, one ruled row per game (Round · Match label, "with partner vs opponents", "W 11–6" and the signed margin on the right), then a W–L / PF / PA / Diff list that spells out each sum ("Points won: 11 + 11 + 11 =" → 33; "PF − PA = 33 − 18 =" → +15), and a Secondary "Close". Tap outside or Esc also closes it. A soft-ink line under the table says "Tap a name to see the games behind the numbers."
+
+### Awards (results page)
+One sheet titled "Awards" with the tournament name as its header action, so a phone screenshot names the event. Each award is a ruled entry: Title-type heading (`text-xl`), a plain-language rule in soft ink with the winning figure in semibold ink, kept on one line ("Most matches played · **3 matches each**"). Player awards put the winners on their club's marker field, one field per club: names in Barlow 600 sentence case (`text-3xl` alone, `text-2xl` for 2–4, `text-lg` in two columns from a 256px field via `@3xs`), the club name in Label type under them. Match awards are ruled match rows with the round and match label above, the score in display 800 `text-3xl`, and the winning pair's cell filled with its club's field.
 
 ## Do's and Don'ts
 

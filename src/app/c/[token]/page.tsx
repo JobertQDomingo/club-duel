@@ -7,7 +7,7 @@ import { Card } from '@/components/ui/Card'
 import { ScoreRace } from '@/components/ui/ScoreRace'
 import { requireCaptain } from '@/lib/auth'
 import { loadTournament } from '@/lib/db'
-import { clubTotals, pairNames, repeatPairs, viewFor } from '@/lib/domain'
+import { clubTotals, pairNames, pastPartners, repeatPairs, viewFor } from '@/lib/domain'
 import { Draft } from './Draft'
 
 export const metadata = { title: 'Captain · Club Duel', robots: { index: false } }
@@ -56,6 +56,7 @@ export default async function CaptainPage({ params }: PageProps<'/c/[token]'>) {
               players={players}
               pairs={pairs}
               repeats={[...repeatPairs(view, round.id, clubId, pairs)]}
+              partners={pastPartners(view, round.id, clubId)}
               submitted={!!lineup.submitted_at}
               locked={!!round.locked_at}
               opponent={{ name: opponent.name, submitted: opponentIn }}

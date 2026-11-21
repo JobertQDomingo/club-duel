@@ -7,7 +7,7 @@ import { CopyLink } from '@/components/ui/CopyLink'
 import { ScoreRace } from '@/components/ui/ScoreRace'
 import { requireAdmin } from '@/lib/auth'
 import { loadAuditLog, loadTournament } from '@/lib/db'
-import { canOpenRound, clubTotals, pairNames, repeatPairs, rosterShortfall, roundStatus, viewFor } from '@/lib/domain'
+import { canOpenRound, clubTotals, pairNames, pastPartners, repeatPairs, rosterShortfall, roundStatus, viewFor } from '@/lib/domain'
 import { adminSaveSlot } from '@/lib/lineup-actions'
 import { LineupSlots } from '@/components/LineupSlots'
 import { Ranking } from '@/components/Ranking'
@@ -146,6 +146,7 @@ export default async function TournamentPage({ params }: PageProps<'/admin/t/[id
                           players={view.players.filter((p) => p.club_id === c.id)}
                           pairs={pairs}
                           repeats={[...repeatPairs(view, round.id, c.id, pairs)]}
+                          partners={pastPartners(view, round.id, c.id)}
                           editable
                           clearable={!round.locked_at}
                           save={adminSaveSlot.bind(null, id, lineup.id)}

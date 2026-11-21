@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { awards, canOpenRound, clubTotals, MAX_NAME, pairKey, pairNames, parseName, parseRoster, parseScores, playerStats, ranking, repeatPairs, rosterShortfall, roundStatus, tabulation, validateLineup, viewFor } from "./domain";
+import { awards, canOpenRound, clubTotals, MAX_NAME, pairNames, parseName, parseRoster, parseScores, pastPartners, playerStats, ranking, repeatPairs, rosterShortfall, roundStatus, tabulation, validateLineup, viewFor } from "./domain";
 import type { LineupPair, Match, TournamentData } from "./types";
 
 // 2 clubs × 4 players, 2 rounds × 2 slots. Round 2 slot 2 is live (must be ignored).
@@ -69,18 +69,30 @@ describe("playerStats", () => {
     expect(byName.Gus).toMatchObject({ played: 2, wins: 0, losses: 2, pf: 14, pa: 22, diff: -8 });
   });
 
+  test("keeps each done game with partner, opponents and the score from the player's side, by round", () => {
+    const games = (n: string) =>
+      byName[n].games.map((g) => ({ round: g.round, slot: g.slot, partner: g.partner?.name, opponents: g.opponents.map((p) => p.name), pf: g.pf, pa: g.pa }));
+    expect(games("Cruz")).toEqual([
+      { round: 1, slot: 1, partner: "Bea", opponents: ["Gus", "Fay"], pf: 11, pa: 5 },
+      { round: 2, slot: 1, partner: "Dan", opponents: ["Gus", "Hal"], pf: 11, pa: 9 },
+    ]);
+    expect(games("Gus")[0]).toEqual({ round: 1, slot: 1, partner: "Fay", opponents: ["Cruz", "Bea"], pf: 5, pa: 11 });
+  });
+
+  test("games add up to the stats", () => {
+    for (const s of playerStats(data)) {
+      expect(s.games).toHaveLength(s.played);
+      expect(s.games.filter((g) => g.pf > g.pa)).toHaveLength(s.wins);
+      expect(s.games.reduce((t, g) => t + g.pf, 0)).toBe(s.pf);
+      expect(s.games.reduce((t, g) => t + g.pa, 0)).toBe(s.pa);
+    }
+  });
+
   test("leaves out players with no done match", () => {
     const r1Only = { ...data, matches: data.matches.filter((m) => m.round_id === "r1") };
     expect(playerStats(r1Only)).toHaveLength(8);
     expect(playerStats({ ...data, matches: [match("r1", 1, "done", 11, 5)] }).map((s) => s.player.id).sort())
       .toEqual(["a1", "a2", "b1", "b2"]);
-  });
-});
-
-describe("pairKey", () => {
-  test("same key regardless of order", () => {
-    expect(pairKey("b1", "a1")).toBe(pairKey("a1", "b1"));
-    expect(pairKey("a1", "b1")).not.toBe(pairKey("a1", "b2"));
   });
 });
 
@@ -100,6 +112,34 @@ describe("repeatPairs", () => {
   test("ignores the same and later rounds", () => {
     // In round 1, nothing is earlier; a1+a3 (round 2) is later.
     expect(repeatPairs(r3, "r1", "ca", draft)).toEqual(new Set());
+  });
+});
+
+describe("pastPartners", () => {
+  const r3 = { ...data, rounds: [...data.rounds, { id: "r3", tournament_id: "t", number: 3, pairs: 2, locked_at: null }] };
+
+  test("each player's partners from earlier rounds, both ways, with the round", () => {
+    expect(pastPartners(r3, "r3", "ca")).toEqual({
+      a1: { a2: [1], a3: [2] },
+      a2: { a1: [1], a4: [2] },
+      a3: { a4: [1], a1: [2] },
+      a4: { a3: [1], a2: [2] },
+    });
+  });
+
+  test("only earlier rounds of this club", () => {
+    expect(pastPartners(r3, "r2", "ca")).toEqual({ a1: { a2: [1] }, a2: { a1: [1] }, a3: { a4: [1] }, a4: { a3: [1] } });
+    expect(pastPartners(r3, "r1", "cb")).toEqual({});
+  });
+
+  test("a pair that played twice lists both rounds in order", () => {
+    const r4 = {
+      ...r3,
+      rounds: [...r3.rounds, { id: "r4", tournament_id: "t", number: 4, pairs: 2, locked_at: null }],
+      lineups: [{ id: "l3a", round_id: "r3", club_id: "ca", submitted_at: "x" }, ...r3.lineups],
+      pairs: [pair("l3a", 1, "a2", "a1"), ...r3.pairs],
+    };
+    expect(pastPartners(r4, "r4", "ca").a1).toEqual({ a2: [1, 3], a3: [2] });
   });
 });
 

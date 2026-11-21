@@ -15,13 +15,14 @@ type Props = {
   players: Player[]
   pairs: LineupPair[]
   repeats: number[]
+  partners: Record<string, Record<string, number[]>>
   submitted: boolean
   locked: boolean
   opponent: { name: string; submitted: boolean }
 }
 
 /** The captain's lineup for the current round, with Submit/Unsubmit. */
-export function Draft({ token, side, slots, players, pairs, repeats, submitted, locked, opponent }: Props) {
+export function Draft({ token, side, slots, players, pairs, repeats, partners, submitted, locked, opponent }: Props) {
   const [error, setError] = useState<string>()
   const [pending, startTransition] = useTransition()
   const run = (action: () => Promise<string | undefined>) => startTransition(async () => setError(await action()))
@@ -42,6 +43,7 @@ export function Draft({ token, side, slots, players, pairs, repeats, submitted, 
         players={players}
         pairs={pairs}
         repeats={repeats}
+        partners={partners}
         editable={!submitted && !locked}
         save={(slot, ids) => saveSlot(token, slot, ids)}
       />

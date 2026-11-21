@@ -9,7 +9,12 @@ export type PlayerStat = {
   pf: number;
   pa: number;
   diff: number;
+  /** The done games behind the numbers, by round then match. */
+  games: Game[];
 };
+
+/** One done game from a player's side. */
+export type Game = { round: number; slot: number; partner: Player | null; opponents: Player[]; pf: number; pa: number };
 
 // The DB check guarantees a done match has two non-null, unequal scores.
 const doneMatches = (data: TournamentView) =>
@@ -29,6 +34,7 @@ export function playerStats(data: TournamentView): PlayerStat[] {
   const side = new Map(data.clubs.map((c) => [c.id, c.side]));
   const lineups = new Map(data.lineups.map((l) => [l.id, l]));
   const players = new Map(data.players.map((p) => [p.id, p]));
+  const roundNo = new Map(data.rounds.map((r) => [r.id, r.number]));
 
   // `${round}:${side}:${slot}` → the two player ids in that pair
   const pairAt = new Map<string, string[]>();
@@ -39,11 +45,15 @@ export function playerStats(data: TournamentView): PlayerStat[] {
 
   const stats = new Map<string, PlayerStat>();
   for (const m of doneMatches(data)) {
-    for (const [s, pf, pa] of [["A", m.score_a, m.score_b], ["B", m.score_b, m.score_a]] as const) {
-      for (const id of pairAt.get(`${m.round_id}:${s}:${m.slot}`) ?? []) {
+    for (const [s, o, pf, pa] of [["A", "B", m.score_a, m.score_b], ["B", "A", m.score_b, m.score_a]] as const) {
+      const ids = pairAt.get(`${m.round_id}:${s}:${m.slot}`) ?? [];
+      const opponents = (pairAt.get(`${m.round_id}:${o}:${m.slot}`) ?? []).flatMap((id) => players.get(id) ?? []);
+      for (const id of ids) {
         const player = players.get(id);
         if (!player) continue;
-        const st = stats.get(id) ?? { player, played: 0, wins: 0, losses: 0, pf: 0, pa: 0, diff: 0 };
+        const st = stats.get(id) ?? { player, played: 0, wins: 0, losses: 0, pf: 0, pa: 0, diff: 0, games: [] };
+        const partner = players.get(ids.find((x) => x !== id) ?? "") ?? null;
+        st.games.push({ round: roundNo.get(m.round_id) ?? 0, slot: m.slot, partner, opponents, pf, pa });
         st.played++;
         if (pf > pa) st.wins++;
         else st.losses++;
@@ -54,26 +64,36 @@ export function playerStats(data: TournamentView): PlayerStat[] {
       }
     }
   }
+  for (const st of stats.values()) st.games.sort((x, y) => x.round - y.round || x.slot - y.slot);
   return [...stats.values()];
 }
 
 /** A pair in a draft lineup; player order doesn't matter. */
 export type DraftPair = Pick<LineupPair, "slot" | "player1_id" | "player2_id">;
 
-/** Order-independent key for two players (lower id first, like the DB check). */
-export function pairKey(a: string, b: string): string {
-  return a < b ? `${a}:${b}` : `${b}:${a}`;
+/** Each player's partners in this club's earlier rounds: player id → partner id → round numbers, ascending. */
+export function pastPartners(data: TournamentView, roundId: string, clubId: string): Record<string, Record<string, number[]>> {
+  const num = new Map(data.rounds.map((r) => [r.id, r.number]));
+  const current = num.get(roundId) ?? 0;
+  const roundOf = new Map(
+    data.lineups
+      .filter((l) => l.club_id === clubId && (num.get(l.round_id) ?? Infinity) < current)
+      .map((l) => [l.id, num.get(l.round_id)!]),
+  );
+  const out: Record<string, Record<string, number[]>> = {};
+  const add = (p: string, q: string, n: number) => ((out[p] ??= {})[q] ??= []).push(n);
+  const earlier = data.pairs.filter((p) => roundOf.has(p.lineup_id));
+  for (const p of earlier.sort((x, y) => roundOf.get(x.lineup_id)! - roundOf.get(y.lineup_id)!)) {
+    add(p.player1_id, p.player2_id, roundOf.get(p.lineup_id)!);
+    add(p.player2_id, p.player1_id, roundOf.get(p.lineup_id)!);
+  }
+  return out;
 }
 
 /** Slots in `pairs` whose two players already paired for this club in an earlier round. */
 export function repeatPairs(data: TournamentView, roundId: string, clubId: string, pairs: DraftPair[]): Set<number> {
-  const num = new Map(data.rounds.map((r) => [r.id, r.number]));
-  const current = num.get(roundId) ?? 0;
-  const earlier = new Set(
-    data.lineups.filter((l) => l.club_id === clubId && (num.get(l.round_id) ?? Infinity) < current).map((l) => l.id),
-  );
-  const seen = new Set(data.pairs.filter((p) => earlier.has(p.lineup_id)).map((p) => pairKey(p.player1_id, p.player2_id)));
-  return new Set(pairs.filter((p) => seen.has(pairKey(p.player1_id, p.player2_id))).map((p) => p.slot));
+  const past = pastPartners(data, roundId, clubId);
+  return new Set(pairs.filter((p) => past[p.player1_id]?.[p.player2_id]).map((p) => p.slot));
 }
 
 /** Error message for an invalid lineup of P pairs, or null if it can be saved. `partial` allows empty slots (a draft). */
