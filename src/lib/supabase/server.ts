@@ -1,9 +1,11 @@
 import 'server-only'
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
+import { connection } from 'next/server'
 
 // Auth-only client bound to the request's session cookies.
 export async function supabaseServer() {
+  await connection() // auth reads Date.now() for token expiry, so always render at request time
   const cookieStore = await cookies()
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

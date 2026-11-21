@@ -50,7 +50,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
   Do: run Impeccable to set the visual direction for 3 surfaces (admin laptop console, captain phone draft, audience phone). Output `DESIGN.md` + Tailwind theme tokens + base components (Button, Card, face-down PairCard, Badge for the ⚠ repeat warning).
   Done when: a `/dev/components` page shows the components (browser); `DESIGN.md` is committed.
 
-- [ ] **T09 Admin auth** (M) [USER] (browser). Depends: T02.
+- [x] **T09 Admin auth** (M) [USER] (browser). Depends: T02.
   Read: ARCH §Request model (auth bullet).
   User: in Supabase Auth, enable email/password and add `http://localhost:3000/**` to the redirect URLs. Google is optional (needs a Google Cloud OAuth client), and can be deferred to T24.
   Do: `/login` (sign in / sign up), middleware or a layout guard protecting `/admin/**`, sign out, and a `requireAdmin(tournamentId)` helper.
@@ -159,3 +159,5 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 - T08: read `DESIGN.md` before UI work. Tokens are Tailwind v4 `@theme` in `globals.css` (`bg-wall`, `bg-sheet`, `text-ink`, `bg-club-a/b`, `bg-live`, `bg-tape`, `bg-warn`, `font-display`). Components in `@/components/ui/{Button,Card,Badge,PairCard,ScoreRace}`.
 - T08: `PairCard names={null}` = face-down (no names in DOM); it peels its tape when names arrive on a mounted card, so keep stable React keys across `router.refresh()`. `ScoreRace` takes `{a:{name,total}, b:{name,total}}` (feed it `clubTotals`).
 - T08: for T12/T19, the review suggested a ruled match row (# | pair A | score/LIVE/Pending | pair B) and an "N of M matches done" line beside the lead. No error colour token yet: add one when the first form error ships.
+- T09: guard with `requireUser()` / `requireAdmin(tournamentId)` from `@/lib/auth` (404 for a tournament you don't own). `src/proxy.ts` (Next 16's middleware) refreshes the session and redirects `/admin/**` → `/login`. Session-reading pages need `export const instant = false` (cacheComponents is on); `/admin/layout.tsx` already sets it.
+- T09: Supabase still has "Confirm email" ON and rejects unknown email domains, so mark test users confirmed with `auth.admin.updateUserById(id, {email_confirm:true})`. `vitest.config.mts` has the `@/*` alias; `auth.test.ts` shows how to mock `server-only`, `next/navigation` and the Supabase clients.
