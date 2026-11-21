@@ -1,6 +1,6 @@
 import 'server-only'
 import { supabaseAdmin as db } from '@/lib/supabase/admin'
-import type { TournamentData } from '@/lib/types'
+import type { AuditEntry, TournamentData } from '@/lib/types'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
@@ -33,4 +33,9 @@ export async function loadTournament(id: string): Promise<TournamentData | null>
     matches: rows<TournamentData['matches']>(matches),
   }
   return data.tournament ? (data as TournamentData) : null
+}
+
+/** Admin-only: never pass this to a viewFor() view. Newest first. */
+export async function loadAuditLog(id: string): Promise<AuditEntry[]> {
+  return rows<AuditEntry[]>(await db.from('audit_log').select('*').eq('tournament_id', id).order('id', { ascending: false }))
 }

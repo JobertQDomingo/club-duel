@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { awards, canOpenRound, clubTotals, pairKey, parseRoster, playerStats, ranking, repeatPairs, roundStatus, validateLineup, viewFor } from "./domain";
+import { awards, canOpenRound, clubTotals, pairKey, parseRoster, parseScores, playerStats, ranking, repeatPairs, roundStatus, validateLineup, viewFor } from "./domain";
 import type { LineupPair, Match, TournamentData } from "./types";
 
 // 2 clubs × 4 players, 2 rounds × 2 slots. Round 2 slot 2 is live (must be ignored).
@@ -285,5 +285,17 @@ describe("canOpenRound", () => {
 
   test("never after the tournament ended", () => {
     expect(canOpenRound({ ...data, matches: allDone, tournament: { ...data.tournament, status: "ended" } })).toBe(false);
+  });
+});
+
+describe("parseScores", () => {
+  test("accepts two different whole numbers ≥ 0", () => {
+    expect(parseScores(" 11 ", "0")).toEqual({ a: 11, b: 0 });
+  });
+  test("rejects equal, negative, blank and fractional scores", () => {
+    expect(parseScores("7", "7")).toBe("Scores can't be equal: a match needs a winner.");
+    for (const [a, b] of [["-1", "5"], ["", "5"], ["5", "2.5"], ["5", "x"], [null, "5"]]) {
+      expect(parseScores(a, b)).toBe("Enter both scores as whole numbers (0 or more).");
+    }
   });
 });

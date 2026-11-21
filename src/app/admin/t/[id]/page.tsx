@@ -6,16 +6,18 @@ import { Card } from '@/components/ui/Card'
 import { CopyLink } from '@/components/ui/CopyLink'
 import { ScoreRace } from '@/components/ui/ScoreRace'
 import { requireAdmin } from '@/lib/auth'
-import { loadTournament } from '@/lib/db'
+import { loadAuditLog, loadTournament } from '@/lib/db'
 import { canOpenRound, clubTotals, ranking, repeatPairs, roundStatus, viewFor } from '@/lib/domain'
 import { adminSaveSlot } from '@/lib/lineup-actions'
 import { LineupSlots } from '@/components/LineupSlots'
 import { Badge } from '@/components/ui/Badge'
 import { PairCard } from '@/components/ui/PairCard'
 import { RosterEditor } from '@/components/RosterEditor'
+import { editScore, endMatch } from './actions'
 import { CourtsEditor } from './CourtsEditor'
 import { OpenRound } from './OpenRound'
 import { RegenerateLink } from './RegenerateLink'
+import { EndMatch, ScoreForm } from './ScoreForm'
 import { StartMatch } from './StartMatch'
 
 export const metadata = { title: 'Tournament · Club Duel' }
@@ -26,7 +28,7 @@ const empty = 'text-ink-soft'
 export default async function TournamentPage({ params }: PageProps<'/admin/t/[id]'>) {
   const { id } = await params
   await requireAdmin(id)
-  const data = await loadTournament(id)
+  const [data, audit] = await Promise.all([loadTournament(id), loadAuditLog(id)])
   if (!data) notFound()
   const view = viewFor(data, { role: 'admin' })
 
@@ -49,6 +51,19 @@ export default async function TournamentPage({ params }: PageProps<'/admin/t/[id
     const lineup = view.lineups.find((l) => l.round_id === roundId && l.club_id === clubId)
     const pair = lineup && view.pairs.find((p) => p.lineup_id === lineup.id && p.slot === slot)
     return pair ? [playerName.get(pair.player1_id) ?? '?', playerName.get(pair.player2_id) ?? '?'] : null
+  }
+  const roundNo = new Map(view.rounds.map((r) => [r.id, r.number]))
+  const finished = view.matches
+    .filter((m) => m.status === 'done')
+    .sort((x, y) => roundNo.get(x.round_id)! - roundNo.get(y.round_id)! || x.slot - y.slot)
+  const clubNames: [string, string] = [a.name, b.name]
+  const names = (ids: string[] | null) => (ids ? ids.map((p) => playerName.get(p) ?? '?').join(' & ') : 'empty')
+  type Logged = { round: number; slot: number; club_id?: string; pair?: string[] | null; score_a?: number; score_b?: number }
+  const auditLine = (e: (typeof audit)[number]) => {
+    const [was, now] = [e.before, e.after] as [Logged, Logged]
+    return e.action === 'score.edit'
+      ? `Round ${now.round} · Match ${now.slot} score ${was.score_a}–${was.score_b} → ${now.score_a}–${now.score_b}`
+      : `Round ${now.round} · ${clubName.get(now.club_id!) ?? '?'} pair ${now.slot}: ${names(was.pair ?? null)} → ${names(now.pair ?? null)}`
   }
 
   return (
@@ -89,10 +104,13 @@ export default async function TournamentPage({ params }: PageProps<'/admin/t/[id
                       {m ? <Badge tone="live">Live · Match {m.slot}</Badge> : <Badge mark="hollow">Free</Badge>}
                     </div>
                     {m ? (
-                      <div className="grid grid-cols-2 divide-x divide-ink/20 border-t border-ink/20">
-                        <PairCard side="A" slot={m.slot} names={pairNames(a.id, m.round_id, m.slot)} />
-                        <PairCard side="B" slot={m.slot} names={pairNames(b.id, m.round_id, m.slot)} />
-                      </div>
+                      <>
+                        <div className="grid grid-cols-2 divide-x divide-ink/20 border-t border-ink/20">
+                          <PairCard side="A" slot={m.slot} names={pairNames(a.id, m.round_id, m.slot)} />
+                          <PairCard side="B" slot={m.slot} names={pairNames(b.id, m.round_id, m.slot)} />
+                        </div>
+                        <EndMatch slot={m.slot} clubs={clubNames} action={endMatch.bind(null, id, m.id)} />
+                      </>
                     ) : pending.length > 0 ? (
                       <StartMatch key={pending.map((p) => p.id).join()} tournamentId={id} court={c} pending={pending} />
                     ) : (
@@ -146,7 +164,47 @@ export default async function TournamentPage({ params }: PageProps<'/admin/t/[id
         </Card>
 
         <Card title="Results">
-          <p className={empty}>No matches finished.</p>
+          <div className="flex flex-col gap-6">
+            {finished.length === 0 ? (
+              <p className={empty}>No matches finished.</p>
+            ) : (
+              <ul className="divide-y divide-ink/20 border-y border-ink/20">
+                {finished.map((m) => (
+                  <li key={m.id} className="flex flex-col gap-2 py-3">
+                    <h3 className="font-display font-bold uppercase">Round {roundNo.get(m.round_id)} · Match {m.slot}</h3>
+                    <p className="text-sm">
+                      <span className="text-club-a">{pairNames(a.id, m.round_id, m.slot)?.join(' & ')}</span>
+                      <span className={empty}> vs </span>
+                      <span className="text-club-b">{pairNames(b.id, m.round_id, m.slot)?.join(' & ')}</span>
+                    </p>
+                    <ScoreForm
+                      key={`${m.score_a}-${m.score_b}`} // remount so defaultValue shows the saved score
+                      clubs={clubNames}
+                      score={[m.score_a!, m.score_b!]}
+                      submit="Save"
+                      action={editScore.bind(null, id, m.id)}
+                    />
+                  </li>
+                ))}
+              </ul>
+            )}
+            <section className="flex flex-col gap-2">
+              <h3 className="font-display font-bold uppercase">Audit log</h3>
+              {audit.length === 0 ? (
+                <p className={empty}>No corrections yet.</p>
+              ) : (
+                <ol className="divide-y divide-ink/20 text-sm">
+                  {audit.map((e) => (
+                    <li key={e.id} className="py-1.5">
+                      {/* shortcut: time is formatted in the server's timezone (UTC on Vercel); format on the client if the venue needs local time */}
+                      <span className={empty}>{new Date(e.created_at).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })} · {e.actor} · </span>
+                      {auditLine(e)}
+                    </li>
+                  ))}
+                </ol>
+              )}
+            </section>
+          </div>
         </Card>
 
         <Card title="Ranking">

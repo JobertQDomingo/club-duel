@@ -100,7 +100,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
   Do: a `start_match(match_id, court_id)` SQL function (migration 0003, [USER] runs it). Court board: free courts show a pending-match picker (the lowest slot is the default) and Start; live courts show the match # and pairs.
   Done when: starting Match 3 on Court 1 reveals it; a second start on a busy court fails cleanly.
 
-- [ ] **T18 Match end + score edit + audit view** (M) (browser). Depends: T17.
+- [x] **T18 Match end + score edit + audit view** (M) (browser). Depends: T17.
   Read: PRD §3 steps 6, edits paragraph.
   Do: a Match end dialog (two integers ≥ 0, not equal) sets `done`. In Results, edit a done match's score, with an audit entry for the old and new values. Show the audit log list.
   Done when: totals and ranking update after the end and after an edit; equal scores are rejected.
@@ -182,3 +182,6 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 - T17: `startMatch(tournamentId, courtId, form)` in `admin/t/[id]/actions.ts` → `start_match` RPC (0003; errors "Court is busy" / "Match N has already started"). Court board tiles are inline in the admin page; `StartMatch.tsx` is the free-court picker. Add "Match end" to the live tile in T18.
 - T17: `check-round-fns.mjs` now also covers start_match. The "T16 check 16v17" tournament has Match 3 live on Court 1 and Match 1 on Court 2 (ready for T18).
 - T17: stale servers hold :3000–:3002 and killing them was denied; `npx next start -p 3005` worked.
+- T18: `endMatch` / `editScore(tournamentId, matchId, form)` in `admin/t/[id]/actions.ts` use `parseScores` (domain); edit writes `score.edit` `{round, slot, score_a, score_b}`. `<ScoreForm>` / `<EndMatch>` (native `<dialog>`) in `admin/t/[id]/ScoreForm.tsx`.
+- T18: `loadAuditLog(id)` in `@/lib/db` is admin-only (kept out of `TournamentData`/`viewFor`). Audit times are formatted in the server's timezone (shortcut comment in the admin page).
+- T18: "T16 check 16v17" now has Match 3 done (11–13, edited once) and Match 1 live on Court 2.

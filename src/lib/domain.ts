@@ -173,3 +173,11 @@ export function parseRoster(text: string): Pick<Player, "name" | "gender">[] | s
   }
   return players.length ? players : "Add at least one player.";
 }
+
+/** Match scores from form fields: whole numbers ≥ 0 that differ (the DB check needs a winner). */
+export function parseScores(a: unknown, b: unknown): { a: number; b: number } | string {
+  const [x, y] = [a, b].map((v) => (typeof v === "string" && /^\s*\d+\s*$/.test(v) ? Number(v) : NaN));
+  if (Number.isNaN(x) || Number.isNaN(y)) return "Enter both scores as whole numbers (0 or more).";
+  if (x === y) return "Scores can't be equal: a match needs a winner.";
+  return { a: x, b: y };
+}
