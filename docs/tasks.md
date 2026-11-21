@@ -5,7 +5,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 
 ## M0 — Foundation
 
-- [ ] **T01 Scaffold app** (S). Depends: none.
+- [x] **T01 Scaffold app** (S). Depends: none.
   Read: ARCH §Stack.
   Do: `create-next-app` in the repo root (TS, Tailwind, ESLint, App Router, `src/`, alias `@/*`). Add `@supabase/supabase-js`, `@supabase/ssr`, and `vitest` with an `npm test` script. Replace the starter page with a one-line "Club Duel" placeholder.
   Done when: lint, test (one trivial test) and build pass.
@@ -146,3 +146,5 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 
 ## Notes
 <!-- Max 3 lines per task. Only what later tasks need. -->
+- T01: Next 16.4 / React 19.3 / Tailwind 4 / Vitest 5 (no vitest config yet; add one with the `@/*` alias when a test first needs it). AGENTS.md is managed by `next dev`, keep it committed.
+- T01: in Git Bash, run `npm test` from `cd "C:/Projects/..."` (capital C:). From `/c/...` Vitest loads twice and fails with "failed to find the current suite". PowerShell is fine.
