@@ -107,6 +107,13 @@ export function roundStatus(data: TournamentView): string {
   return `Round ${r.number} · ${done} of ${r.pairs} matches done`;
 }
 
+/** Mirrors `open_round`: the latest round must be locked with every match done (or none exist yet). */
+export function canOpenRound(data: TournamentView): boolean {
+  if (data.tournament.status === "ended") return false;
+  const r = data.rounds.at(-1);
+  return !r || (!!r.locked_at && data.matches.every((m) => m.round_id !== r.id || m.status === "done"));
+}
+
 /**
  * The data one viewer may see. Non-admins lose captain tokens, other clubs' pairs
  * whose match isn't live/done yet (drafts included), and players they'd only learn of from those pairs.

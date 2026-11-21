@@ -57,3 +57,10 @@ export async function setPairsPerRound(tournamentId: string, form: FormData) {
   const { error } = await db.from('tournaments').update({ pairs_per_round: pairs }).eq('id', tournamentId)
   return error ? error.message : done(tournamentId)
 }
+
+/** The SQL function refuses while the latest round has unfinished matches. */
+export async function openRound(tournamentId: string) {
+  await requireAdmin(tournamentId)
+  const { error } = await db.rpc('open_round', { p_tournament_id: tournamentId })
+  return error ? error.message : done(tournamentId)
+}

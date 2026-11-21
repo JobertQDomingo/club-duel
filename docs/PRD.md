@@ -4,7 +4,7 @@ Web app for a two-club pickleball "Club Duel" run in Captain's Mode. It replaces
 
 ## 1. Tournament rules (as implemented)
 
-- Two clubs (A and B). Each has one captain and N players (official format: 16 players, 10 men / 6 women). Gender is recorded **for display only**; there are no gender rules for pairs.
+- Two clubs (A and B). Each has one captain and N players (official format: 16 players, 10 men / 6 women; the real event has Club A = 16, Club B = 17, so rosters can differ in size). Gender is recorded **for display only**; there are no gender rules for pairs.
 - Play happens in **rounds**. Each round has `P` doubles matches (`pairs_per_round`, default 7, set by the admin). Match *k* = Club A Pair *k* vs Club B Pair *k*.
 - The number of rounds is **open-ended**: the admin opens rounds until they end the tournament.
 - **Winner = highest cumulative points scored across all finished matches.** Match wins do not decide the winner.

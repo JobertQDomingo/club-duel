@@ -7,9 +7,13 @@ import { CopyLink } from '@/components/ui/CopyLink'
 import { ScoreRace } from '@/components/ui/ScoreRace'
 import { requireAdmin } from '@/lib/auth'
 import { loadTournament } from '@/lib/db'
-import { clubTotals, ranking, roundStatus, viewFor } from '@/lib/domain'
+import { canOpenRound, clubTotals, ranking, repeatPairs, roundStatus, viewFor } from '@/lib/domain'
+import { adminSaveSlot } from '@/lib/lineup-actions'
+import { LineupSlots } from '@/components/LineupSlots'
+import { Badge } from '@/components/ui/Badge'
 import { RosterEditor } from '@/components/RosterEditor'
 import { CourtsEditor } from './CourtsEditor'
+import { OpenRound } from './OpenRound'
 import { RegenerateLink } from './RegenerateLink'
 
 export const metadata = { title: 'Tournament · Club Duel' }
@@ -31,6 +35,7 @@ export default async function TournamentPage({ params }: PageProps<'/admin/t/[id
   const totals = clubTotals(view)
   const clubName = new Map(clubs.map((c) => [c.id, c.name]))
   const rows = ranking(view)
+  const round = view.rounds.at(-1) // rounds are sorted by number
 
   return (
     <main className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-6">
@@ -60,8 +65,44 @@ export default async function TournamentPage({ params }: PageProps<'/admin/t/[id
           <p className={empty}>No match on court.</p>
         </Card>
 
-        <Card title="Round panel" className="lg:col-span-2">
-          <p className={empty}>No round open yet.</p>
+        <Card title={round ? `Round ${round.number} lineups` : 'Round panel'} className="lg:col-span-2">
+          <div className="flex flex-col gap-6">
+            {!round ? (
+              <p className={empty}>No round open yet.</p>
+            ) : (
+              <>
+                {round.locked_at && <Badge mark="filled">Locked</Badge>}
+                <div className="grid gap-8 lg:grid-cols-2">
+                  {clubs.map((c) => {
+                    const lineup = view.lineups.find((l) => l.round_id === round.id && l.club_id === c.id)
+                    if (!lineup) return null
+                    const pairs = view.pairs.filter((p) => p.lineup_id === lineup.id)
+                    return (
+                      <section key={c.id} className="flex min-w-0 flex-col gap-2">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <h3 className={`font-display text-xl font-bold uppercase ${c.side === 'A' ? 'text-club-a' : 'text-club-b'}`}>{c.name}</h3>
+                          <Badge mark={lineup.submitted_at ? 'filled' : 'hollow'}>{lineup.submitted_at ? 'Submitted' : 'Not yet'}</Badge>
+                        </div>
+                        <LineupSlots
+                          key={lineup.id}
+                          side={c.side}
+                          slots={round.pairs}
+                          players={view.players.filter((p) => p.club_id === c.id)}
+                          pairs={pairs}
+                          repeats={[...repeatPairs(view, round.id, c.id, pairs)]}
+                          editable
+                          clearable={!round.locked_at}
+                          save={adminSaveSlot.bind(null, id, lineup.id)}
+                        />
+                      </section>
+                    )
+                  })}
+                </div>
+                <p className={empty}>Your lineup edits are recorded in the audit log.</p>
+              </>
+            )}
+            <OpenRound tournamentId={id} number={(round?.number ?? 0) + 1} allowed={canOpenRound(view)} />
+          </div>
         </Card>
 
         <Card title="Results">

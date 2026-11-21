@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { awards, clubTotals, pairKey, parseRoster, playerStats, ranking, repeatPairs, roundStatus, validateLineup, viewFor } from "./domain";
+import { awards, canOpenRound, clubTotals, pairKey, parseRoster, playerStats, ranking, repeatPairs, roundStatus, validateLineup, viewFor } from "./domain";
 import type { LineupPair, Match, TournamentData } from "./types";
 
 // 2 clubs × 4 players, 2 rounds × 2 slots. Round 2 slot 2 is live (must be ignored).
@@ -260,5 +260,30 @@ describe("roundStatus", () => {
 
   test("ended wins", () => {
     expect(roundStatus({ ...data, tournament: { ...data.tournament, status: "ended" } })).toBe("Tournament ended");
+  });
+});
+
+describe("canOpenRound", () => {
+  const allDone = data.matches.map((m) => ({ ...m, status: "done" as const, score_a: 11, score_b: 5 }));
+
+  test("first round", () => {
+    expect(canOpenRound({ ...data, rounds: [], lineups: [], pairs: [], matches: [] })).toBe(true);
+  });
+
+  test("blocked while the latest round has a pending or live match", () => {
+    expect(canOpenRound(data)).toBe(false);
+  });
+
+  test("blocked while the latest round is unlocked (no matches yet)", () => {
+    const r3 = { id: "r3", tournament_id: "t", number: 3, pairs: 2, locked_at: null };
+    expect(canOpenRound({ ...data, rounds: [...data.rounds, r3], matches: allDone })).toBe(false);
+  });
+
+  test("allowed once every match of the latest round is done", () => {
+    expect(canOpenRound({ ...data, matches: allDone })).toBe(true);
+  });
+
+  test("never after the tournament ended", () => {
+    expect(canOpenRound({ ...data, matches: allDone, tournament: { ...data.tournament, status: "ended" } })).toBe(false);
   });
 });

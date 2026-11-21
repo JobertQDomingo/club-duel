@@ -88,7 +88,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
   Do: `/c/[token]` with the club name, roster section (reuse T13), and draft for the current round: tap a slot, pick 2 available players, a ⚠ badge on repeat pairs, `saveLineup` (validated with `validateLineup`), Submit/Unsubmit, opponent status "submitted / not yet". Wrap it in `<LiveRefresh>`.
   Done when: a captain fills 7 slots, sees a repeat warning on a known repeat, submits, and unsubmits before the opponent.
 
-- [ ] **T16 Admin round panel** (M) (browser). Depends: T12, T14, T15.
+- [x] **T16 Admin round panel** (M) (browser). Depends: T12, T14, T15.
   Read: PRD §3 steps 3–4, §4 Round panel.
   Do: an "Open Round N" button (disabled until the previous round is done); both lineups side by side with submitted status and ⚠ warnings; admin lineup edit (allowed even after the lock), with each edit written to `audit_log`.
   Done when: the admin opens a round, sees both submit, and the round shows Locked.
@@ -124,7 +124,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
   Done when: a full seeded run ends and shows the winner, tabulation and awards.
 
 - [ ] **T22 Seed + demo script** (S). Depends: T14.
-  Do: `npm run seed` creates a demo tournament (16+16 players, 7 courts) for a given admin email, optionally with 2 played rounds. Used for dry runs.
+  Do: `npm run seed` creates a demo tournament (Club A 16 + Club B 17 players, 7 courts — the real event's rosters; counts stay args, not constants) for a given admin email, optionally with 2 played rounds. Used for dry runs.
   Done when: running it twice gives two independent demo tournaments.
 
 ## M7 — Ship
@@ -141,7 +141,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
   Do: Impeccable critique/polish on the captain draft and the audience page at phone width; fix the top issues.
 
 - [ ] **T26 Full dry run** (M) (browser). Depends: T22, T23.
-  Do: with Playwright MCP on production, play 2 rounds end-to-end as admin + 2 captains + audience; log and fix bugs (split big fixes into new tasks at the bottom).
+  Do: with Playwright MCP on production, play 2 rounds end-to-end as admin + 2 captains + audience, using a 16 + 17 roster (uneven sizes, so one club benches more players per round); log and fix bugs (split big fixes into new tasks at the bottom).
   Done when: no blocker bugs; the event checklist from ARCH §Free-tier caveats is noted in the README.
 
 ## Notes
@@ -176,3 +176,6 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 - T15: captain lineup actions are in `@/lib/lineup-actions` (`saveSlot(token, slot, [id,id]|null)` upserts one slot after `validateLineup(..., partial=true)`; `submitLineup`/`unsubmitLineup` call the T14 RPCs). They act on the latest round only and refuse once submitted/locked; T16's admin edit needs its own action + audit_log.
 - T15: `/c/[token]` = club band + `Draft` (`src/app/c/[token]/Draft.tsx`, slot list + picker, the 2nd pick saves) + `RosterEditor`. Repeat flags come from `repeatPairs` over saved pairs, so ⚠ shows after the save. T20 adds ranking/totals/past rounds below the draft.
 - T15: LiveRefresh misses broadcasts sent in the ~1s before its channel joins (seen when clicking right after another tab loads); fine in practice. Wrap a `<fieldset>` with `min-w-0` in flex layouts, or it overflows at phone width.
+- T16: `<LineupSlots>` (`@/components/LineupSlots`) is the shared slot list + picker (captain `Draft` and admin panel); pass `save(slot, ids|null)` — a server action bound in the page works. `canOpenRound(view)` mirrors `open_round`.
+- T16: `adminSaveSlot(tournamentId, lineupId, slot, ids)` in `@/lib/lineup-actions` edits the latest round (also locked; clearing refused once locked) and writes `audit_log` `lineup.edit` with `{round, club_id, slot, pair}` before/after. Not atomic (shortcut comment); T18 score edits can copy the shape.
+- T16: the live DB has a "T16 check 16v17" tournament (16+17 players, round 1 locked) usable for T17. The browser may hold another admin's session; sign out first.
