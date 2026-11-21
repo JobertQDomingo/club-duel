@@ -33,7 +33,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
   Do: in `src/lib/domain.ts`, `clubTotals(data)`, `playerStats(data)`, `ranking(data)` (wins → diff → PF → name). Use done matches only.
   Done when: Vitest covers a 2-round fixture including a ranking tie.
 
-- [ ] **T06 Repeat pairs + lineup validation** (S). Depends: T05.
+- [x] **T06 Repeat pairs + lineup validation** (S). Depends: T05.
   Read: PRD §1, DM §Rules enforced where.
   Do: `pairKey(a,b)`, `repeatPairs(data, roundId, clubId, pairs)` → a set of slots that repeat an earlier round, and `validateLineup(pairs, P)` → error on a duplicate player, a missing slot, or a player from the wrong club.
   Done when: tests cover duplicate (blocked), repeat (flagged), and the normalized order of `a,b`.
@@ -152,3 +152,5 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 - T03: migrations are applied by pasting into the Supabase SQL editor (no CLI link). Verify with service role `select count` + anon insert → 42501.
 - T04: `loadTournament(id)` (server-only) returns `TournamentData | null` (null for unknown or non-uuid id). Rows are unsorted except `rounds` (by number). Types in `@/lib/types`.
 - T05: `clubTotals` returns `{A, B}` keyed by club side. `playerStats`/`ranking` include only players with ≥1 done match (`PlayerStat` has `player`, played, wins, losses, pf, pa, diff). Fixture in `domain.test.ts` is reusable for T06/T07.
+- T06: `validateLineup(pairs, P, clubPlayerIds)` takes a 3rd arg (the club roster ids) for the wrong-club check, and requires all P slots, so it's the submit/full-save check. Returns an error string or null. `DraftPair` = `{slot, player1_id, player2_id}` in any order.
+- T06: before inserting into `lineup_pairs`, sort each pair so player1_id < player2_id (DB check). `pairKey` uses the same JS string order.

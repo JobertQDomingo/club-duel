@@ -1,5 +1,5 @@
 // Pure derived numbers. No IO here, so the server and tests can share it.
-import type { Match, Player, TournamentData } from "./types";
+import type { LineupPair, Match, Player, TournamentData } from "./types";
 
 export type PlayerStat = {
   player: Player;
@@ -55,6 +55,36 @@ export function playerStats(data: TournamentData): PlayerStat[] {
     }
   }
   return [...stats.values()];
+}
+
+/** A pair in a draft lineup; player order doesn't matter. */
+export type DraftPair = Pick<LineupPair, "slot" | "player1_id" | "player2_id">;
+
+/** Order-independent key for two players (lower id first, like the DB check). */
+export function pairKey(a: string, b: string): string {
+  return a < b ? `${a}:${b}` : `${b}:${a}`;
+}
+
+/** Slots in `pairs` whose two players already paired for this club in an earlier round. */
+export function repeatPairs(data: TournamentData, roundId: string, clubId: string, pairs: DraftPair[]): Set<number> {
+  const num = new Map(data.rounds.map((r) => [r.id, r.number]));
+  const current = num.get(roundId) ?? 0;
+  const earlier = new Set(
+    data.lineups.filter((l) => l.club_id === clubId && (num.get(l.round_id) ?? Infinity) < current).map((l) => l.id),
+  );
+  const seen = new Set(data.pairs.filter((p) => earlier.has(p.lineup_id)).map((p) => pairKey(p.player1_id, p.player2_id)));
+  return new Set(pairs.filter((p) => seen.has(pairKey(p.player1_id, p.player2_id))).map((p) => p.slot));
+}
+
+/** Error message for an invalid lineup of P pairs, or null if it can be saved. */
+export function validateLineup(pairs: DraftPair[], P: number, clubPlayerIds: string[]): string | null {
+  const slots = new Set(pairs.map((p) => p.slot));
+  if (pairs.length !== P || slots.size !== P || [...slots].some((s) => !Number.isInteger(s) || s < 1 || s > P))
+    return `Fill every slot 1–${P} exactly once.`;
+  const ids = pairs.flatMap((p) => [p.player1_id, p.player2_id]);
+  if (new Set(ids).size !== ids.length) return "A player can play only once per round.";
+  if (ids.some((id) => !clubPlayerIds.includes(id))) return "Every player must be from your club.";
+  return null;
 }
 
 /** Wins desc, then diff desc, then PF desc, then name. */

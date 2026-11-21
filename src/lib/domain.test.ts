@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { clubTotals, playerStats, ranking } from "./domain";
+import { clubTotals, pairKey, playerStats, ranking, repeatPairs, validateLineup } from "./domain";
 import type { LineupPair, Match, TournamentData } from "./types";
 
 // 2 clubs × 4 players, 2 rounds × 2 slots. Round 2 slot 2 is live (must be ignored).
@@ -74,6 +74,59 @@ describe("playerStats", () => {
     expect(playerStats(r1Only)).toHaveLength(8);
     expect(playerStats({ ...data, matches: [match("r1", 1, "done", 11, 5)] }).map((s) => s.player.id).sort())
       .toEqual(["a1", "a2", "b1", "b2"]);
+  });
+});
+
+describe("pairKey", () => {
+  test("same key regardless of order", () => {
+    expect(pairKey("b1", "a1")).toBe(pairKey("a1", "b1"));
+    expect(pairKey("a1", "b1")).not.toBe(pairKey("a1", "b2"));
+  });
+});
+
+describe("repeatPairs", () => {
+  // Round 3 draft for club A: slot 1 repeats r1 (a2,a1 reversed), slot 2 repeats r2, slot 3 is new.
+  const r3 = { ...data, rounds: [...data.rounds, { id: "r3", tournament_id: "t", number: 3, pairs: 3, locked_at: null }] };
+  const draft = [
+    { slot: 1, player1_id: "a2", player2_id: "a1" },
+    { slot: 2, player1_id: "a3", player2_id: "a1" },
+    { slot: 3, player1_id: "a3", player2_id: "a2" },
+  ];
+
+  test("flags slots that repeat an earlier round, in any order", () => {
+    expect(repeatPairs(r3, "r3", "ca", draft)).toEqual(new Set([1, 2]));
+  });
+
+  test("ignores the same and later rounds", () => {
+    // In round 1, nothing is earlier; a1+a3 (round 2) is later.
+    expect(repeatPairs(r3, "r1", "ca", draft)).toEqual(new Set());
+  });
+});
+
+describe("validateLineup", () => {
+  const club = ["a1", "a2", "a3", "a4"];
+  const ok = [
+    { slot: 1, player1_id: "a1", player2_id: "a2" },
+    { slot: 2, player1_id: "a3", player2_id: "a4" },
+  ];
+
+  test("accepts a full lineup with distinct club players", () => {
+    expect(validateLineup(ok, 2, club)).toBeNull();
+  });
+
+  test("blocks a player used twice in the round", () => {
+    expect(validateLineup([ok[0], { slot: 2, player1_id: "a3", player2_id: "a1" }], 2, club)).toMatch(/once/);
+    expect(validateLineup([ok[0], { slot: 2, player1_id: "a3", player2_id: "a3" }], 2, club)).toMatch(/once/);
+  });
+
+  test("blocks a missing, duplicated or out-of-range slot", () => {
+    expect(validateLineup([ok[0]], 2, club)).toMatch(/slot/i);
+    expect(validateLineup([ok[0], { ...ok[1], slot: 1 }], 2, club)).toMatch(/slot/i);
+    expect(validateLineup([ok[0], { ...ok[1], slot: 3 }], 2, club)).toMatch(/slot/i);
+  });
+
+  test("blocks a player from the other club", () => {
+    expect(validateLineup([ok[0], { slot: 2, player1_id: "a3", player2_id: "b1" }], 2, club)).toMatch(/club/);
   });
 });
 
