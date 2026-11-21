@@ -140,3 +140,16 @@ export function awards(data: TournamentView) {
     closest: best(done, (m) => -margin(m)),
   };
 }
+
+/** One player per line, "Name, M|F". Returns the players, or an error message naming the line. */
+export function parseRoster(text: string): Pick<Player, "name" | "gender">[] | string {
+  const players: Pick<Player, "name" | "gender">[] = [];
+  const lines = text.split("\n");
+  for (let i = 0; i < lines.length; i++) {
+    if (!lines[i].trim()) continue;
+    const m = /^\s*([^,]*?)\s*,\s*([mf])\s*$/i.exec(lines[i]);
+    if (!m || !m[1]) return `Line ${i + 1}: use "Name, M" or "Name, F".`;
+    players.push({ name: m[1], gender: m[2].toUpperCase() as Player["gender"] });
+  }
+  return players.length ? players : "Add at least one player.";
+}

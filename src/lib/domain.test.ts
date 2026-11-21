@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { awards, clubTotals, pairKey, playerStats, ranking, repeatPairs, validateLineup, viewFor } from "./domain";
+import { awards, clubTotals, pairKey, parseRoster, playerStats, ranking, repeatPairs, validateLineup, viewFor } from "./domain";
 import type { LineupPair, Match, TournamentData } from "./types";
 
 // 2 clubs × 4 players, 2 rounds × 2 slots. Round 2 slot 2 is live (must be ignored).
@@ -213,5 +213,22 @@ describe("awards", () => {
 
   test("empty lists with no done matches", () => {
     expect(awards({ ...data, matches: [] })).toEqual({ mvp: [], topScorer: { A: [], B: [] }, iron: [], biggestWin: [], closest: [] });
+  });
+});
+
+describe("parseRoster", () => {
+  test("parses Name, M|F lines, trimming and skipping blanks", () => {
+    expect(parseRoster(" Ana Cruz , f\n\nBen, M \r\n")).toEqual([
+      { name: "Ana Cruz", gender: "F" },
+      { name: "Ben", gender: "M" },
+    ]);
+  });
+  test("names the bad line", () => {
+    expect(parseRoster("Ana, F\nBen")).toBe('Line 2: use "Name, M" or "Name, F".');
+    expect(parseRoster("Ana, X")).toBe('Line 1: use "Name, M" or "Name, F".');
+    expect(parseRoster(", M")).toBe('Line 1: use "Name, M" or "Name, F".');
+  });
+  test("needs at least one player", () => {
+    expect(parseRoster(" \n")).toBe("Add at least one player.");
   });
 });
