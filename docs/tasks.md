@@ -83,7 +83,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
   Do: `supabase/migrations/0002_round_fns.sql` with `open_round(tournament_id)`, `submit_lineup(lineup_id)` (row lock, sets `locked_at` and creates the match rows when both are in), `unsubmit_lineup(lineup_id)`. [USER] runs the migration.
   Done when: a script or test calls submit twice concurrently and gets exactly 1 lock and P matches.
 
-- [ ] **T15 Captain page + draft** (M) (browser). Depends: T06, T08, T13, T14.
+- [x] **T15 Captain page + draft** (M) (browser). Depends: T06, T08, T13, T14.
   Read: PRD §4 Captain.
   Do: `/c/[token]` with the club name, roster section (reuse T13), and draft for the current round: tap a slot, pick 2 available players, a ⚠ badge on repeat pairs, `saveLineup` (validated with `validateLineup`), Submit/Unsubmit, opponent status "submitted / not yet". Wrap it in `<LiveRefresh>`.
   Done when: a captain fills 7 slots, sees a repeat warning on a known repeat, submits, and unsubmits before the opponent.
@@ -173,3 +173,6 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 - T13: removal guard verified with a temporary lineup pair (FK 23503 → "Already played — can't remove, rename instead."). Stale `next start` servers may hold :3000/:3001; TaskStop leaves the node child alive, so kill it by port.
 - T14: `db.rpc('open_round',{p_tournament_id})` → new round id; `submit_lineup`/`unsubmit_lineup` take `{p_lineup_id}`; submit returns true when it locked the round. Errors are plain `raise exception` messages (show `error.message`). Service role only (revoked from anon).
 - T14: deleting a tournament with lineup pairs fails (players' restrict FK fires before the cascade); delete its `rounds` first. `node --env-file=.env.local scripts/check-round-fns.mjs` re-checks the round fns against the live DB.
+- T15: captain lineup actions are in `@/lib/lineup-actions` (`saveSlot(token, slot, [id,id]|null)` upserts one slot after `validateLineup(..., partial=true)`; `submitLineup`/`unsubmitLineup` call the T14 RPCs). They act on the latest round only and refuse once submitted/locked; T16's admin edit needs its own action + audit_log.
+- T15: `/c/[token]` = club band + `Draft` (`src/app/c/[token]/Draft.tsx`, slot list + picker, the 2nd pick saves) + `RosterEditor`. Repeat flags come from `repeatPairs` over saved pairs, so ⚠ shows after the save. T20 adds ranking/totals/past rounds below the draft.
+- T15: LiveRefresh misses broadcasts sent in the ~1s before its channel joins (seen when clicking right after another tab loads); fine in practice. Wrap a `<fieldset>` with `min-w-0` in flex layouts, or it overflows at phone width.

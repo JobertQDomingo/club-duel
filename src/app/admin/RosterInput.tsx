@@ -32,7 +32,7 @@ export function RosterInput({ side, field: fieldName = `players${side}`, legend 
   }
 
   return (
-    <fieldset className="flex flex-col gap-2">
+    <fieldset className="flex min-w-0 flex-col gap-2">
       <legend className="font-display text-sm font-bold uppercase tracking-wide">
         {legend} ({players.length})
       </legend>

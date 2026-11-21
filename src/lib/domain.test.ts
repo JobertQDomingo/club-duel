@@ -128,6 +128,15 @@ describe("validateLineup", () => {
   test("blocks a player from the other club", () => {
     expect(validateLineup([ok[0], { slot: 2, player1_id: "a3", player2_id: "b1" }], 2, club)).toMatch(/club/);
   });
+
+  test("partial drafts may leave slots empty but keep every other rule", () => {
+    expect(validateLineup([], 2, club, true)).toBeNull();
+    expect(validateLineup([ok[1]], 2, club, true)).toBeNull();
+    expect(validateLineup([ok[0], { ...ok[1], slot: 1 }], 2, club, true)).toMatch(/slot/i);
+    expect(validateLineup([{ ...ok[0], slot: 3 }], 2, club, true)).toMatch(/slot/i);
+    expect(validateLineup([ok[0], { slot: 2, player1_id: "a3", player2_id: "a1" }], 2, club, true)).toMatch(/once/);
+    expect(validateLineup([{ slot: 1, player1_id: "a1", player2_id: "b1" }], 2, club, true)).toMatch(/club/);
+  });
 });
 
 describe("ranking", () => {

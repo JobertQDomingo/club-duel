@@ -76,10 +76,10 @@ export function repeatPairs(data: TournamentView, roundId: string, clubId: strin
   return new Set(pairs.filter((p) => seen.has(pairKey(p.player1_id, p.player2_id))).map((p) => p.slot));
 }
 
-/** Error message for an invalid lineup of P pairs, or null if it can be saved. */
-export function validateLineup(pairs: DraftPair[], P: number, clubPlayerIds: string[]): string | null {
+/** Error message for an invalid lineup of P pairs, or null if it can be saved. `partial` allows empty slots (a draft). */
+export function validateLineup(pairs: DraftPair[], P: number, clubPlayerIds: string[], partial = false): string | null {
   const slots = new Set(pairs.map((p) => p.slot));
-  if (pairs.length !== P || slots.size !== P || [...slots].some((s) => !Number.isInteger(s) || s < 1 || s > P))
+  if (slots.size !== pairs.length || (!partial && slots.size !== P) || [...slots].some((s) => !Number.isInteger(s) || s < 1 || s > P))
     return `Fill every slot 1–${P} exactly once.`;
   const ids = pairs.flatMap((p) => [p.player1_id, p.player2_id]);
   if (new Set(ids).size !== ids.length) return "A player can play only once per round.";
