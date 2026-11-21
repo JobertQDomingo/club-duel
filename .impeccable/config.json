@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-11-21T04:49:41.361Z",
+        "reason": "agent: unchosen decision-round sketch, intentionally in its own rejected direction's fonts; not shipped UI"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-wallet.html"
+        ],
+        "createdAt": "2026-11-21T04:49:41.630Z",
+        "reason": "agent: unchosen decision-round sketch, intentionally in its own rejected direction's fonts; not shipped UI"
+      }
+    ]
+  }
+}
