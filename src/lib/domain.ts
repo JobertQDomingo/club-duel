@@ -94,6 +94,19 @@ export function ranking(data: TournamentView): PlayerStat[] {
   );
 }
 
+/** One line for the header: where the latest round stands. */
+export function roundStatus(data: TournamentView): string {
+  if (data.tournament.status === "ended") return "Tournament ended";
+  const r = data.rounds.at(-1); // rounds are sorted by number
+  if (!r) return "No round open yet";
+  if (!r.locked_at) {
+    const submitted = data.lineups.filter((l) => l.round_id === r.id && l.submitted_at).length;
+    return `Round ${r.number} · ${submitted} of 2 lineups submitted`;
+  }
+  const done = data.matches.filter((m) => m.round_id === r.id && m.status === "done").length;
+  return `Round ${r.number} · ${done} of ${r.pairs} matches done`;
+}
+
 /**
  * The data one viewer may see. Non-admins lose captain tokens, other clubs' pairs
  * whose match isn't live/done yet (drafts included), and players they'd only learn of from those pairs.

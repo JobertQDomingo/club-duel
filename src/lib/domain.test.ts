@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { awards, clubTotals, pairKey, parseRoster, playerStats, ranking, repeatPairs, validateLineup, viewFor } from "./domain";
+import { awards, clubTotals, pairKey, parseRoster, playerStats, ranking, repeatPairs, roundStatus, validateLineup, viewFor } from "./domain";
 import type { LineupPair, Match, TournamentData } from "./types";
 
 // 2 clubs × 4 players, 2 rounds × 2 slots. Round 2 slot 2 is live (must be ignored).
@@ -230,5 +230,26 @@ describe("parseRoster", () => {
   });
   test("needs at least one player", () => {
     expect(parseRoster(" \n")).toBe("Add at least one player.");
+  });
+});
+
+describe("roundStatus", () => {
+  const r3 = { id: "r3", tournament_id: "t", number: 3, pairs: 2, locked_at: null };
+
+  test("no rounds yet", () => {
+    expect(roundStatus({ ...data, rounds: [], lineups: [], pairs: [], matches: [] })).toBe("No round open yet");
+  });
+
+  test("open round counts submitted lineups", () => {
+    const d = { ...data, rounds: [...data.rounds, r3], lineups: [...data.lineups, { id: "l3a", round_id: "r3", club_id: "ca", submitted_at: "x" }] };
+    expect(roundStatus(d)).toBe("Round 3 · 1 of 2 lineups submitted");
+  });
+
+  test("locked round counts done matches", () => {
+    expect(roundStatus(data)).toBe("Round 2 · 1 of 2 matches done");
+  });
+
+  test("ended wins", () => {
+    expect(roundStatus({ ...data, tournament: { ...data.tournament, status: "ended" } })).toBe("Tournament ended");
   });
 });

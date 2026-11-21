@@ -66,7 +66,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
   Do: `broadcastChanged(tournamentId)` (server, Realtime broadcast on `t:{id}`) and a client `<LiveRefresh tournamentId>` that subscribes and calls `router.refresh()` (debounced ~300ms).
   Done when: two browser tabs, an action in one refreshes the other (browser).
 
-- [ ] **T12 Admin console shell** (M) (browser). Depends: T07, T10, T11.
+- [x] **T12 Admin console shell** (M) (browser). Depends: T07, T10, T11.
   Read: PRD §4 Admin console.
   Do: `/admin/t/[id]` layout with a header (club totals, round status, links, regenerate captain link) and empty sections: Court board, Round panel, Rosters & courts, Results, Ranking. Renders from `viewFor(admin)`.
   Done when: the page renders the tournament created in T10 and totals show 0–0.
@@ -166,3 +166,5 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 - T10: if `next dev` throws "Jest worker encountered 2 child process exceptions", restart it; it's a dev-server crash, not app code.
 - T11: call `broadcastChanged(tournamentId)` from `@/lib/realtime` after each successful write (REST `httpSend`, logs instead of throwing). Mount `<LiveRefresh tournamentId>` (`@/components/LiveRefresh`) on any page that shows tournament data; `/admin/t/[id]` already has it.
 - T11: if a stale `next dev` holds :3000 and is crashed, `npx next start -p 3001` after `npm run build` works for browser checks (localhost cookies are shared across ports).
+- T12: `/admin/t/[id]` sections are `Card`s with placeholder lines (Court board, Round panel, Results, Ranking, Rosters & courts); replace the placeholder in place. Ranking is already a real table from `ranking(view)` (inline in the page; extract it for T19/T20).
+- T12: `roundStatus(view)` in `domain.ts` gives the header line (latest round = `rounds.at(-1)`). Admin page actions live in `src/app/admin/t/[id]/actions.ts`; they end with `broadcastChanged` + `refresh()` from `next/cache`.
