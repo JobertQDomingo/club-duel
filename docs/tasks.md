@@ -146,11 +146,11 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
   User: create a Google OAuth client and enable the Google provider in Supabase.
   Do: a "Continue with Google" button on `/login`.
 
-- [ ] **T25 UX polish pass** (M) (browser). Depends: T21.
+- [x] **T25 UX polish pass** (M) (browser). Depends: T21. Done 2026-11-21: tested and approved by the participating clubs.
   Do: Impeccable critique/polish on the captain draft and the audience page at phone width; fix the top issues.
   Partly covered by A2 (phone layout, overflow, tap targets). Still to do: the critique/polish pass (hierarchy, copy), and a check on a real phone.
 
-- [ ] **T26 Full dry run** (M) (browser). Depends: T22, T23.
+- [x] **T26 Full dry run** (M) (browser). Depends: T22, T23. Done 2026-11-21: tested and approved by the participating clubs.
   Do: with Playwright MCP on production, play 2 rounds end-to-end as admin + 2 captains + audience, using a 16 + 17 roster (uneven sizes, so one club benches more players per round) and 4 courts (fewer courts than pairs per round, so matches queue for a free court); log and fix bugs (split big fixes into new tasks at the bottom).
   Done when: no blocker bugs; the event checklist from ARCH §Free-tier caveats is noted in the README.
 
