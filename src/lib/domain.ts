@@ -94,6 +94,15 @@ export function ranking(data: TournamentView): PlayerStat[] {
   );
 }
 
+/** The two names of a club's pair in a round slot, or null when the view hides it (render face-down). */
+export function pairNames(data: TournamentView, clubId: string, roundId: string, slot: number): [string, string] | null {
+  const lineup = data.lineups.find((l) => l.round_id === roundId && l.club_id === clubId);
+  const pair = lineup && data.pairs.find((p) => p.lineup_id === lineup.id && p.slot === slot);
+  if (!pair) return null;
+  const name = (id: string) => data.players.find((p) => p.id === id)?.name ?? "?";
+  return [name(pair.player1_id), name(pair.player2_id)];
+}
+
 /** One line for the header: where the latest round stands. */
 export function roundStatus(data: TournamentView): string {
   if (data.tournament.status === "ended") return "Tournament ended";

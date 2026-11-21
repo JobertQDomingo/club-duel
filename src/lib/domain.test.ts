@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { awards, canOpenRound, clubTotals, pairKey, parseRoster, parseScores, playerStats, ranking, repeatPairs, roundStatus, validateLineup, viewFor } from "./domain";
+import { awards, canOpenRound, clubTotals, pairKey, pairNames, parseRoster, parseScores, playerStats, ranking, repeatPairs, roundStatus, validateLineup, viewFor } from "./domain";
 import type { LineupPair, Match, TournamentData } from "./types";
 
 // 2 clubs × 4 players, 2 rounds × 2 slots. Round 2 slot 2 is live (must be ignored).
@@ -297,5 +297,18 @@ describe("parseScores", () => {
     for (const [a, b] of [["-1", "5"], ["", "5"], ["5", "2.5"], ["5", "x"], [null, "5"]]) {
       expect(parseScores(a, b)).toBe("Enter both scores as whole numbers (0 or more).");
     }
+  });
+});
+
+describe("pairNames", () => {
+  test("names a visible pair", () => {
+    expect(pairNames(data, "cb", "r2", 2)).toEqual(["Fay", "Ana"]);
+  });
+
+  test("null for a pair the view hides (face-down)", () => {
+    const pending = { ...data, matches: data.matches.map((m) => (m.id === "r2s2" ? { ...m, status: "pending" as const } : m)) };
+    const view = viewFor(pending, { role: "audience" });
+    expect(pairNames(view, "cb", "r2", 2)).toBeNull();
+    expect(pairNames(view, "cb", "r2", 1)).toEqual(["Gus", "Hal"]);
   });
 });

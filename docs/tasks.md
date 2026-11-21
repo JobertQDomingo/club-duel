@@ -107,7 +107,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 
 ## M5 — Audience
 
-- [ ] **T19 Audience page** (M) (browser). Depends: T07, T08, T11, T17.
+- [x] **T19 Audience page** (M) (browser). Depends: T07, T08, T11, T17.
   Read: PRD §4 Audience.
   Do: `/t/[id]` (public): club totals, current round, match cards (face-down → revealed → final score), court status, ranking. Mobile first. Uses `viewFor(audience)` only.
   Done when: in the browser, a pending match shows a face-down card, and the page source/RSC payload has no hidden names (search the response text).
@@ -185,3 +185,5 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 - T18: `endMatch` / `editScore(tournamentId, matchId, form)` in `admin/t/[id]/actions.ts` use `parseScores` (domain); edit writes `score.edit` `{round, slot, score_a, score_b}`. `<ScoreForm>` / `<EndMatch>` (native `<dialog>`) in `admin/t/[id]/ScoreForm.tsx`.
 - T18: `loadAuditLog(id)` in `@/lib/db` is admin-only (kept out of `TournamentData`/`viewFor`). Audit times are formatted in the server's timezone (shortcut comment in the admin page).
 - T18: "T16 check 16v17" now has Match 3 done (11–13, edited once) and Match 1 live on Court 2.
+- T19: `/t/[id]` (`src/app/t/[id]/page.tsx`) is public (proxy doesn't match it). Reuse `<Ranking view>` (`@/components/Ranking`) and `pairNames(view, clubId, roundId, slot)` (domain; null = face-down) for T20/T21.
+- T19: leak check = fetch `/t/[id]` plain + with `RSC: 1` header and search for hidden players' names/ids (none found on "T16 check 16v17").

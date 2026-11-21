@@ -7,9 +7,10 @@ import { CopyLink } from '@/components/ui/CopyLink'
 import { ScoreRace } from '@/components/ui/ScoreRace'
 import { requireAdmin } from '@/lib/auth'
 import { loadAuditLog, loadTournament } from '@/lib/db'
-import { canOpenRound, clubTotals, ranking, repeatPairs, roundStatus, viewFor } from '@/lib/domain'
+import { canOpenRound, clubTotals, pairNames, repeatPairs, roundStatus, viewFor } from '@/lib/domain'
 import { adminSaveSlot } from '@/lib/lineup-actions'
 import { LineupSlots } from '@/components/LineupSlots'
+import { Ranking } from '@/components/Ranking'
 import { Badge } from '@/components/ui/Badge'
 import { PairCard } from '@/components/ui/PairCard'
 import { RosterEditor } from '@/components/RosterEditor'
@@ -38,7 +39,6 @@ export default async function TournamentPage({ params }: PageProps<'/admin/t/[id
   const [a, b] = clubs
   const totals = clubTotals(view)
   const clubName = new Map(clubs.map((c) => [c.id, c.name]))
-  const rows = ranking(view)
   const round = view.rounds.at(-1) // rounds are sorted by number
   const courts = [...view.courts].sort((x, y) => x.name.localeCompare(y.name, undefined, { numeric: true }))
   const liveOn = new Map(view.matches.filter((m) => m.status === 'live').map((m) => [m.court_id, m]))
@@ -47,11 +47,6 @@ export default async function TournamentPage({ params }: PageProps<'/admin/t/[id
     .sort((x, y) => x.slot - y.slot)
     .map(({ id, slot }) => ({ id, slot }))
   const playerName = new Map(view.players.map((p) => [p.id, p.name]))
-  const pairNames = (clubId: string, roundId: string, slot: number): [string, string] | null => {
-    const lineup = view.lineups.find((l) => l.round_id === roundId && l.club_id === clubId)
-    const pair = lineup && view.pairs.find((p) => p.lineup_id === lineup.id && p.slot === slot)
-    return pair ? [playerName.get(pair.player1_id) ?? '?', playerName.get(pair.player2_id) ?? '?'] : null
-  }
   const roundNo = new Map(view.rounds.map((r) => [r.id, r.number]))
   const finished = view.matches
     .filter((m) => m.status === 'done')
@@ -106,8 +101,8 @@ export default async function TournamentPage({ params }: PageProps<'/admin/t/[id
                     {m ? (
                       <>
                         <div className="grid grid-cols-2 divide-x divide-ink/20 border-t border-ink/20">
-                          <PairCard side="A" slot={m.slot} names={pairNames(a.id, m.round_id, m.slot)} />
-                          <PairCard side="B" slot={m.slot} names={pairNames(b.id, m.round_id, m.slot)} />
+                          <PairCard side="A" slot={m.slot} names={pairNames(view, a.id, m.round_id, m.slot)} />
+                          <PairCard side="B" slot={m.slot} names={pairNames(view, b.id, m.round_id, m.slot)} />
                         </div>
                         <EndMatch slot={m.slot} clubs={clubNames} action={endMatch.bind(null, id, m.id)} />
                       </>
@@ -173,9 +168,9 @@ export default async function TournamentPage({ params }: PageProps<'/admin/t/[id
                   <li key={m.id} className="flex flex-col gap-2 py-3">
                     <h3 className="font-display font-bold uppercase">Round {roundNo.get(m.round_id)} · Match {m.slot}</h3>
                     <p className="text-sm">
-                      <span className="text-club-a">{pairNames(a.id, m.round_id, m.slot)?.join(' & ')}</span>
+                      <span className="text-club-a">{pairNames(view, a.id, m.round_id, m.slot)?.join(' & ')}</span>
                       <span className={empty}> vs </span>
-                      <span className="text-club-b">{pairNames(b.id, m.round_id, m.slot)?.join(' & ')}</span>
+                      <span className="text-club-b">{pairNames(view, b.id, m.round_id, m.slot)?.join(' & ')}</span>
                     </p>
                     <ScoreForm
                       key={`${m.score_a}-${m.score_b}`} // remount so defaultValue shows the saved score
@@ -208,34 +203,7 @@ export default async function TournamentPage({ params }: PageProps<'/admin/t/[id
         </Card>
 
         <Card title="Ranking">
-          {rows.length === 0 ? (
-            <p className={empty}>No matches finished.</p>
-          ) : (
-            <table className="w-full text-left">
-              <thead className="font-display text-sm font-bold uppercase tracking-wide">
-                <tr className="border-b border-ink">
-                  <th className="py-1 pr-2">#</th>
-                  <th className="py-1 pr-2">Player</th>
-                  <th className="py-1 pr-2 text-right">W–L</th>
-                  <th className="py-1 pr-2 text-right">Diff</th>
-                  <th className="py-1 text-right">PF</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-ink/20">
-                {rows.map((s, i) => (
-                  <tr key={s.player.id}>
-                    <td className="py-1.5 pr-2">{i + 1}</td>
-                    <td className="py-1.5 pr-2">
-                      {s.player.name} <span className={`text-sm ${empty}`}>{clubName.get(s.player.club_id)}</span>
-                    </td>
-                    <td className="py-1.5 pr-2 text-right">{s.wins}–{s.losses}</td>
-                    <td className="py-1.5 pr-2 text-right">{s.diff > 0 ? `+${s.diff}` : s.diff}</td>
-                    <td className="py-1.5 text-right">{s.pf}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+          <Ranking view={view} />
         </Card>
 
         <Card title="Rosters & courts" className="lg:col-span-2">
