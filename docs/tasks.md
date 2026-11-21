@@ -112,7 +112,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
   Do: `/t/[id]` (public): club totals, current round, match cards (face-down → revealed → final score), court status, ranking. Mobile first. Uses `viewFor(audience)` only.
   Done when: in the browser, a pending match shows a face-down card, and the page source/RSC payload has no hidden names (search the response text).
 
-- [ ] **T20 Ranking + totals on the captain page** (S) (browser). Depends: T15, T19.
+- [x] **T20 Ranking + totals on the captain page** (S) (browser). Depends: T15, T19.
   Do: reuse the audience ranking/totals components on `/c/[token]`, plus the captain's past results.
   Done when: the captain sees the live ranking and their past rounds.
 
@@ -187,3 +187,4 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 - T18: "T16 check 16v17" now has Match 3 done (11–13, edited once) and Match 1 live on Court 2.
 - T19: `/t/[id]` (`src/app/t/[id]/page.tsx`) is public (proxy doesn't match it). Reuse `<Ranking view>` (`@/components/Ranking`) and `pairNames(view, clubId, roundId, slot)` (domain; null = face-down) for T20/T21.
 - T19: leak check = fetch `/t/[id]` plain + with `RSC: 1` header and search for hidden players' names/ids (none found on "T16 check 16v17").
+- T20: `/c/[token]` shows ScoreRace, a Results card (locked rounds, newest first, W/L from the captain's side, opponent pair "Hidden" until started) and `<Ranking>`. A `curl -H 'RSC: 1'` alone returns empty here; the leak check uses the HTML (it carries the inline flight payload).
