@@ -1,9 +1,16 @@
 'use client'
 
+import { useFormStatus } from 'react-dom'
 import { FormError, useResult } from '@/components/ActionResult'
 import { Button } from '@/components/ui/Button'
 import { field } from '@/components/ui/field'
 import { startMatch } from './actions'
+
+// Disabled while saving so a slow tap isn't sent twice ("Match N has already started").
+function Submit() {
+  const { pending } = useFormStatus()
+  return <Button type="submit" disabled={pending}>{pending ? 'Starting…' : 'Start match'}</Button>
+}
 
 /** Free-court picker. `pending` is sorted by slot, so the lowest match is the default. */
 export function StartMatch({
@@ -25,7 +32,7 @@ export function StartMatch({
             <option key={m.id} value={m.id}>Match {m.slot}</option>
           ))}
         </select>
-        <Button type="submit">Start match</Button>
+        <Submit />
       </div>
       <FormError error={error} />
     </form>

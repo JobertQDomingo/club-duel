@@ -1,5 +1,6 @@
 import 'server-only'
 import { refresh } from 'next/cache'
+import { after } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 
 // Tell every open view of this tournament to refetch. No data rides along, so nothing can leak.
@@ -16,9 +17,11 @@ export async function broadcastChanged(tournamentId: string) {
   }
 }
 
-/** End of a successful server action: tell other views, refresh this one. Resolves to undefined (no error), so actions can `return error ? error.message : changed(id)`. */
+/** End of a successful server action: refresh this view, then tell the others once the response is out. Resolves to undefined (no error), so actions can `return error ? error.message : changed(id)`. */
 export async function changed(tournamentId: string): Promise<undefined> {
-  await broadcastChanged(tournamentId)
+  // Sent now, in parallel with this view's re-render; after() keeps the function alive until it lands.
+  const sent = broadcastChanged(tournamentId)
+  after(() => sent)
   refresh()
   return undefined
 }

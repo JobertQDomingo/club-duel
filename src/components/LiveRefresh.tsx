@@ -15,7 +15,7 @@ export function LiveRefresh({ tournamentId }: { tournamentId: string }) {
       .channel(`t:${tournamentId}`)
       .on('broadcast', { event: 'changed' }, () => {
         clearTimeout(timer)
-        timer = setTimeout(() => router.refresh(), 300) // collapse bursts of writes into one refetch
+        timer = setTimeout(() => router.refresh(), 100) // collapse bursts of writes into one refetch
       })
       .subscribe()
     return () => {

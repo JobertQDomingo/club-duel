@@ -56,11 +56,14 @@ export async function setPairsPerRound(tournamentId: string, form: FormData) {
 
 /** Reveals the match. The SQL function refuses a busy court or a match that isn't pending. */
 export async function startMatch(tournamentId: string, courtId: string, form: FormData) {
-  await requireAdmin(tournamentId)
   const matchId = String(form.get('match') ?? '')
+  // start_match checks the match and court share a tournament; this ties them to the one the caller owns.
+  // Both checks run at once (the court lookup returns nothing to the caller before requireAdmin passes).
+  const [, { data: court }] = await Promise.all([
+    requireAdmin(tournamentId),
+    db.from('courts').select('id').eq('id', courtId).eq('tournament_id', tournamentId).maybeSingle(),
+  ])
   if (!matchId) return 'Pick a match.'
-  // start_match checks the match and court share a tournament; this ties them to the one the caller owns
-  const { data: court } = await db.from('courts').select('id').eq('id', courtId).eq('tournament_id', tournamentId).maybeSingle()
   if (!court) return 'Court not found.'
   const { error } = await db.rpc('start_match', { p_match_id: matchId, p_court_id: courtId })
   return error ? error.message : done(tournamentId)

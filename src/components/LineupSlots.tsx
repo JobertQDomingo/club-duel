@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useOptimistic, useState, useTransition } from 'react'
 import { FormError } from '@/components/ActionResult'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
@@ -25,11 +25,17 @@ export function LineupSlots({ side, slots, players, pairs, repeats, editable, cl
   const [open, setOpen] = useState<number | null>(null)
   const [picked, setPicked] = useState<string[]>([])
   const [error, setError] = useState<string>()
-  const [pending, startTransition] = useTransition()
+  const [, startTransition] = useTransition()
+  // The slot shows the new pair the moment the 2nd player is tapped; it reverts if the save fails.
+  const [shown, show] = useOptimistic(pairs, (cur, { slot, ids }: { slot: number; ids: [string, string] | null }) => [
+    ...cur.filter((p) => p.slot !== slot),
+    // sorted like the saved row (player1_id < player2_id), so names don't swap when the server answers
+    ...(ids ? [{ lineup_id: '', slot, player1_id: ids[0] < ids[1] ? ids[0] : ids[1], player2_id: ids[0] < ids[1] ? ids[1] : ids[0] }] : []),
+  ])
 
   const name = new Map(players.map((p) => [p.id, p.name]))
-  const bySlot = new Map(pairs.map((p) => [p.slot, p]))
-  const usedIn = new Map(pairs.flatMap((p) => [[p.player1_id, p.slot], [p.player2_id, p.slot]] as const))
+  const bySlot = new Map(shown.map((p) => [p.slot, p]))
+  const usedIn = new Map(shown.flatMap((p) => [[p.player1_id, p.slot], [p.player2_id, p.slot]] as const))
   const sorted = [...players].sort((a, b) => a.name.localeCompare(b.name))
   const club = side === 'A' ? 'text-club-a' : 'text-club-b'
   const first = picked.length === 1 ? picked[0] : null
@@ -44,12 +50,13 @@ export function LineupSlots({ side, slots, players, pairs, repeats, editable, cl
     setOpen(null)
     setPicked([])
   }
-  const run = (slot: number, ids: [string, string] | null) =>
+  const run = (slot: number, ids: [string, string] | null) => {
+    close() // outside the transition, or React holds it until the save returns
     startTransition(async () => {
-      const e = await save(slot, ids)
-      setError(e)
-      if (!e) close()
+      show({ slot, ids })
+      setError(await save(slot, ids))
     })
+  }
   function toggleSlot(slot: number) {
     if (open === slot) return close()
     const p = bySlot.get(slot)
@@ -114,7 +121,7 @@ export function LineupSlots({ side, slots, players, pairs, repeats, editable, cl
                           key={pl.id}
                           type="button"
                           aria-pressed={picked.includes(pl.id)}
-                          disabled={taken || pending}
+                          disabled={taken}
                           onClick={() => pick(pl.id)}
                           className={`flex min-h-11 min-w-0 flex-col items-start justify-center gap-1 rounded-xl border px-3 py-1.5 text-left wrap-anywhere transition-colors hover:border-ink/30 aria-pressed:border-ink aria-pressed:bg-ink aria-pressed:text-white disabled:cursor-not-allowed disabled:opacity-40 ${rounds ? 'border-warn/40 bg-warn-bg' : 'border-line bg-card'}`}
                         >
@@ -129,7 +136,7 @@ export function LineupSlots({ side, slots, players, pairs, repeats, editable, cl
                   </div>
                   <div className="flex gap-2">
                     {p && clearable && (
-                      <Button variant="ghost" disabled={pending} onClick={() => run(slot, null)}>
+                      <Button variant="ghost" onClick={() => run(slot, null)}>
                         Clear pair
                       </Button>
                     )}
