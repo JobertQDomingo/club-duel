@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { awards, canOpenRound, clubTotals, pairKey, pairNames, parseRoster, parseScores, playerStats, ranking, repeatPairs, roundStatus, tabulation, validateLineup, viewFor } from "./domain";
+import { awards, canOpenRound, clubTotals, MAX_NAME, pairKey, pairNames, parseName, parseRoster, parseScores, playerStats, ranking, repeatPairs, rosterShortfall, roundStatus, tabulation, validateLineup, viewFor } from "./domain";
 import type { LineupPair, Match, TournamentData } from "./types";
 
 // 2 clubs × 4 players, 2 rounds × 2 slots. Round 2 slot 2 is live (must be ignored).
@@ -239,6 +239,28 @@ describe("parseRoster", () => {
   });
   test("needs at least one player", () => {
     expect(parseRoster(" \n")).toBe("Add at least one player.");
+  });
+  test("names the line with a too-long name", () => {
+    expect(parseRoster(`Ana, F\n${"x".repeat(MAX_NAME + 1)}, M`)).toBe(`Line 2: keep names to ${MAX_NAME} characters.`);
+  });
+});
+
+describe("parseName", () => {
+  test("trims; null when empty, too long or not a string", () => {
+    expect(parseName("  Court 1 ")).toBe("Court 1");
+    expect(parseName("x".repeat(MAX_NAME))).toHaveLength(MAX_NAME);
+    for (const v of ["", "   ", "x".repeat(MAX_NAME + 1), null, 5]) expect(parseName(v)).toBeNull();
+  });
+});
+
+describe("rosterShortfall", () => {
+  // The fixture has 4 players per club and pairs_per_round 2, so exactly enough.
+  test("null when every club has 2 players per pair", () => {
+    expect(rosterShortfall(data)).toBeNull();
+  });
+  test("names the short club when a round needs more players than it has", () => {
+    const three = { ...data, tournament: { ...data.tournament, pairs_per_round: 3 } };
+    expect(rosterShortfall(three)).toBe("Bravo has 4 players; 3 pairs per round need 6. Add players or lower pairs per round.");
   });
 });
 

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-21T04:48:18.547Z",
+  "generatedAt": "2026-11-21T08:06:06.099Z",
   "title": "Design System: Club Duel",
   "extensions": {
     "colorMeta": {
@@ -143,7 +143,7 @@
     "typographyMeta": {
       "display-total": {
         "displayName": "Display Total",
-        "purpose": "Club totals in the score race only; 6rem from sm."
+        "purpose": "Club totals in the score race only; clamp(3.5rem, 20vw, 4.5rem) below sm so a 3-digit total fits half of a 320px phone, 6rem from sm."
       },
       "headline": {
         "displayName": "Headline",
@@ -159,7 +159,7 @@
       },
       "label": {
         "displayName": "Label",
-        "purpose": "Badges, pair labels, club names; buttons at 1rem."
+        "purpose": "Badges, pair labels (\"Pair 4\" on phones), club names over totals; buttons at 1rem."
       }
     },
     "shadows": [
@@ -183,12 +183,19 @@
     ],
     "breakpoints": [
       {
-        "name": "sm",
-        "value": "640px"
+        "name": "container-sm",
+        "value": "384px",
+        "purpose": "Container query on roster rows: below it the name field takes its own line."
       },
       {
-        "name": "md",
-        "value": "768px"
+        "name": "sm",
+        "value": "640px",
+        "purpose": "Display-total to 6rem, full pair labels, court board two columns."
+      },
+      {
+        "name": "lg",
+        "value": "1024px",
+        "purpose": "Admin console goes to two/three columns."
       }
     ]
   },
@@ -234,18 +241,25 @@
       "css": ".ds-card{background:var(--color-sheet);padding:16px;}.ds-card-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--color-ink);}.ds-card-head h2{margin:0;font-family:var(--font-display);font-weight:700;font-size:1.5rem;line-height:1;text-transform:uppercase;}"
     },
     {
+      "name": "Form Field",
+      "kind": "input",
+      "description": "Square 44px ink-bordered fields with an uppercase label above; roster rows give the name its own line under 384px; errors are an ink-ruled alert.",
+      "html": "<div class=\"ds-form\"><label class=\"ds-label\">Club A name<input class=\"ds-input\" value=\"Riverside PC\" maxlength=\"60\"></label><fieldset class=\"ds-roster\"><legend class=\"ds-label\">New players (0)</legend><div class=\"ds-row\"><input class=\"ds-input ds-grow\" placeholder=\"Player name\" aria-label=\"Club A player name\" maxlength=\"60\"><select class=\"ds-input\" aria-label=\"Club A player gender\"><option value=\"\" disabled selected>Gender</option><option value=\"M\">M</option><option value=\"F\">F</option></select><button class=\"ds-btn-secondary\" type=\"button\">Add</button></div></fieldset><p class=\"ds-error\" role=\"alert\">Enter a club name (up to 60 characters).</p></div>",
+      "css": ".ds-form{display:flex;flex-direction:column;gap:16px;background:var(--color-sheet);padding:16px;}.ds-label{display:flex;flex-direction:column;gap:4px;padding:0;font-family:var(--font-display);font-weight:700;font-size:.875rem;text-transform:uppercase;letter-spacing:0.025em;color:var(--color-ink);}.ds-input{min-height:44px;border:1px solid var(--color-ink);border-radius:0;background:var(--color-sheet);padding:0 12px;font-family:var(--font-sans);font-size:1rem;font-weight:400;text-transform:none;letter-spacing:0;color:var(--color-ink);}.ds-input:focus-visible,.ds-btn-secondary:focus-visible{outline:2px solid var(--color-ink);outline-offset:2px;}.ds-roster{container-type:inline-size;min-width:0;margin:0;padding:0;border:0;display:flex;flex-direction:column;gap:8px;}.ds-row{display:flex;flex-wrap:wrap;gap:8px;}.ds-grow{flex:1 1 100%;min-width:0;}@container (min-width:24rem){.ds-grow{flex-basis:0;}}.ds-btn-secondary{min-height:44px;padding:0 16px;border:1px solid var(--color-ink);border-radius:0;background:var(--color-sheet);color:var(--color-ink);font-family:var(--font-display);font-weight:700;font-size:1rem;text-transform:uppercase;letter-spacing:0.025em;cursor:pointer;transition:background-color .15s;}.ds-btn-secondary:hover{background:var(--color-wall);}.ds-error{margin:0;border-left:4px solid var(--color-ink);padding-left:12px;font-family:var(--font-sans);font-weight:600;color:var(--color-ink);}"
+    },
+    {
       "name": "PairCard",
       "kind": "custom",
-      "description": "One club's pair; face-down renders masking tape and no names.",
-      "html": "<div class=\"ds-match\"><div class=\"ds-pair\"><p class=\"ds-pair-label ds-a\">Club A · Pair 4</p><p class=\"ds-names\">Mara Villa<br>Noel Ramos</p></div><span class=\"ds-vs\">vs</span><div class=\"ds-pair ds-right\"><p class=\"ds-pair-label ds-b\">Club B · Pair 4</p><div class=\"ds-tape\"></div></div></div>",
-      "css": ".ds-match{display:grid;grid-template-columns:1fr auto 1fr;border-top:1px solid var(--color-ink);border-bottom:1px solid var(--color-ink);background:var(--color-sheet);}.ds-pair{position:relative;min-height:72px;overflow:hidden;padding:8px 12px;}.ds-right{text-align:right;}.ds-pair-label{margin:0;font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:0.025em;font-size:.875rem;}.ds-a{color:var(--color-club-a);}.ds-b{color:var(--color-club-b);}.ds-names{margin:0;font-family:var(--font-sans);line-height:1.375;}.ds-vs{display:flex;align-items:center;padding:0 8px;border-left:1px solid var(--color-ink);border-right:1px solid var(--color-ink);font-family:var(--font-display);font-weight:800;font-size:1.25rem;}.ds-tape{position:absolute;left:8px;right:8px;top:28px;height:48px;transform:rotate(-1deg);background:var(--color-tape);box-shadow:0 2px 4px rgb(22 24 29 / 0.18);}"
+      "description": "One club's pair; face-down renders masking tape and no names. On phones the label reads \"Pair 4\" (club prefix screen-reader only) and long names wrap.",
+      "html": "<div class=\"ds-match\"><div class=\"ds-pair\"><p class=\"ds-pair-label ds-a\"><span class=\"ds-club-prefix\">Club A · </span>Pair 4</p><p class=\"ds-names\">Maximiliano Dela Cruz-Santos<br>Noel Ramos</p></div><span class=\"ds-vs\">vs</span><div class=\"ds-pair ds-right\"><p class=\"ds-pair-label ds-b\"><span class=\"ds-club-prefix\">Club B · </span>Pair 4</p><div class=\"ds-tape\"></div></div></div>",
+      "css": ".ds-match{display:grid;grid-template-columns:1fr auto 1fr;border-top:1px solid var(--color-ink);border-bottom:1px solid var(--color-ink);background:var(--color-sheet);}.ds-pair{position:relative;min-width:0;min-height:72px;overflow:hidden;padding:8px 12px;}.ds-right{text-align:right;}.ds-pair-label{margin:0;font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:0.025em;font-size:.875rem;}.ds-a{color:var(--color-club-a);}.ds-b{color:var(--color-club-b);}.ds-names{margin:0;font-family:var(--font-sans);line-height:1.375;overflow-wrap:break-word;hyphens:auto;}.ds-vs{display:flex;align-items:center;padding:0 8px;border-left:1px solid var(--color-ink);border-right:1px solid var(--color-ink);font-family:var(--font-display);font-weight:800;font-size:1.25rem;}.ds-tape{position:absolute;left:8px;right:8px;top:28px;height:48px;transform:rotate(-1deg);background:var(--color-tape);box-shadow:0 2px 4px rgb(22 24 29 / 0.18);}@media (max-width:639px){.ds-pair{padding:8px;}.ds-club-prefix{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;}}"
     },
     {
       "name": "ScoreRace",
       "kind": "custom",
-      "description": "Club totals as whole colour fields over a race strip meeting at an ink midline.",
+      "description": "Club totals as whole colour fields over a race strip meeting at an ink midline. Club names take up to two lines; totals sit on the bottom edge and shrink fluidly below sm.",
       "html": "<div><div class=\"ds-band\"><div class=\"ds-field ds-fa\"><p class=\"ds-club\">Riverside PC</p><p class=\"ds-total\">112</p></div><div class=\"ds-field ds-fb\"><p class=\"ds-club\">Northgate PC</p><p class=\"ds-total\">104</p></div></div><div class=\"ds-strip\"><div class=\"ds-bar ds-fa\" style=\"left:0;width:62%\"></div><div class=\"ds-bar ds-fb\" style=\"right:0;width:38%\"></div><div class=\"ds-mid\"></div></div><p class=\"ds-lead\">Riverside PC lead by 8</p></div>",
-      "css": ".ds-band{display:grid;grid-template-columns:1fr 1fr;color:var(--color-sheet);}.ds-field{padding:10px 16px 12px;}.ds-fb{text-align:right;}.ds-fa{background:var(--color-club-a);}.ds-fb{background:var(--color-club-b);}.ds-club{margin:0;font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:0.025em;font-size:.875rem;}.ds-total{margin:0;font-family:var(--font-display);font-weight:800;font-size:4.5rem;line-height:.9;font-variant-numeric:tabular-nums;}.ds-strip{position:relative;margin-top:8px;height:14px;background:var(--color-sheet);}.ds-bar{position:absolute;top:0;bottom:0;transition:width .7s cubic-bezier(0.16,1,0.3,1);}.ds-mid{position:absolute;top:-3px;bottom:-3px;left:50%;width:2px;transform:translateX(-50%);background:var(--color-ink);}.ds-lead{margin:6px 0 0;font-family:var(--font-display);font-weight:700;text-transform:uppercase;}"
+      "css": ".ds-band{display:grid;grid-template-columns:1fr 1fr;color:var(--color-sheet);}.ds-field{display:flex;flex-direction:column;justify-content:space-between;min-width:0;padding:10px 16px 12px;}.ds-fb{text-align:right;}.ds-fa{background:var(--color-club-a);}.ds-fb{background:var(--color-club-b);}.ds-club{margin:0;font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:0.025em;font-size:.875rem;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;overflow-wrap:break-word;}.ds-total{margin:0;font-family:var(--font-display);font-weight:800;font-size:clamp(3.5rem,20vw,4.5rem);line-height:.9;font-variant-numeric:tabular-nums;}.ds-strip{position:relative;margin-top:8px;height:14px;background:var(--color-sheet);}.ds-bar{position:absolute;top:0;bottom:0;transition:width .7s cubic-bezier(0.16,1,0.3,1);}.ds-mid{position:absolute;top:-3px;bottom:-3px;left:50%;width:2px;transform:translateX(-50%);background:var(--color-ink);}.ds-lead{margin:6px 0 0;font-family:var(--font-display);font-weight:700;text-transform:uppercase;}@media (min-width:640px){.ds-total{font-size:6rem;}}"
     }
   ],
   "narrative": {

@@ -1,9 +1,8 @@
 'use server'
 
-import { refresh } from 'next/cache'
 import { requireAdmin, requireCaptain } from '@/lib/auth'
-import { parseRoster } from '@/lib/domain'
-import { broadcastChanged } from '@/lib/realtime'
+import { MAX_NAME, parseName, parseRoster } from '@/lib/domain'
+import { changed as done } from '@/lib/realtime'
 import { supabaseAdmin as db } from '@/lib/supabase/admin'
 
 /** Admin passes the tournament id (checked against the session); a captain passes their link token. */
@@ -26,16 +25,10 @@ async function scope(caller: Caller): Promise<{ tournamentId: string; clubIds: s
   return { tournamentId: caller.tournamentId, clubIds: data.map((c) => c.id) }
 }
 
-async function done(tournamentId: string): Promise<Result> {
-  await broadcastChanged(tournamentId)
-  refresh()
-  return undefined
-}
-
 export async function renameClub(caller: Caller, clubId: string, form: FormData): Promise<Result> {
   const { tournamentId, clubIds } = await scope(caller)
-  const name = String(form.get('name') ?? '').trim()
-  if (!name) return 'Enter a club name.'
+  const name = parseName(form.get('name'))
+  if (!name) return `Enter a club name (up to ${MAX_NAME} characters).`
   if (!clubIds.includes(clubId)) return 'Not your club.'
   const { error } = await db.from('clubs').update({ name }).eq('id', clubId)
   return error ? error.message : done(tournamentId)
@@ -53,9 +46,9 @@ export async function addPlayers(caller: Caller, clubId: string, form: FormData)
 
 export async function editPlayer(caller: Caller, playerId: string, form: FormData): Promise<Result> {
   const { tournamentId, clubIds } = await scope(caller)
-  const name = String(form.get('name') ?? '').trim()
+  const name = parseName(form.get('name'))
   const gender = String(form.get('gender') ?? '')
-  if (!name) return 'Enter a player name.'
+  if (!name) return `Enter a player name (up to ${MAX_NAME} characters).`
   if (gender !== 'M' && gender !== 'F') return 'Pick M or F.'
   const { data, error } = await db
     .from('players')

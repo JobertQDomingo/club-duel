@@ -1,10 +1,10 @@
 'use server'
 
 import { randomBytes } from 'node:crypto'
-import { refresh } from 'next/cache'
 import { requireAdmin } from '@/lib/auth'
-import { parseScores } from '@/lib/domain'
-import { broadcastChanged } from '@/lib/realtime'
+import { loadTournament } from '@/lib/db'
+import { MAX_NAME, parseName, parseScores, rosterShortfall } from '@/lib/domain'
+import { changed as done } from '@/lib/realtime'
 import { supabaseAdmin as db } from '@/lib/supabase/admin'
 
 /** New captain token for one club; the old link stops working. */
@@ -16,29 +16,24 @@ export async function regenerateCaptainLink(tournamentId: string, clubId: string
     .eq('id', clubId)
     .eq('tournament_id', tournamentId) // the club must belong to the tournament the caller owns
   if (error) throw new Error(error.message)
-  await broadcastChanged(tournamentId)
-  refresh()
+  await done(tournamentId)
 }
 
-const done = async (tournamentId: string) => {
-  await broadcastChanged(tournamentId)
-  refresh()
-  return undefined
-}
+const COURT_NAME = `Enter a court name (up to ${MAX_NAME} characters).`
 
 /** Court + pairs actions return an error message, or undefined on success. */
 export async function addCourt(tournamentId: string, form: FormData) {
   await requireAdmin(tournamentId)
-  const name = String(form.get('name') ?? '').trim()
-  if (!name) return 'Enter a court name.'
+  const name = parseName(form.get('name'))
+  if (!name) return COURT_NAME
   const { error } = await db.from('courts').insert({ tournament_id: tournamentId, name })
   return error ? error.message : done(tournamentId)
 }
 
 export async function renameCourt(tournamentId: string, courtId: string, form: FormData) {
   await requireAdmin(tournamentId)
-  const name = String(form.get('name') ?? '').trim()
-  if (!name) return 'Enter a court name.'
+  const name = parseName(form.get('name'))
+  if (!name) return COURT_NAME
   const { error } = await db.from('courts').update({ name }).eq('id', courtId).eq('tournament_id', tournamentId)
   return error ? error.message : done(tournamentId)
 }
@@ -71,9 +66,12 @@ export async function startMatch(tournamentId: string, courtId: string, form: Fo
   return error ? error.message : done(tournamentId)
 }
 
-/** The SQL function refuses while the latest round has unfinished matches. */
+/** The SQL function refuses while the latest round has unfinished matches; a club too small for P pairs is refused here, or its captain could never submit. */
 export async function openRound(tournamentId: string) {
   await requireAdmin(tournamentId)
+  const data = await loadTournament(tournamentId)
+  const short = data && rosterShortfall(data)
+  if (short) return short
   const { error } = await db.rpc('open_round', { p_tournament_id: tournamentId })
   return error ? error.message : done(tournamentId)
 }

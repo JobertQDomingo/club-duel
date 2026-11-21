@@ -1,9 +1,8 @@
 'use server'
 
-import { refresh } from 'next/cache'
 import { requireAdmin, requireCaptain } from '@/lib/auth'
 import { validateLineup } from '@/lib/domain'
-import { broadcastChanged } from '@/lib/realtime'
+import { changed as done } from '@/lib/realtime'
 import { supabaseAdmin as db } from '@/lib/supabase/admin'
 
 /** Every action returns an error message, or undefined on success. */
@@ -14,13 +13,16 @@ async function currentLineup(token: string) {
   const club = await requireCaptain(token)
   const { data: round, error } = await db
     .from('rounds')
-    .select('id, pairs, locked_at')
+    .select('id, pairs, locked_at, tournaments!inner(status)')
     .eq('tournament_id', club.tournament_id)
     .order('number', { ascending: false })
     .limit(1)
     .maybeSingle()
   if (error) throw new Error(error.message)
   if (!round) return { club, error: 'No round is open yet.' as const, round: undefined, lineup: undefined }
+  // A round left open at the end must not lock afterwards (its matches could never start).
+  if ((round.tournaments as unknown as { status: string }).status === 'ended')
+    return { club, error: 'The tournament has ended.' as const, round: undefined, lineup: undefined }
   const { data: lineup, error: e2 } = await db
     .from('lineups')
     .select('id, submitted_at')
@@ -29,12 +31,6 @@ async function currentLineup(token: string) {
     .single()
   if (e2) throw new Error(e2.message)
   return { club, round, lineup, error: undefined }
-}
-
-async function done(tournamentId: string): Promise<Result> {
-  await broadcastChanged(tournamentId)
-  refresh()
-  return undefined
 }
 
 /** Validates and writes one slot. `partial` allows empty slots (a draft); a locked round needs all of them. */

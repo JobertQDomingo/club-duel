@@ -47,7 +47,7 @@ export function EndMatch({ slot, ...props }: Omit<Props, 'submit' | 'onDone'> & 
   return (
     <>
       <Button variant="secondary" onClick={() => dialog.current?.showModal()}>Match end</Button>
-      <dialog ref={dialog} aria-label={`Match ${slot} score`} className="m-auto w-full max-w-md border border-ink bg-sheet p-4 text-ink backdrop:bg-ink/40">
+      <dialog ref={dialog} aria-label={`Match ${slot} score`} className="m-auto w-[calc(100%-2rem)] max-w-md border border-ink bg-sheet p-4 text-ink backdrop:bg-ink/40">
         <div className="flex flex-col gap-3">
           <h3 className="border-b border-ink pb-2 font-display text-xl font-bold uppercase">Match {slot} score</h3>
           <ScoreForm {...props} submit="Save score" onDone={() => dialog.current?.close()} />

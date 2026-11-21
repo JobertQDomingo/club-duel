@@ -112,8 +112,9 @@ alter table audit_log    enable row level security;
 | Lock when both submitted | `submit_lineup(lineup_id)` Postgres function: sets `submitted_at`, then `select ... for update` on the round. If both lineups are submitted, sets `locked_at` and inserts `matches` rows 1..P. Atomic, so simultaneous submits are safe. |
 | Unsubmit only before lock | `unsubmit_lineup`: allowed only if `rounds.locked_at is null`. |
 | Start match | Requires the round to be locked, the match `pending`, and the court free (unique partial index). |
-| Open next round | Requires the previous round to have all matches `done` and tournament status not `ended`. Creates the round and 2 empty lineups. Sets tournament `active`. |
-| End tournament | Requires no `live` matches. Sets `status='ended'`, `ended_at`. Pending matches of an unfinished round are ignored in totals. |
+| Open next round | Requires the previous round to have all matches `done` and tournament status not `ended` (`open_round`). The server action also requires each club to have at least 2·P players (`rosterShortfall` in domain). Creates the round and 2 empty lineups. Sets tournament `active`. |
+| End tournament | Requires no `live` matches. Sets `status='ended'`, `ended_at`. Pending matches of an unfinished round are ignored in totals. Afterwards `start_match` refuses, and the captain lineup actions refuse (checked in `lineup-actions.ts`, not SQL). |
+| Names | Club, player, court and tournament names are trimmed and 1–60 characters (`parseName` / `MAX_NAME` in domain, checked in every action). |
 
 ## Derived data (TypeScript, `src/lib/domain.ts`)
 

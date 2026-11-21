@@ -45,9 +45,11 @@ export function ScoreRace({
 
 function Field({ club, total, className }: { club: string; total: number; className: string }) {
   return (
-    <div className={`min-w-0 px-4 pt-2.5 pb-3 ${className}`}>
-      <p className="truncate font-display text-sm font-bold uppercase tracking-wide">{club}</p>
-      <p className="font-display text-7xl font-extrabold leading-[0.9] sm:text-8xl">{total}</p>
+    // Totals sit on the bottom edge so they line up when one club name takes two lines.
+    <div className={`flex min-w-0 flex-col justify-between px-4 pt-2.5 pb-3 ${className}`}>
+      <p className="line-clamp-2 font-display text-sm font-bold uppercase tracking-wide wrap-break-word">{club}</p>
+      {/* fluid below 360px so a 3-digit total fits half of a 320px phone */}
+      <p className="font-display text-[length:clamp(3.5rem,20vw,4.5rem)] font-extrabold leading-[0.9] sm:text-8xl">{total}</p>
     </div>
   );
 }

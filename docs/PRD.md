@@ -25,12 +25,12 @@ Web app for a two-club pickleball "Club Duel" run in Captain's Mode. It replaces
 
 1. **Create.** Admin enters Club A name, Club B name, number of courts, pairs per round (default 7), and each club's players (name + gender), added one at a time: type the name, pick M or F, click Add (or press Enter); each listed player can be removed before creating. The app creates both captain links and the audience link.
 2. **Roster edits.** Captains can rename their club and add, edit or remove their own players at any time. The admin can edit everything. **A player who has played a match cannot be removed**, only renamed. The same rule applies to courts.
-3. **Open round.** Admin clicks "Open Round N". This is only possible when the previous round has no pending or live matches.
+3. **Open round.** Admin clicks "Open Round N". This is only possible when the previous round has no pending or live matches, and when each club has at least 2·P players (each player plays once per round, so a smaller club could never submit). The disabled button says why.
 4. **Blind lineup.** Each captain fills Pair 1…P by picking 2 players per slot. They see repeat-pair warnings inline, and same-round duplicates are prevented. All slots must be filled to submit. A captain can **unsubmit** until the opponent submits. When both have submitted, the round is **locked** and only the admin can edit lineups after that.
 5. **Rolling reveal.** Once the round is locked, the admin sees free courts and pending matches (the next match number is suggested), picks one, and clicks **Start** on a court. That match's pair cards flip to show names for everyone. Unstarted matches stay **face-down** for the audience and for the opposing captain.
 6. **Match end.** Admin clicks **Match end** on a live court and enters the Club A and Club B scores. The court becomes free. Totals and rankings update live.
 7. **Repeat** steps 5–6 until all P matches are done, then open the next round (step 3).
-8. **End tournament.** Disabled while any match is live. A confirm dialog appears. The audience view then reveals the winning club (or Draw), the full tabulation, and the awards.
+8. **End tournament.** Disabled while any match is live. A confirm dialog appears. The audience view then reveals the winning club (or Draw), the full tabulation, and the awards. After the end, no match can start and captains can no longer save or submit lineups; the admin can still correct scores, lineups and rosters.
 
 The admin can edit anything at any time: club names, rosters, courts, pairs per round (applies to rounds opened afterwards), lineups (even of started matches), and finished scores. Every admin correction to a lineup or score is written to an **audit log** (who, when, old → new). Totals recompute from data and are never stored.
 

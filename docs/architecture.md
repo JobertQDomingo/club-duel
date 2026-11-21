@@ -38,7 +38,8 @@ Browser ──(server actions / route handlers)──▶ Next.js server ──(s
 
 ## Security notes
 - Captain token: 48 hex chars (`gen_random_bytes(24)`). "Regenerate link" replaces it.
-- Validate every input on the server: ids belong to the same tournament, slot within 1..P, scores are non-negative integers and not equal, and names are trimmed and length-limited.
+- Validate every input on the server: ids belong to the same tournament, slot within 1..P, scores are non-negative integers and not equal, and names are trimmed and at most 60 characters (`parseName`, `MAX_NAME` in `src/lib/domain.ts`).
+- Captain actions are scoped to the token's own club; `src/lib/roster-actions.test.ts` pins that (other club → "Not your club.", edits filtered by `club_id`).
 - `SUPABASE_SERVICE_ROLE_KEY` is only in Vercel env vars, never `NEXT_PUBLIC_*`.
 
 ## Free-tier caveats

@@ -1,4 +1,5 @@
 import 'server-only'
+import { refresh } from 'next/cache'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 
 // Tell every open view of this tournament to refetch. No data rides along, so nothing can leak.
@@ -13,4 +14,11 @@ export async function broadcastChanged(tournamentId: string) {
   } finally {
     await supabaseAdmin.removeChannel(channel)
   }
+}
+
+/** End of a successful server action: tell other views, refresh this one. Resolves to undefined (no error), so actions can `return error ? error.message : changed(id)`. */
+export async function changed(tournamentId: string): Promise<undefined> {
+  await broadcastChanged(tournamentId)
+  refresh()
+  return undefined
 }

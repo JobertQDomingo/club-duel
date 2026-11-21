@@ -48,12 +48,12 @@ export function Results({ view, a, b }: { view: TournamentView; a: Club; b: Club
                 <ol className="divide-y divide-ink/20 border-y border-ink/20">
                   {r.matches.map((m) => (
                     <li key={m.id} className="grid grid-cols-[1fr_auto_1fr] gap-2 py-2">
-                      <span className="min-w-0 text-club-a">{pair(a, m)}</span>
+                      <span className="min-w-0 text-club-a wrap-break-word hyphens-auto">{pair(a, m)}</span>
                       <span className="flex flex-col items-center px-2 text-center">
                         <span className="font-display text-sm font-bold uppercase tracking-wide">Match {m.slot}</span>
                         <span className="font-display text-xl font-extrabold">{m.score_a}–{m.score_b}</span>
                       </span>
-                      <span className="min-w-0 text-right text-club-b">{pair(b, m)}</span>
+                      <span className="min-w-0 text-right text-club-b wrap-break-word hyphens-auto">{pair(b, m)}</span>
                     </li>
                   ))}
                 </ol>

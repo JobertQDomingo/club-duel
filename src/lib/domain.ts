@@ -186,6 +186,25 @@ export function tabulation(data: TournamentView) {
   });
 }
 
+/** Longest club, player, court or tournament name the server accepts (they show on phones). */
+export const MAX_NAME = 60;
+
+/** A form value as a name: trimmed, 1–MAX_NAME characters. Null otherwise. */
+export function parseName(v: unknown): string | null {
+  const s = typeof v === "string" ? v.trim() : "";
+  return s && s.length <= MAX_NAME ? s : null;
+}
+
+/** Admin view only (needs full rosters): an error if a club can't fill a round, since each player plays once per round. */
+export function rosterShortfall(data: TournamentView): string | null {
+  const P = data.tournament.pairs_per_round;
+  for (const c of data.clubs) {
+    const n = data.players.filter((p) => p.club_id === c.id).length;
+    if (n < 2 * P) return `${c.name} has ${n} players; ${P} pairs per round need ${2 * P}. Add players or lower pairs per round.`;
+  }
+  return null;
+}
+
 /** One player per line, "Name, M|F". Returns the players, or an error message naming the line. */
 export function parseRoster(text: string): Pick<Player, "name" | "gender">[] | string {
   const players: Pick<Player, "name" | "gender">[] = [];
@@ -194,6 +213,7 @@ export function parseRoster(text: string): Pick<Player, "name" | "gender">[] | s
     if (!lines[i].trim()) continue;
     const m = /^\s*([^,]*?)\s*,\s*([mf])\s*$/i.exec(lines[i]);
     if (!m || !m[1]) return `Line ${i + 1}: use "Name, M" or "Name, F".`;
+    if (m[1].length > MAX_NAME) return `Line ${i + 1}: keep names to ${MAX_NAME} characters.`;
     players.push({ name: m[1], gender: m[2].toUpperCase() as Player["gender"] });
   }
   return players.length ? players : "Add at least one player.";

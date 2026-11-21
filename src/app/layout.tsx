@@ -4,7 +4,7 @@ import "./globals.css";
 
 const barlow = Barlow({
   variable: "--font-barlow",
-  weight: ["400"],
+  weight: ["400", "600"], // 600 = font-semibold (errors, notices); without it the browser fakes bold
   subsets: ["latin"],
 });
 

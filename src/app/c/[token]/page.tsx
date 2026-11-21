@@ -43,7 +43,9 @@ export default async function CaptainPage({ params }: PageProps<'/c/[token]'>) {
         <ScoreRace a={{ name: a.name, total: totals.A }} b={{ name: b.name, total: totals.B }} />
 
         <Card title={round ? `Round ${round.number} lineup` : 'Lineup'}>
-          {!round || !lineup ? (
+          {view.tournament.status === 'ended' ? (
+            <p className="text-ink-soft">The tournament has ended. No more lineups.</p>
+          ) : !round || !lineup ? (
             <p className="text-ink-soft">No round open yet. Your draft appears here when the admin opens a round.</p>
           ) : (
             <Draft
@@ -78,9 +80,9 @@ export default async function CaptainPage({ params }: PageProps<'/c/[token]'>) {
                         return (
                           <li key={m.id} className="grid grid-cols-[auto_1fr_auto_1fr] items-center gap-2 py-1.5 text-sm">
                             <span className="font-display font-bold">#{m.slot}</span>
-                            <span>{mine?.join(' & ')}</span>
+                            <span className="min-w-0 wrap-break-word">{mine?.join(' & ')}</span>
                             {m.status === 'done' && us !== null && them !== null ? (
-                              <span className="font-display font-extrabold">
+                              <span className="whitespace-nowrap font-display font-extrabold">
                                 {us > them ? 'W' : 'L'} {us}–{them}
                               </span>
                             ) : m.status === 'live' ? (
@@ -88,7 +90,7 @@ export default async function CaptainPage({ params }: PageProps<'/c/[token]'>) {
                             ) : (
                               <span className="text-ink-soft">Pending</span>
                             )}
-                            <span className="text-right">{theirs ? theirs.join(' & ') : <span className="text-ink-soft">Hidden</span>}</span>
+                            <span className="min-w-0 text-right wrap-break-word">{theirs ? theirs.join(' & ') : <span className="text-ink-soft">Hidden</span>}</span>
                           </li>
                         )
                       })}

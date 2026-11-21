@@ -1,6 +1,7 @@
 'use client'
 
 import { useActionState } from 'react'
+import { FormError } from '@/components/ActionResult'
 import { Button } from '@/components/ui/Button'
 import { authenticate } from './actions'
 
@@ -18,11 +19,7 @@ export function LoginForm() {
         Password
         <input name="password" type="password" autoComplete="current-password" required className={field} />
       </label>
-      {state?.error && (
-        <p role="alert" className="border-l-4 border-ink pl-3 font-semibold">
-          {state.error}
-        </p>
-      )}
+      <FormError error={state?.error} />
       {state?.info && <p role="status" className="border-l-4 border-ink pl-3">{state.info}</p>}
       <div className="flex flex-wrap gap-2">
         <Button type="submit" name="mode" value="signin" disabled={pending}>

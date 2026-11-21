@@ -3,6 +3,7 @@
 import { FormError, useResult } from '@/components/ActionResult'
 import { field } from '@/components/RosterEditor'
 import { Button } from '@/components/ui/Button'
+import { MAX_NAME } from '@/lib/domain'
 import type { Court } from '@/lib/types'
 import { addCourt, removeCourt, renameCourt, setPairsPerRound } from './actions'
 
@@ -36,7 +37,7 @@ export function CourtsEditor({ tournamentId, courts, pairs }: { tournamentId: st
 
       <form action={wrapAdd((f) => addCourt(tournamentId, f))} className="flex flex-col gap-2">
         <div className="flex gap-2">
-          <input name="name" placeholder="Court name" aria-label="New court name" required className={`${field} min-w-0 flex-1`} />
+          <input name="name" placeholder="Court name" aria-label="New court name" required maxLength={MAX_NAME} className={`${field} min-w-0 flex-1`} />
           <Button type="submit" variant="secondary">Add court</Button>
         </div>
         <FormError error={addError} />
@@ -54,7 +55,7 @@ function CourtRow({ tournamentId, court }: { tournamentId: string; court: Court 
   return (
     <li className="flex flex-col gap-1 px-3 py-2">
       <form action={wrap((f) => renameCourt(tournamentId, court.id, f))} className="flex flex-wrap items-center gap-2">
-        <input name="name" defaultValue={court.name} required aria-label="Court name" className={`${field} min-w-0 flex-1`} />
+        <input name="name" defaultValue={court.name} required maxLength={MAX_NAME} aria-label={`Rename ${court.name}`} className={`${field} min-w-0 flex-1`} />
         <Button type="submit" variant="secondary">Save</Button>
         <Button type="submit" variant="ghost" formAction={wrap(remove)} formNoValidate>
           Remove

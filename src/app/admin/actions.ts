@@ -2,7 +2,7 @@
 
 import { redirect } from 'next/navigation'
 import { requireUser } from '@/lib/auth'
-import { parseRoster } from '@/lib/domain'
+import { MAX_NAME, parseName, parseRoster } from '@/lib/domain'
 import { supabaseAdmin as db } from '@/lib/supabase/admin'
 
 export type CreateState = { error: string; values: Record<string, string> } | undefined
@@ -15,12 +15,12 @@ export async function createTournament(_prev: CreateState, form: FormData): Prom
   const values = Object.fromEntries([...form].map(([k, v]) => [k, String(v)]))
   const fail = (error: string) => ({ error, values })
 
-  const name = values.name?.trim()
-  const clubA = values.clubA?.trim()
-  const clubB = values.clubB?.trim()
+  const name = parseName(values.name)
+  const clubA = parseName(values.clubA)
+  const clubB = parseName(values.clubB)
   const courts = Number(values.courts)
   const pairs = Number(values.pairs)
-  if (!name || !clubA || !clubB) return fail('Enter the tournament name and both club names.')
+  if (!name || !clubA || !clubB) return fail(`Enter the tournament name and both club names (up to ${MAX_NAME} characters each).`)
   if (!Number.isInteger(courts) || courts < 1 || courts > MAX_COURTS) return fail(`Courts must be a whole number from 1 to ${MAX_COURTS}.`)
   if (!Number.isInteger(pairs) || pairs < 1 || pairs > MAX_PAIRS) return fail(`Pairs per round must be a whole number from 1 to ${MAX_PAIRS}.`)
   const rosterA = parseRoster(values.playersA ?? '')

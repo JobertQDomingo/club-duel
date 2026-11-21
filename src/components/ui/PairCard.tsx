@@ -26,14 +26,15 @@ export function PairCard({
 
   return (
     <div
-      className={`relative min-h-18 overflow-hidden px-3 py-2 ${side === "B" ? "text-right" : ""}`}
+      className={`relative min-h-18 overflow-hidden px-2 py-2 sm:px-3 ${side === "B" ? "text-right" : ""}`}
     >
+      {/* One line on phones (the tape sits under it): the club prefix is screen-reader only there; colour and side carry it. */}
       <p className={`font-display text-sm font-bold uppercase tracking-wide ${club}`}>
-        Club {side} · Pair {slot}
+        <span className="max-sm:sr-only">Club {side} · </span>Pair {slot}
       </p>
       {names ? (
         <>
-          <p className="text-base leading-snug">
+          <p className="text-base leading-snug wrap-break-word hyphens-auto">
             {names[0]}
             <br />
             {names[1]}

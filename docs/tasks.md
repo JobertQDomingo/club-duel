@@ -123,6 +123,14 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
   Do: an End Tournament button (disabled while a match is live, with a confirm dialog and a "currently tied" note). Results view on `/t/[id]` when ended: winner banner or Draw, a per-round tabulation with running totals, and awards from `awards()`.
   Done when: a full seeded run ends and shows the winner, tabulation and awards.
 
+- [x] **A1 Code audit + review fixes** (M). Ponytail audit of the repo and review of T19–T21 (2026-11-21, before T22).
+  Fixed: (1) a round with more pairs than a club can fill could never be submitted, leaving the admin stuck → Open Round is refused with the reason (`rosterShortfall`); (2) after End tournament the court board still offered Start and an open round could still be drafted/submitted → both refused; (3) names had no length limit (spec said they did) → 60 chars, `parseName`; (4) captain roster scoping had no test → `roster-actions.test.ts`; (5) three copies of the post-write helper → `changed()` in `@/lib/realtime`; (6) placeholder smoke test deleted.
+  Left as-is (decisions with `shortcut:` comments): `endTournament` live-check race, two-call audit writes, audit-log times in server timezone (see T23).
+
+- [x] **A2 Impeccable UI audit + mobile fixes** (M) (browser). Same day. Score 14/20 → 19/20 (responsive 1 → 4).
+  Fixed: admin console and New-tournament form scrolled sideways on phones (grids without a base column template); 3-digit totals overflowed the score race at 320px; long names were clipped in pair cards (tape `overflow-hidden`) and overflowed results cells; ranking numbers split across lines; roster name inputs were 50–75px wide; Barlow 600 was used but not loaded; back link under 44px; dialogs touched the screen edges; repeated generic row labels; duplicate error paragraphs → `FormError`. Rules recorded in `DESIGN.md` §Layout › Responsive.
+  Not fixed (P3): captain results grid is dense at 320px; "· M" in the lineup picker can wrap; no real-device/iOS Safari or screen-reader pass (Chromium emulation only).
+
 - [ ] **T22 Seed + demo script** (S). Depends: T14.
   Do: `npm run seed` creates a demo tournament (Club A 16 + Club B 17 players, 4 courts — the real event's setup; counts stay args, not constants) for a given admin email, optionally with 2 played rounds. Used for dry runs.
   Done when: running it twice gives two independent demo tournaments.
@@ -132,6 +140,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 - [ ] **T23 Deploy to Vercel** (S) [USER]. Depends: T21.
   User: import the GitHub repo in Vercel, add the 3 env vars, and add the Vercel URL to the Supabase Auth redirect URLs.
   Done when: the production URL works for login, captain and audience.
+  Check: audit-log times render in the server timezone (UTC on Vercel; `shortcut:` in the admin page). If the venue needs local time, format them on the client.
 
 - [ ] **T24 Google login** (S) [USER]. Depends: T23. Optional.
   User: create a Google OAuth client and enable the Google provider in Supabase.
@@ -139,6 +148,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 
 - [ ] **T25 UX polish pass** (M) (browser). Depends: T21.
   Do: Impeccable critique/polish on the captain draft and the audience page at phone width; fix the top issues.
+  Partly covered by A2 (phone layout, overflow, tap targets). Still to do: the critique/polish pass (hierarchy, copy), and a check on a real phone.
 
 - [ ] **T26 Full dry run** (M) (browser). Depends: T22, T23.
   Do: with Playwright MCP on production, play 2 rounds end-to-end as admin + 2 captains + audience, using a 16 + 17 roster (uneven sizes, so one club benches more players per round) and 4 courts (fewer courts than pairs per round, so matches queue for a free court); log and fix bugs (split big fixes into new tasks at the bottom).
@@ -164,10 +174,10 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 - T10: every session-reading page needs its own `export const instant = false`; the layout's doesn't cover the page. Create is plain inserts with a compensating `delete` of the tournament on failure (cascade), not an SQL function.
 - T10: `CopyLink` (`@/components/ui/CopyLink`) for the T12 header links; origin from `headers()` (host + x-forwarded-proto). `RosterInput` (`src/app/admin/RosterInput.tsx`) is name + gender + Add, posting a hidden `players{A|B}` that `parseRoster` validates; reuse it for T13 roster add.
 - T10: if `next dev` throws "Jest worker encountered 2 child process exceptions", restart it; it's a dev-server crash, not app code.
-- T11: call `broadcastChanged(tournamentId)` from `@/lib/realtime` after each successful write (REST `httpSend`, logs instead of throwing). Mount `<LiveRefresh tournamentId>` (`@/components/LiveRefresh`) on any page that shows tournament data; `/admin/t/[id]` already has it.
+- T11: after each successful write, end the action with `changed(tournamentId)` from `@/lib/realtime` (A1: wraps `broadcastChanged` — REST `httpSend`, logs instead of throwing — plus `refresh()`). Mount `<LiveRefresh tournamentId>` (`@/components/LiveRefresh`) on any page that shows tournament data; `/admin/t/[id]` already has it.
 - T11: if a stale `next dev` holds :3000 and is crashed, `npx next start -p 3001` after `npm run build` works for browser checks (localhost cookies are shared across ports).
 - T12: `/admin/t/[id]` sections are `Card`s with placeholder lines (Court board, Round panel, Results, Ranking, Rosters & courts); replace the placeholder in place. Ranking is already a real table from `ranking(view)` (inline in the page; extract it for T19/T20).
-- T12: `roundStatus(view)` in `domain.ts` gives the header line (latest round = `rounds.at(-1)`). Admin page actions live in `src/app/admin/t/[id]/actions.ts`; they end with `broadcastChanged` + `refresh()` from `next/cache`.
+- T12: `roundStatus(view)` in `domain.ts` gives the header line (latest round = `rounds.at(-1)`). Admin page actions live in `src/app/admin/t/[id]/actions.ts`; they end with `changed(id)` (imported as `done`).
 - T13: `<RosterEditor caller club players>` (`@/components/RosterEditor`) is the shared club-name + roster editor; the captain page passes `caller={{ token }}`. Actions in `@/lib/roster-actions` scope by caller (`requireCaptain(token)` in `@/lib/auth` → own club only). Courts + pairs are admin-only in `admin/t/[id]/actions.ts`.
 - T13: forms use `useResult()` / `<FormError>` (`@/components/ActionResult`): actions return an error string or undefined. A `<select defaultValue>` doesn't update on form reset, so key rows on their values to remount after save.
 - T13: removal guard verified with a temporary lineup pair (FK 23503 → "Already played — can't remove, rename instead."). Stale `next start` servers may hold :3000/:3001; TaskStop leaves the node child alive, so kill it by port.
@@ -191,3 +201,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 - T21: `endTournament` (admin actions) checks for live matches then sets `ended` (two calls, shortcut comment; no migration). `EndTournament.tsx` sits beside OpenRound; both hide once ended. Score edits still work after the end.
 - T21: `tabulation(view)` (domain) = rounds with done matches + round score + running totals. `/t/[id]` swaps the round/courts cards for `Results.tsx` (banner, tabulation, awards) when ended.
 - T21: "T16 check 16v17" is now ended (Alpha 26–20). Use T22's seed for fresh runs.
+- A1: validate names with `parseName(form.get('name'))` (null = empty or > `MAX_NAME` 60). `OpenRound` takes `blocked: string | null` (the reason), not a boolean. T22's seed must give each club ≥ 2·P players or Open Round refuses.
+- A1: `roster-actions.test.ts` shows how to mock the Supabase query chain (a recorded thenable); reuse it for other action tests.
+- A2: every grid needs a base `grid-cols-1` (an implicit `auto` track scrolls phones sideways); a fieldset in a grid/flex row needs `min-w-0`. Input + buttons rows: `@container` on the row, `min-w-0 flex-1 basis-full @sm:basis-0` on the input. Name inputs get `maxLength={MAX_NAME}`; form errors only via `<FormError>`.
+- A2: a crashed `next dev` on :3000 blocks a second dev server in this folder (Next 16 lock); use `next build && next start -p 30xx`. If the Playwright MCP profile is locked, drive Playwright from a script with `channel: 'chrome'`.

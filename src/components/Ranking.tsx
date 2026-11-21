@@ -12,7 +12,7 @@ export function Ranking({ view }: { view: TournamentView }) {
         <tr className="border-b border-ink">
           <th className="py-1 pr-2">#</th>
           <th className="py-1 pr-2">Player</th>
-          <th className="py-1 pr-2 text-right">W–L</th>
+          <th className="whitespace-nowrap py-1 pr-2 text-right">W–L</th>
           <th className="py-1 pr-2 text-right">Diff</th>
           <th className="py-1 text-right">PF</th>
         </tr>
@@ -24,8 +24,8 @@ export function Ranking({ view }: { view: TournamentView }) {
             <td className="py-1.5 pr-2">
               {s.player.name} <span className="text-sm text-ink-soft">{clubName.get(s.player.club_id)}</span>
             </td>
-            <td className="py-1.5 pr-2 text-right">{s.wins}–{s.losses}</td>
-            <td className="py-1.5 pr-2 text-right">{s.diff > 0 ? `+${s.diff}` : s.diff}</td>
+            <td className="whitespace-nowrap py-1.5 pr-2 text-right">{s.wins}–{s.losses}</td>
+            <td className="whitespace-nowrap py-1.5 pr-2 text-right">{s.diff > 0 ? `+${s.diff}` : s.diff}</td>
             <td className="py-1.5 text-right">{s.pf}</td>
           </tr>
         ))}

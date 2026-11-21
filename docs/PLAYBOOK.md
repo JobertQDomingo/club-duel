@@ -16,7 +16,7 @@ Run `/next` in a fresh context window (or `/next T07` to pick a task). Do **one 
 - Ponytail rules: smallest complete change, no speculative code.
 - Logic tasks (domain functions, server actions, SQL functions): write the test first (superpowers TDD), then the code.
 - UI tasks: follow `DESIGN.md` once it exists (created in T08). Use Impeccable for UI work.
-- Every mutation: check the caller (admin session or captain token) on the server, validate the input, then call `broadcastChanged(tournamentId)` after a successful write.
+- Every mutation: check the caller (admin session or captain token) on the server, validate the input, then end with `changed(tournamentId)` from `@/lib/realtime` after a successful write (it broadcasts and refreshes; resolves to undefined = no error).
 - Never send hidden pair names to audience or opponent views. Always go through `viewFor()`.
 
 ## 4. Verify

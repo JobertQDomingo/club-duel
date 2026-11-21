@@ -17,7 +17,7 @@ export function EndTournament({ tournamentId, live, tied, pending }: Props) {
         End tournament
       </Button>
       {live && <p className="text-ink-soft">Ends once no match is live.</p>}
-      <dialog ref={dialog} aria-label="End tournament" className="m-auto w-full max-w-md border border-ink bg-sheet p-4 text-ink backdrop:bg-ink/40">
+      <dialog ref={dialog} aria-label="End tournament" className="m-auto w-[calc(100%-2rem)] max-w-md border border-ink bg-sheet p-4 text-ink backdrop:bg-ink/40">
         <form action={wrap(() => endTournament(tournamentId))} className="flex flex-col gap-3">
           <h3 className="border-b border-ink pb-2 font-display text-xl font-bold uppercase">End tournament?</h3>
           <p>The audience sees the final result and awards. No more rounds can be opened.</p>

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { RosterInput } from '@/app/admin/RosterInput'
 import { FormError, useResult } from '@/components/ActionResult'
 import { Button } from '@/components/ui/Button'
+import { MAX_NAME } from '@/lib/domain'
 import { addPlayers, editPlayer, removePlayer, renameClub, type Caller } from '@/lib/roster-actions'
 import type { Club, Player } from '@/lib/types'
 
@@ -23,7 +24,7 @@ export function RosterEditor({ caller, club, players }: { caller: Caller; club: 
           Club {club.side} name
         </label>
         <div className="flex gap-2">
-          <input id={`club-${club.id}`} name="name" defaultValue={club.name} required className={`${field} min-w-0 flex-1`} />
+          <input id={`club-${club.id}`} name="name" defaultValue={club.name} required maxLength={MAX_NAME} className={`${field} min-w-0 flex-1`} />
           <Button type="submit" variant="secondary">Save</Button>
         </div>
         <FormError error={nameError} />
@@ -53,9 +54,10 @@ function PlayerRow({ caller, player }: { caller: Caller; player: Player }) {
     return removePlayer(caller, player.id)
   }
   return (
-    <li className="flex flex-col gap-1 px-3 py-2">
+    <li className="@container flex flex-col gap-1 px-3 py-2">
+      {/* under 384px the name gets its own line; gender, Save and Remove go below it */}
       <form action={wrap((f) => editPlayer(caller, player.id, f))} className="flex flex-wrap items-center gap-2">
-        <input name="name" defaultValue={player.name} required aria-label="Player name" className={`${field} min-w-0 flex-1`} />
+        <input name="name" defaultValue={player.name} required maxLength={MAX_NAME} aria-label={`Rename ${player.name}`} className={`${field} min-w-0 flex-1 basis-full @sm:basis-0`} />
         <select name="gender" defaultValue={player.gender} aria-label={`${player.name} gender`} className={field}>
           <option value="M">M</option>
           <option value="F">F</option>
