@@ -3,6 +3,7 @@
 import { useActionState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { createTournament } from './actions'
+import { RosterInput } from './RosterInput'
 
 const label = 'font-display text-sm font-bold uppercase tracking-wide'
 const field = 'mt-1 block min-h-11 w-full border border-ink bg-sheet px-3 font-sans text-base font-normal normal-case tracking-normal'
@@ -33,19 +34,7 @@ export function NewTournamentForm() {
               Club {side} name
               <input name={`club${side}`} required defaultValue={v[`club${side}`]} className={field} />
             </label>
-            <label className={label}>
-              Club {side} players
-              <span className="block font-sans text-sm font-normal normal-case tracking-normal text-ink-soft">
-                One per line: <code>Name, M</code> or <code>Name, F</code>
-              </span>
-              <textarea
-                name={`players${side}`}
-                required
-                rows={10}
-                defaultValue={v[`players${side}`]}
-                className={`${field} py-2`}
-              />
-            </label>
+            <RosterInput side={side} />
           </fieldset>
         ))}
       </div>
