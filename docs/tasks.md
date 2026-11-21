@@ -78,7 +78,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 
 ## M3 — Rounds + blind lineup
 
-- [ ] **T14 Round SQL functions** (M). Depends: T03.
+- [x] **T14 Round SQL functions** (M). Depends: T03.
   Read: DM §Rules enforced where.
   Do: `supabase/migrations/0002_round_fns.sql` with `open_round(tournament_id)`, `submit_lineup(lineup_id)` (row lock, sets `locked_at` and creates the match rows when both are in), `unsubmit_lineup(lineup_id)`. [USER] runs the migration.
   Done when: a script or test calls submit twice concurrently and gets exactly 1 lock and P matches.
@@ -171,3 +171,5 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 - T13: `<RosterEditor caller club players>` (`@/components/RosterEditor`) is the shared club-name + roster editor; the captain page passes `caller={{ token }}`. Actions in `@/lib/roster-actions` scope by caller (`requireCaptain(token)` in `@/lib/auth` → own club only). Courts + pairs are admin-only in `admin/t/[id]/actions.ts`.
 - T13: forms use `useResult()` / `<FormError>` (`@/components/ActionResult`): actions return an error string or undefined. A `<select defaultValue>` doesn't update on form reset, so key rows on their values to remount after save.
 - T13: removal guard verified with a temporary lineup pair (FK 23503 → "Already played — can't remove, rename instead."). Stale `next start` servers may hold :3000/:3001; TaskStop leaves the node child alive, so kill it by port.
+- T14: `db.rpc('open_round',{p_tournament_id})` → new round id; `submit_lineup`/`unsubmit_lineup` take `{p_lineup_id}`; submit returns true when it locked the round. Errors are plain `raise exception` messages (show `error.message`). Service role only (revoked from anon).
+- T14: deleting a tournament with lineup pairs fails (players' restrict FK fires before the cascade); delete its `rounds` first. `node --env-file=.env.local scripts/check-round-fns.mjs` re-checks the round fns against the live DB.
