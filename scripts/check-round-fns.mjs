@@ -1,4 +1,4 @@
-// Integration check for supabase/migrations/0002_round_fns.sql against the real DB.
+// Integration check for supabase/migrations/0002_round_fns.sql + 0003_start_match.sql against the real DB.
 // Run: node --env-file=.env.local scripts/check-round-fns.mjs
 // Creates a throwaway tournament (owned by the first auth user) and deletes it at the end.
 import assert from 'node:assert/strict'
@@ -76,6 +76,23 @@ try {
   await fails('unsubmit_lineup', { p_lineup_id: lb.id }, /Round is locked/)
   await fails('open_round', { p_tournament_id: t.id }, /Round 1 is not finished/)
 
+  // start_match (0003): busy court, double start, foreign court, concurrent starts on one court
+  const [c1, c2] = must(await db.from('courts').insert([{ tournament_id: t.id, name: 'C1' }, { tournament_id: t.id, name: 'C2' }]).select())
+  const m = Object.fromEntries(must(await db.from('matches').select('id, slot').eq('round_id', roundId)).map((x) => [x.slot, x.id]))
+  assert.ok((await anon.rpc('start_match', { p_match_id: m[3], p_court_id: c1.id })).error, 'anon start_match should fail')
+  must(await rpc('start_match', { p_match_id: m[3], p_court_id: c1.id }))
+  const live = must(await db.from('matches').select().eq('id', m[3]).single())
+  assert.equal(live.status, 'live')
+  assert.equal(live.court_id, c1.id)
+  assert.ok(live.started_at)
+  await fails('start_match', { p_match_id: m[1], p_court_id: c1.id }, /Court is busy/)
+  await fails('start_match', { p_match_id: m[3], p_court_id: c2.id }, /Match 3 has already started/)
+  const other = must(await db.from('courts').select('id').neq('tournament_id', t.id).limit(1))
+  if (other[0]) await fails('start_match', { p_match_id: m[1], p_court_id: other[0].id }, /Court not found/)
+  const starts = await Promise.all([m[1], m[2]].map((id) => rpc('start_match', { p_match_id: id, p_court_id: c2.id })))
+  assert.equal(starts.filter((r) => !r.error).length, 1, `exactly 1 start on C2, got ${JSON.stringify(starts)}`)
+  for (const r of starts) if (r.error) assert.match(r.error.message, /Court is busy/)
+
   // all done → round 2 opens with the current pairs_per_round
   must(await db.from('matches').update({ status: 'done', score_a: 11, score_b: 5 }).eq('round_id', roundId))
   must(await db.from('tournaments').update({ pairs_per_round: 2 }).eq('id', t.id))
@@ -87,7 +104,7 @@ try {
   must(await db.from('tournaments').update({ status: 'ended' }).eq('id', t.id))
   await fails('open_round', { p_tournament_id: t.id }, /has ended/)
 
-  console.log(`OK: 1 lock, ${matches.length} matches, all guards hold`)
+  console.log(`OK: 1 lock, ${matches.length} matches, start_match guards, all guards hold`)
 } finally {
   // rounds first: players' restrict FK from lineup_pairs blocks the tournament cascade
   must(await db.from('rounds').delete().eq('tournament_id', t.id))

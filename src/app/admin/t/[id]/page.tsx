@@ -11,10 +11,12 @@ import { canOpenRound, clubTotals, ranking, repeatPairs, roundStatus, viewFor } 
 import { adminSaveSlot } from '@/lib/lineup-actions'
 import { LineupSlots } from '@/components/LineupSlots'
 import { Badge } from '@/components/ui/Badge'
+import { PairCard } from '@/components/ui/PairCard'
 import { RosterEditor } from '@/components/RosterEditor'
 import { CourtsEditor } from './CourtsEditor'
 import { OpenRound } from './OpenRound'
 import { RegenerateLink } from './RegenerateLink'
+import { StartMatch } from './StartMatch'
 
 export const metadata = { title: 'Tournament · Club Duel' }
 export const instant = false // reads the session cookie
@@ -36,6 +38,18 @@ export default async function TournamentPage({ params }: PageProps<'/admin/t/[id
   const clubName = new Map(clubs.map((c) => [c.id, c.name]))
   const rows = ranking(view)
   const round = view.rounds.at(-1) // rounds are sorted by number
+  const courts = [...view.courts].sort((x, y) => x.name.localeCompare(y.name, undefined, { numeric: true }))
+  const liveOn = new Map(view.matches.filter((m) => m.status === 'live').map((m) => [m.court_id, m]))
+  const pending = view.matches
+    .filter((m) => m.round_id === round?.id && m.status === 'pending')
+    .sort((x, y) => x.slot - y.slot)
+    .map(({ id, slot }) => ({ id, slot }))
+  const playerName = new Map(view.players.map((p) => [p.id, p.name]))
+  const pairNames = (clubId: string, roundId: string, slot: number): [string, string] | null => {
+    const lineup = view.lineups.find((l) => l.round_id === roundId && l.club_id === clubId)
+    const pair = lineup && view.pairs.find((p) => p.lineup_id === lineup.id && p.slot === slot)
+    return pair ? [playerName.get(pair.player1_id) ?? '?', playerName.get(pair.player2_id) ?? '?'] : null
+  }
 
   return (
     <main className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-6">
@@ -62,7 +76,33 @@ export default async function TournamentPage({ params }: PageProps<'/admin/t/[id
         </Card>
 
         <Card title="Court board" className="lg:col-span-2">
-          <p className={empty}>No match on court.</p>
+          {courts.length === 0 ? (
+            <p className={empty}>No courts yet. Add one under Rosters &amp; courts.</p>
+          ) : (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {courts.map((c) => {
+                const m = liveOn.get(c.id)
+                return (
+                  <section key={c.id} className="flex min-w-0 flex-col gap-3 border border-ink p-3">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h3 className="font-display text-xl font-bold uppercase">{c.name}</h3>
+                      {m ? <Badge tone="live">Live · Match {m.slot}</Badge> : <Badge mark="hollow">Free</Badge>}
+                    </div>
+                    {m ? (
+                      <div className="grid grid-cols-2 divide-x divide-ink/20 border-t border-ink/20">
+                        <PairCard side="A" slot={m.slot} names={pairNames(a.id, m.round_id, m.slot)} />
+                        <PairCard side="B" slot={m.slot} names={pairNames(b.id, m.round_id, m.slot)} />
+                      </div>
+                    ) : pending.length > 0 ? (
+                      <StartMatch key={pending.map((p) => p.id).join()} tournamentId={id} court={c} pending={pending} />
+                    ) : (
+                      <p className={empty}>{round && !round.locked_at ? 'Matches start once both lineups are in.' : 'No pending match.'}</p>
+                    )}
+                  </section>
+                )
+              })}
+            </div>
+          )}
         </Card>
 
         <Card title={round ? `Round ${round.number} lineups` : 'Round panel'} className="lg:col-span-2">

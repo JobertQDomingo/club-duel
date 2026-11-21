@@ -95,7 +95,7 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 
 ## M4 — Courts + scoring
 
-- [ ] **T17 Start match + court board** (M) (browser). Depends: T16.
+- [x] **T17 Start match + court board** (M) (browser). Depends: T16.
   Read: PRD §3 step 5, DM §Rules (start match).
   Do: a `start_match(match_id, court_id)` SQL function (migration 0003, [USER] runs it). Court board: free courts show a pending-match picker (the lowest slot is the default) and Start; live courts show the match # and pairs.
   Done when: starting Match 3 on Court 1 reveals it; a second start on a busy court fails cleanly.
@@ -179,3 +179,6 @@ Docs: PRD = `docs/PRD.md`, DM = `docs/data-model.md`, ARCH = `docs/architecture.
 - T16: `<LineupSlots>` (`@/components/LineupSlots`) is the shared slot list + picker (captain `Draft` and admin panel); pass `save(slot, ids|null)` — a server action bound in the page works. `canOpenRound(view)` mirrors `open_round`.
 - T16: `adminSaveSlot(tournamentId, lineupId, slot, ids)` in `@/lib/lineup-actions` edits the latest round (also locked; clearing refused once locked) and writes `audit_log` `lineup.edit` with `{round, club_id, slot, pair}` before/after. Not atomic (shortcut comment); T18 score edits can copy the shape.
 - T16: the live DB has a "T16 check 16v17" tournament (16+17 players, round 1 locked) usable for T17. The browser may hold another admin's session; sign out first.
+- T17: `startMatch(tournamentId, courtId, form)` in `admin/t/[id]/actions.ts` → `start_match` RPC (0003; errors "Court is busy" / "Match N has already started"). Court board tiles are inline in the admin page; `StartMatch.tsx` is the free-court picker. Add "Match end" to the live tile in T18.
+- T17: `check-round-fns.mjs` now also covers start_match. The "T16 check 16v17" tournament has Match 3 live on Court 1 and Match 1 on Court 2 (ready for T18).
+- T17: stale servers hold :3000–:3002 and killing them was denied; `npx next start -p 3005` worked.
