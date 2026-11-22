@@ -136,6 +136,13 @@ export function roundStatus(data: TournamentView): string {
   return `Round ${r.number} · ${done} of ${r.pairs} matches done`;
 }
 
+/** The scoreboard's lead line: who leads by how much, or the verdict once the tournament has ended. */
+export function leadLine(a: { name: string; total: number }, b: { name: string; total: number }, ended = false): string {
+  const gap = Math.abs(a.total - b.total);
+  if (gap === 0) return ended ? "Draw" : "Tied";
+  return `${a.total > b.total ? a.name : b.name} ${ended ? "win" : "lead"} by ${gap}`;
+}
+
 /** Mirrors `open_round`: the latest round must be locked with every match done (or none exist yet). */
 export function canOpenRound(data: TournamentView): boolean {
   if (data.tournament.status === "ended") return false;

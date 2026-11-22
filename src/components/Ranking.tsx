@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/Button'
 import { ranking, type PlayerStat } from '@/lib/domain'
 import type { TournamentView } from '@/lib/types'
 
-const signed = (n: number) => (n > 0 ? `+${n}` : n < 0 ? `−${-n}` : '0') // U+2212: a hyphen reads as a dash
+export const signed = (n: number) => (n > 0 ? `+${n}` : n < 0 ? `−${-n}` : '0') // U+2212: a hyphen reads as a dash
 const label = 'text-xs font-semibold text-ink-soft'
 
 /** Live player ranking table (players with at least one finished match). Tap a name for how the numbers add up. */

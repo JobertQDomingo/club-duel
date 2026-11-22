@@ -171,7 +171,7 @@ A neutral sports-app frame (cool grey, white, near-black ink) carrying two club 
 - **Scoreboard Ink** (ink): text, the primary button fill, the race-bar centre tick, the focus ring, and the "W" chip in a captain's own results. It is the app's structural colour; there is no separate brand accent.
 
 ### Secondary
-- **Club A Blue** (club-a): Club A's crest, its share of the race bar, its pair labels ("Pair 3"), the colour of a winning Club A score, the captain header band, the winner banner, award winner fields, the winning pair cell in award match rows, and the small club dot in the ranking and lineup headers.
+- **Club A Blue** (club-a): Club A's crest, its share of the race bar, its pair labels ("Pair 3"), the colour of a winning Club A score, the captain header band, the winner card's trophy circle and headline, the MVP award field, the top-scorer figure, and the small club dot in the ranking, lineup headers and award name chips.
 - **Club B Red** (club-b): the same roles for Club B.
 
 ### Tertiary
@@ -202,9 +202,9 @@ A neutral sports-app frame (cool grey, white, near-black ink) carrying two club 
 
 ### Hierarchy
 - **Display-total** (800, 2.5rem; 3.5rem once the scoreboard card is at least 48rem wide, line-height 1, tight tracking, tabular): the two club totals in the scoreboard. Nothing else is this heavy and this large.
-- **Headline** (700–800, 1.875rem, tight): page titles ("My tournaments", the login wordmark) and the winner banner ("Riverside PC win"). The tournament name in the scoreboard is a smaller headline (1.25rem, 1.5rem from 640px).
+- **Headline** (700–800, 1.875rem, tight): page titles ("My tournaments", the login wordmark). The winner card headline ("Riverside PC win") is 1.5rem/800. The tournament name in the scoreboard is a smaller headline (1.25rem, 1.5rem from 640px).
 - **Title** (700, 1.125rem, leading-tight, tight): card titles, court names, section headings on the ground ("Courts", "Round 2 matches").
-- **Score** (800, 1.5rem, tabular, tight): finished scores in match rows. Results and the match strip use 1.25rem / 1.125rem at 700–800, and award match rows use 1.875rem.
+- **Score** (800, 1.5rem, tabular, tight): finished scores in match rows. Results, award match rows and the match strip use 1.25rem / 1.125rem at 700–800. Award figures (top-scorer points) are 1.875rem/800, still below the totals.
 - **Body** (400, 1rem, 1.5): copy and names. Names in pair cards and the picker are 0.9375rem leading-snug. Prose is capped at `max-w-prose`.
 - **Button** (600, 0.9375rem): buttons. Tabs use 0.8125rem on phones and 0.875rem from 640px.
 - **Label** (600, 0.75rem, sentence case): pair labels, badges, metadata labels ("Match 3"), table headers, round/match captions.
@@ -228,7 +228,7 @@ Phone first, and a single column until the content earns more. Every role page f
 - **Tap targets** are at least 44px tall. Lineup slots and list links are at least 56px.
 
 ### Responsive
-Breakpoints are Tailwind's `sm` (640px), `lg` (1024px) and `xl` (1280px), plus container queries: the scoreboard (`@3xl`, 48rem), court cards and roster rows (`@sm`, 24rem) and award winner fields (`@3xs`, 16rem). It is checked at 320px with no sideways scroll.
+Breakpoints are Tailwind's `sm` (640px), `lg` (1024px) and `xl` (1280px), plus container queries: the scoreboard (`@3xl`, 48rem), and court cards and roster rows (`@sm`, 24rem). It is checked at 320px with no sideways scroll.
 - **Every grid gets a base column template** (`grid-cols-1 sm:… lg:…`). An implicit `auto` track grows to its widest child (a link field, a roster row) and scrolls the phone sideways. Grid and flex children that hold text get `min-w-0`.
 - **Admin:** court cards are 1, 2 and then 4 columns (sm, xl). The match strip is 2, 4 and then 7 columns. Lineups, rosters and courts are 2 columns at `lg`, and Results / Audit log split 3:2 at `lg`.
 - **Audience:** court tiles are 2 columns, then 4 from 640px.
@@ -252,7 +252,7 @@ The interface is flat at rest. Cards are separated from the grey ground by tone 
 
 ## Shapes
 
-The corners are soft and consistent. Containers are 16px (cards, the scoreboard, dialogs, popovers, the tab strip, the winner banner). Controls and tiles are 12px (buttons, fields, tabs, court and match tiles, picker buttons, award winner fields, inline notes). Small fills are 8px (card backs, the W/L chip, the Edit toggle). Fully round shapes are pills and circles: badges, crests, status and club dots, the race-bar track, and its centre tick. Borders are always 1px, in hairline grey at rest and 25–30% ink on hover. A badge's state mark is an 8px circle with a 1.5px current-colour stroke: filled means done or submitted, hollow means not yet or free.
+The corners are soft and consistent. Containers are 16px (cards, the scoreboard, dialogs, popovers, the tab strip, the winner card). Controls and tiles are 12px (buttons, fields, tabs, court and match tiles, picker buttons, the MVP field and top-scorer tiles, inline notes). Small fills are 8px (card backs, the W/L chip, the Edit toggle). Fully round shapes are pills and circles: badges, crests, status and club dots, the race-bar track, and its centre tick. Borders are always 1px, in hairline grey at rest and 25–30% ink on hover. A badge's state mark is an 8px circle with a 1.5px current-colour stroke: filled means done or submitted, hollow means not yet or free.
 
 ## Components
 
@@ -303,7 +303,7 @@ Court cards (Courts tab) are full cards on the ground. The title row holds the c
 The table is tabular-nums, with soft-ink Label headers and divided rows. The player cell takes the leftover width (`w-full max-w-0`). Each name is a full-cell, 44px button: the name with a dotted underline, then a club dot and the club name truncated to one line beneath it. It opens a native `popover` stat sheet styled like the dialogs: the name and club on a hairline, one ruled row per game ("W 11–6" and the signed margin), then a W–L / PF / PA / Diff list that spells out each sum, and a secondary Close.
 
 ### Results (ended)
-A winner banner fills a 16px-corner field with the winning club's colour (ink for a Draw), with the 1.875rem/800 headline and a tabular "Final · …" line. Below it come the tabulation card (flush match rows per round, then the round and running totals) and the Awards card. Each award winner sits on their club's colour field (12px corners, names at 1.875rem / 1.5rem / 1.125rem depending on how many there are). Award match rows fill the winning pair's cell with its club colour.
+The winner card ("Lead tracker") is a white card, because the scoreboard above already shows the totals. A 48px circle in the winner's colour holds a white trophy (a Draw shows both crests overlapped), beside the headline in the winner's colour ("Riverside PC win", 1.5rem/800) and a soft line ("by 18 points over 3 rounds", or "Level after 3 rounds"). Under "Lead after each round", one row per round: the round and running total in Label type, an 8px race bar on the scoreboard's scale (`RaceBar`), and the leading club's dot with the margin ("+5", or "Level"). The last row is set bold. Below it come the tabulation card (flush match rows per round, then the round and running totals) and the Awards card ("Spotlight"). Only the MVP gets a colour field: the club's colour (ink when a tie spans both clubs), a trophy icon and "MVP" with a "Tied" pill when needed, the names at 1.875rem/800 (1.5rem for a tie), the club, then a ruled row of Wins / Point diff / Points and the rule line. Every other award has a Title heading with its rule and deciding value in soft ink beneath. Top scorers are two hairline tiles side by side, Club A left, each with a club dot and name, the points figure in the club colour and the names. Iron player is a wrap of 6% ink name chips with club dots. Biggest win and Closest match reuse the flush tabulation row (round and match label, pair A, score in the winner's colour, pair B, winning pair semibold). Long ties fold behind a native `<details>` ("Show 16 more players" / "Show fewer"): chips after 8, match rows after 2, never folding a lone leftover.
 
 ### Dialogs
 A native `<dialog>` or `popover` with a 16px radius, 20px padding, the overlay shadow and a 40% ink backdrop. The heading is 1.25rem/700, and Cancel or Close is a ghost or secondary button aligned left.

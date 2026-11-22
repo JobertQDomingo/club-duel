@@ -8,7 +8,7 @@ import { ScoreRace } from '@/components/ui/ScoreRace'
 import { Tabs } from '@/components/ui/Tabs'
 import { requireCaptain } from '@/lib/auth'
 import { loadTournament } from '@/lib/db'
-import { clubTotals, pairNames, pastPartners, repeatPairs, viewFor } from '@/lib/domain'
+import { clubTotals, pairNames, pastPartners, repeatPairs, roundStatus, viewFor } from '@/lib/domain'
 import { Draft } from './Draft'
 
 export const metadata = { title: 'Captain · Club Duel', robots: { index: false } }
@@ -105,6 +105,8 @@ export default async function CaptainPage({ params }: PageProps<'/c/[token]'>) {
         heading={<h2 className="mb-4 text-lg font-bold tracking-tight wrap-anywhere">{view.tournament.name}</h2>}
         a={{ name: a.name, total: totals.A }}
         b={{ name: b.name, total: totals.B }}
+        status={roundStatus(view)}
+        ended={view.tournament.status === 'ended'}
       />
       <Tabs
         label="Captain sections"
