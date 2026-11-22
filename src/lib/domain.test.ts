@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { awards, canOpenRound, clubTotals, MAX_NAME, pairNames, parseName, parseRoster, parseScores, pastPartners, playerStats, ranking, repeatPairs, rosterShortfall, roundStatus, tabulation, validateLineup, viewFor } from "./domain";
+import { awards, canOpenRound, clubTotals, leadLine, MAX_NAME, pairNames, parseName, parseRoster, parseScores, pastPartners, playerStats, ranking, repeatPairs, rosterShortfall, roundStatus, tabulation, validateLineup, viewFor } from "./domain";
 import type { LineupPair, Match, TournamentData } from "./types";
 
 // 2 clubs × 4 players, 2 rounds × 2 slots. Round 2 slot 2 is live (must be ignored).
@@ -322,6 +322,22 @@ describe("roundStatus", () => {
 
   test("ended wins", () => {
     expect(roundStatus({ ...data, tournament: { ...data.tournament, status: "ended" } })).toBe("Tournament ended");
+  });
+});
+
+describe("leadLine", () => {
+  const club = (name: string, total: number) => ({ name, total });
+
+  test("during play: who leads, or Tied", () => {
+    expect(leadLine(club("Alpha", 26), club("Bravo", 20))).toBe("Alpha lead by 6");
+    expect(leadLine(club("Alpha", 19), club("Bravo", 20))).toBe("Bravo lead by 1");
+    expect(leadLine(club("Alpha", 20), club("Bravo", 20))).toBe("Tied");
+  });
+
+  test("after the end: the winner, or Draw", () => {
+    expect(leadLine(club("Alpha", 426), club("Bravo", 387), true)).toBe("Alpha win by 39");
+    expect(leadLine(club("Alpha", 0), club("Bravo", 2), true)).toBe("Bravo win by 2");
+    expect(leadLine(club("Alpha", 426), club("Bravo", 426), true)).toBe("Draw");
   });
 });
 

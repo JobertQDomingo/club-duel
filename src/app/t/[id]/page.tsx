@@ -92,6 +92,7 @@ export default async function AudiencePage({ params }: PageProps<'/t/[id]'>) {
         a={{ name: a.name, total: totals.A }}
         b={{ name: b.name, total: totals.B }}
         status={roundStatus(view)}
+        ended={view.tournament.status === 'ended'}
       />
       <Tabs
         label="Live sections"

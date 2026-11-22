@@ -298,6 +298,7 @@ export default async function TournamentPage({ params }: PageProps<'/admin/t/[id
         a={{ name: a.name, total: totals.A }}
         b={{ name: b.name, total: totals.B }}
         status={roundStatus(view)}
+        ended={ended}
       />
       <Tabs
         label="Tournament sections"
